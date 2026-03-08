@@ -1,7 +1,7 @@
 {
   "name": "@neuralmemory/pug-brain-dashboard",
   "private": false,
-  "version": "2.27.4",
+  "version": "3.0.0",
   "type": "module",
   "publishConfig": {
     "access": "public"
