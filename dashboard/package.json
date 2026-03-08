@@ -1,7 +1,7 @@
 {
   "name": "pug-brain-dashboard",
   "private": false,
-  "version": "2.27.5",
+  "version": "6.0.8",
 
   "type": "module",
   "publishConfig": {
