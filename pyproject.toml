@@ -143,6 +143,7 @@ pug-hook-post-tool-use = "neural_memory.hooks.post_tool_use:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/neural_memory"]
+artifacts = ["src/neural_memory/server/static/dist"]
 
 [tool.ruff]
 line-length = 100
