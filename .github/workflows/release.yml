@@ -1,9 +1,9 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - pug-master
+  release:
+    types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,19 +15,16 @@ concurrency:
 
 jobs:
   release:
-    name: Release (auto bump + publish)
-    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+    name: Build and Publish
     runs-on: ubuntu-latest
     environment: pypi
     outputs:
-      released: ${{ steps.bump.outputs.released }}
-      version: ${{ steps.bump.outputs.version }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -40,177 +37,51 @@ jobs:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Determine next version + update files
-        id: bump
+      - name: Get version
+        id: version
         run: |
           python - <<'PY'
           import os
           import re
-          import subprocess
           from pathlib import Path
 
-          def parse_version(v: str):
-              parts = v.strip().split(".")
-              return tuple(int(p) for p in parts)
-
-          def format_version(t):
-              return ".".join(str(x) for x in t)
-
-          def bump_version(v, level):
-              major, minor, patch = parse_version(v)
-              if level == "major":
-                  return format_version((major + 1, 0, 0))
-              if level == "minor":
-                  return format_version((major, minor + 1, 0))
-              return format_version((major, minor, patch + 1))
-
-          def read_version_from_pyproject():
-              text = Path("pyproject.toml").read_text()
-              m = re.search(r'^version\s*=\s*\"([^\"]+)\"', text, re.M)
-              return m.group(1) if m else None
-
-          def read_version_from_init():
-              text = Path("src/neural_memory/__init__.py").read_text()
-              m = re.search(r'^__version__\s*=\s*\"([^\"]+)\"', text, re.M)
-              return m.group(1) if m else None
-
-          def read_version_from_json(path):
-              if not Path(path).exists():
-                  return None
-              text = Path(path).read_text()
-              m = re.search(r'\"version\"\s*:\s*\"([^\"]+)\"', text)
-              return m.group(1) if m else None
-
-          versions = [
-              v for v in [
-                  read_version_from_pyproject(),
-                  read_version_from_init(),
-                  read_version_from_json("package.json"),
-                  read_version_from_json("dashboard/package.json"),
-              ] if v
-          ]
-
-          if not versions:
-              raise SystemExit("No version found to bump.")
-
-          # Base version = max across known files to avoid regressions
-          base_version = format_version(max(parse_version(v) for v in versions))
-
-          # Determine bump level from commits since last tag
-          try:
-              last_tag = subprocess.check_output(
-                  ["git", "describe", "--tags", "--abbrev=0", "--match", "v*"],
-                  text=True,
-              ).strip()
-              rev_range = f"{last_tag}..HEAD"
-          except subprocess.CalledProcessError:
-              rev_range = "HEAD"
-
-          log = subprocess.check_output(
-              ["git", "log", rev_range, "--pretty=%B"],
-              text=True,
-          )
-
-          level = None
-          if re.search(r"BREAKING CHANGE", log, re.I) or re.search(r"^\w+!:", log, re.M):
-              level = "patch"
-          elif re.search(r"^feat(\(.+\))?:", log, re.M):
-              level = "patch"
-          elif re.search(r"^(fix|perf|chore)(\(.+\))?:", log, re.M):
-              level = "patch"
+          text = Path("pyproject.toml").read_text()
+          m = re.search(r'^version\s*=\s*"([^"]+)"', text, re.M)
+          version = m.group(1) if m else "0.0.0"
 
           output_path = os.environ.get("GITHUB_OUTPUT")
-          if not level:
-              with open(output_path, "a", encoding="utf-8") as f:
-                  f.write("released=false\n")
-                  f.write(f"version={base_version}\n")
-              print("No release-worthy commits found. Skipping release.")
-              raise SystemExit(0)
-
-          next_version = bump_version(base_version, level)
-
-          def replace_in_file(path, pattern, repl):
-              p = Path(path)
-              if not p.exists():
-                  return
-              text = p.read_text()
-              new_text = re.sub(pattern, repl, text, flags=re.M)
-              p.write_text(new_text)
-
-          replace_in_file(
-              "pyproject.toml",
-              r'^(version\s*=\s*\")([^\"]+)(\")',
-              f'\g<1>{next_version}\g<3>'
-          )
-          replace_in_file(
-              "src/neural_memory/__init__.py",
-              r'^(__version__\s*=\s*\")([^\"]+)(\")',
-              f'\g<1>{next_version}\g<3>'
-          )
-          replace_in_file(
-              "package.json",
-              r'(\"version\"\s*:\s*\")([^\"]+)(\")',
-              f'\g<1>{next_version}\g<3>'
-          )
-          replace_in_file(
-              "dashboard/package.json",
-              r'(\"version\"\s*:\s*\")([^\"]+)(\")',
-              f'\g<1>{next_version}\g<3>'
-          )
-
           with open(output_path, "a", encoding="utf-8") as f:
-              f.write("released=true\n")
-              f.write(f"version={next_version}\n")
-
-          print(f"Bumping version: {base_version} -> {next_version} ({level})")
+              f.write(f"version={version}\n")
+          print(f"Version: {version}")
           PY
 
-      - name: Commit + tag release
-        if: steps.bump.outputs.released == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pyproject.toml src/neural_memory/__init__.py package.json dashboard/package.json || true
-          git commit -m "chore(release): v${{ steps.bump.outputs.version }} [skip ci]"
-          git tag "v${{ steps.bump.outputs.version }}"
-          git push origin HEAD:pug-master --follow-tags
-
       - name: Build dashboard
-        if: steps.bump.outputs.released == 'true'
         run: |
           cd dashboard
           npm install
           npm run build
 
       - name: Build Python package
-        if: steps.bump.outputs.released == 'true'
         run: |
           pip install build
           python -m build
 
       - name: Publish to PyPI
-        if: steps.bump.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           skip-existing: true
 
       - name: Publish dashboard to npm
-        if: steps.bump.outputs.released == 'true'
         working-directory: dashboard
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # Ensure dist exist if we want to publish it too
-          npm publish --access public
+          npm publish --access public || echo "npm publish skipped or failed"
 
-      - name: Create GitHub Release
-        if: steps.bump.outputs.released == 'true'
+      - name: Upload to GitHub Release
+        if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          TAG="v${{ steps.bump.outputs.version }}"
-          if gh release view "$TAG" --repo "${{ github.repository }}" > /dev/null 2>&1; then
-            gh release upload "$TAG" --repo "${{ github.repository }}" --clobber dist/* || true
-          else
-            gh release create "$TAG" --repo "${{ github.repository }}" --title "$TAG" --generate-notes dist/*
-          fi
+          TAG="${{ github.event.release.tag_name }}"
+          gh release upload "$TAG" --repo "${{ github.repository }}" --clobber dist/* || true
