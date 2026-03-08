@@ -1,6 +1,6 @@
 {
   "name": "pug-brain",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "MCP server for PugBrain - Hybrid Neural-Vector Intelligence Core for AI assistants",
   "main": "index.js",
   "bin": {
