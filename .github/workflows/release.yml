@@ -174,15 +174,12 @@ jobs:
           git tag "v${{ steps.bump.outputs.version }}"
           git push origin HEAD:pug-master --follow-tags
 
-      - name: Build dashboard + sync dist for Python package
+      - name: Build dashboard
         if: steps.bump.outputs.released == 'true'
         run: |
           cd dashboard
           npm ci
           npm run build
-          rm -rf ../src/neural_memory/server/static/dist
-          mkdir -p ../src/neural_memory/server/static/dist
-          cp -R dist/* ../src/neural_memory/server/static/dist/
 
       - name: Build Python package
         if: steps.bump.outputs.released == 'true'
@@ -201,7 +198,9 @@ jobs:
         working-directory: dashboard
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: |
+          # Ensure dist exist if we want to publish it too
+          npm publish --access public
 
       - name: Create GitHub Release
         if: steps.bump.outputs.released == 'true'
