@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* Class-based dark mode for TailwindCSS 4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Pug Brain Dashboard — Cyberpunk / Tech Modern Theme
+ * Deep dark glassmorphism with neon accents
+ */
+
+@theme {
+  /* Colors — Deep Space Dark (Default) */
+  --color-background: #020408;
+  --color-foreground: #e2e8f0;
+  --color-card: rgba(13, 17, 23, 0.7);
+  --color-card-foreground: #e2e8f0;
+  --color-popover: #0d1117;
+  --color-popover-foreground: #e2e8f0;
+  --color-primary: #3b82f6; /* Cyber Blue */
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #e2e8f0;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-accent: rgba(59, 130, 246, 0.1);
+  --color-accent-foreground: #3b82f6;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: rgba(51, 65, 85, 0.5);
+  --color-input: #1e293b;
+  --color-ring: #3b82f6;
+
+  /* Neon Tech colors */
+  --color-neon-blue: #00d2ff;
+  --color-neon-purple: #9d50bb;
+  --color-neon-green: #39ff14;
+  --color-neon-cyan: #00ffff;
+
+  /* Health colors */
+  --color-health-good: #10b981;
+  --color-health-warn: #f59e0b;
+  --color-health-bad: #ef4444;
+
+  /* Chart colors - Cyber set */
+  --color-chart-1: #3b82f6;
+  --color-chart-2: #8b5cf6;
+  --color-chart-3: #06b6d4;
+  --color-chart-4: #f43f5e;
+  --color-chart-5: #10b981;
+
+  /* Radius - More geometric */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  /* Shadows - Glow effects */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --shadow-neon: 0 0 15px rgba(59, 130, 246, 0.3);
+
+  /* Fonts - Modern Tech */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Clash Display", "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 450ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Sidebar - Darker glass */
+  --color-sidebar: #05070a;
+  --color-sidebar-foreground: #f1f5f9;
+  --color-sidebar-border: rgba(51, 65, 85, 0.8);
+  --color-sidebar-accent: rgba(59, 130, 246, 0.15);
+  --color-sidebar-accent-foreground: #3b82f6;
+  --color-sidebar-primary: #3b82f6;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-ring: #3b82f6;
+}
+
+/* Light mode override (Modern Minimalist) */
+:root:not(.dark) {
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-border: #e2e8f0;
+  --color-sidebar: #f8fafc;
+  --color-sidebar-border: #e2e8f0;
+  --color-sidebar-foreground: #0f172a;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+.glass-card {
+  background: var(--color-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.neon-border {
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.tech-grid {
+  background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+  opacity: 0.1;
+}
+
+/* Font display class */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Animation for loading/data entry */
+@keyframes tech-scan {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+.scanning-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  animation: tech-scan 2s linear infinite;
+  opacity: 0.5;
+}

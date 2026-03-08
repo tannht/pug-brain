@@ -1,0 +1,48 @@
+{
+  "name": "pug-brain",
+  "version": "2.27.2",
+  "description": "MCP server for PugBrain - Hybrid Neural-Vector Intelligence Core for AI assistants",
+  "main": "index.js",
+  "bin": {
+    "pug-mcp": "./bin/pug-mcp.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "keywords": [
+    "mcp",
+    "memory",
+    "ai",
+    "neural",
+    "claude",
+    "cursor",
+    "openclaw",
+    "pugbrain",
+    "vector",
+    "graph"
+  ],
+  "author": "PugBrain Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tannht/pug-brain.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tannht/pug-brain/issues"
+  },
+  "homepage": "https://github.com/tannht/pug-brain#readme",
+  "documentation": "https://nhadaututtheky.github.io/neural-memory",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

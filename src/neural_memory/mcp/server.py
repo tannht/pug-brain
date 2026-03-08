@@ -1,0 +1,436 @@
+"""MCP server implementation for NeuralMemory.
+
+Exposes NeuralMemory as tools via Model Context Protocol (MCP),
+allowing Claude Code, Cursor, AntiGravity and other MCP clients to
+store and recall memories.
+
+All tools share the same SQLite database at ~/.neuralmemory/brains/<brain>.db
+This enables seamless memory sharing between different AI tools.
+
+Usage:
+    # Run directly
+    python -m neural_memory.mcp
+
+    # Or add to Claude Code via CLI:
+    claude mcp add --scope user neural-memory -- pug-mcp
+
+    # Or set NEURALMEMORY_BRAIN to use a specific brain:
+    NEURALMEMORY_BRAIN=myproject python -m neural_memory.mcp
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import sys
+from typing import TYPE_CHECKING, Any
+
+from neural_memory import __version__
+from neural_memory.engine.hooks import HookRegistry
+from neural_memory.mcp.alert_handler import AlertHandler
+from neural_memory.mcp.auto_handler import AutoHandler
+from neural_memory.mcp.cognitive_handler import CognitiveHandler
+from neural_memory.mcp.conflict_handler import ConflictHandler
+from neural_memory.mcp.connection_handler import ConnectionHandler
+from neural_memory.mcp.db_train_handler import DBTrainHandler
+from neural_memory.mcp.eternal_handler import EternalHandler
+from neural_memory.mcp.expiry_cleanup_handler import ExpiryCleanupHandler
+from neural_memory.mcp.index_handler import IndexHandler
+from neural_memory.mcp.maintenance_handler import MaintenanceHandler
+from neural_memory.mcp.mem0_sync_handler import Mem0SyncHandler
+from neural_memory.mcp.narrative_handler import NarrativeHandler
+from neural_memory.mcp.onboarding_handler import OnboardingHandler
+from neural_memory.mcp.prompt import get_mcp_instructions, get_system_prompt
+from neural_memory.mcp.review_handler import ReviewHandler
+from neural_memory.mcp.scheduled_consolidation_handler import ScheduledConsolidationHandler
+from neural_memory.mcp.session_handler import SessionHandler
+from neural_memory.mcp.sync_handler import SyncToolHandler
+from neural_memory.mcp.telegram_handler import TelegramHandler
+from neural_memory.mcp.tool_handlers import ToolHandler
+from neural_memory.mcp.tool_schemas import get_tool_schemas_for_tier
+from neural_memory.mcp.train_handler import TrainHandler
+from neural_memory.mcp.version_check_handler import VersionCheckHandler
+from neural_memory.unified_config import get_config, get_shared_storage
+
+if TYPE_CHECKING:
+    from neural_memory.storage.base import NeuralStorage
+    from neural_memory.unified_config import UnifiedConfig
+
+logger = logging.getLogger(__name__)
+
+
+def _sanitize_surrogates(obj: Any) -> Any:
+    """Remove lone surrogate characters from strings in tool arguments.
+
+    On Windows, stdio pipes can introduce surrogate characters (U+D800-U+DFFF)
+    that cause UnicodeEncodeError when passed to UTF-8 encoders or SQLite.
+    """
+    if isinstance(obj, str):
+        return obj.encode("utf-8", errors="surrogatepass").decode("utf-8", errors="replace")
+    if isinstance(obj, dict):
+        return {k: _sanitize_surrogates(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize_surrogates(item) for item in obj]
+    return obj
+
+
+class MCPServer(
+    ToolHandler,
+    SessionHandler,
+    EternalHandler,
+    AutoHandler,
+    IndexHandler,
+    ConflictHandler,
+    TrainHandler,
+    DBTrainHandler,
+    MaintenanceHandler,
+    AlertHandler,
+    ReviewHandler,
+    NarrativeHandler,
+    ConnectionHandler,
+    CognitiveHandler,
+    Mem0SyncHandler,
+    OnboardingHandler,
+    ExpiryCleanupHandler,
+    ScheduledConsolidationHandler,
+    VersionCheckHandler,
+    SyncToolHandler,
+    TelegramHandler,
+):
+    """MCP server that exposes NeuralMemory tools.
+
+    Uses shared SQLite storage for cross-tool memory sharing.
+    Configuration from ~/.neuralmemory/config.toml
+
+    Handler mixins:
+        SessionHandler      — _session, _get_active_session
+        EternalHandler      — _eternal, _recap, _fire_eternal_trigger
+        AutoHandler         — _auto, _passive_capture, _save_detected_memories
+        IndexHandler        — _index, _import
+        ConflictHandler     — _conflicts (list, resolve, check)
+        TrainHandler        — _train (train docs into brain, status)
+        DBTrainHandler      — _train_db (train DB schema into brain, status)
+        MaintenanceHandler  — _check_maintenance, health pulse
+        AlertHandler        — _alerts, persistent alert lifecycle
+        ReviewHandler       — _review, spaced repetition queue/mark/schedule/stats
+        NarrativeHandler    — _narrative, timeline/topic/causal narratives
+        ConnectionHandler   — _explain, shortest-path connection explanation
+        CognitiveHandler    — _hypothesize, _evidence, _predict, _verify, _cognitive, _gaps, _schema
+        Mem0SyncHandler     — maybe_start_mem0_sync, background auto-sync
+        OnboardingHandler   — _check_onboarding, fresh-brain guidance
+        ExpiryCleanupHandler — _maybe_run_expiry_cleanup, auto-delete expired
+        ScheduledConsolidationHandler — periodic background consolidation
+        VersionCheckHandler  — background PyPI version check + update hints
+        SyncToolHandler      — _sync, _sync_status, _sync_config (multi-device sync)
+        TelegramHandler      — _telegram_backup (send brain to Telegram)
+    """
+
+    def __init__(self) -> None:
+        self.config: UnifiedConfig = get_config()
+        self._storage: NeuralStorage | None = None
+        self._eternal_ctx = None
+        self.hooks: HookRegistry = HookRegistry()
+
+    async def get_storage(self) -> NeuralStorage:
+        """Get or create shared storage instance.
+
+        Re-reads ``current_brain`` from disk on each call so that
+        brain switches made by the CLI are picked up without
+        restarting the MCP server.
+        """
+        # get_shared_storage() handles brain-change detection internally
+        # and returns the correct (possibly cached) storage instance.
+        self._storage = await get_shared_storage()
+        return self._storage
+
+    def get_resources(self) -> list[dict[str, Any]]:
+        """Return list of available MCP resources."""
+        return [
+            {
+                "uri": "neuralmemory://prompt/system",
+                "name": "NeuralMemory System Prompt",
+                "description": "Instructions for AI on when/how to use NeuralMemory",
+                "mimeType": "text/plain",
+            },
+            {
+                "uri": "neuralmemory://prompt/compact",
+                "name": "NeuralMemory Compact Prompt",
+                "description": "Short version of system prompt for limited context",
+                "mimeType": "text/plain",
+            },
+        ]
+
+    def get_resource_content(self, uri: str) -> str | None:
+        """Get content for a specific resource URI."""
+        if uri == "neuralmemory://prompt/system":
+            return get_system_prompt(compact=False)
+        elif uri == "neuralmemory://prompt/compact":
+            return get_system_prompt(compact=True)
+        return None
+
+    def get_tools(self) -> list[dict[str, Any]]:
+        """Return list of available MCP tools, filtered by tier."""
+        tier = self.config.tool_tier.tier
+        return get_tool_schemas_for_tier(tier)
+
+    async def call_tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+        """Dispatch a tool call to the appropriate handler."""
+        dispatch = {
+            "pugbrain_remember": self._remember,
+            "pugbrain_recall": self._recall,
+            "pugbrain_context": self._context,
+            "pugbrain_todo": self._todo,
+            "pugbrain_stats": self._stats,
+            "pugbrain_auto": self._auto,
+            "pugbrain_suggest": self._suggest,
+            "pugbrain_session": self._session,
+            "pugbrain_index": self._index,
+            "pugbrain_import": self._import,
+            "pugbrain_eternal": self._eternal,
+            "pugbrain_recap": self._recap,
+            "pugbrain_health": self._health,
+            "pugbrain_evolution": self._evolution,
+            "pugbrain_habits": self._habits,
+            "pugbrain_version": self._version,
+            "pugbrain_transplant": self._transplant,
+            "pugbrain_conflicts": self._conflicts,
+            "pugbrain_train": self._train,
+            "pugbrain_train_db": self._train_db,
+            "pugbrain_pin": self._pin,
+            "pugbrain_alerts": self._alerts,
+            "pugbrain_review": self._review,
+            "pugbrain_narrative": self._narrative,
+            "pugbrain_sync": self._sync,
+            "pugbrain_sync_status": self._sync_status,
+            "pugbrain_sync_config": self._sync_config,
+            "pugbrain_telegram_backup": self._telegram_backup,
+            "pugbrain_explain": self._explain,
+            "pugbrain_hypothesize": self._hypothesize,
+            "pugbrain_evidence": self._evidence,
+            "pugbrain_predict": self._predict,
+            "pugbrain_verify": self._verify,
+            "pugbrain_cognitive": self._cognitive,
+            "pugbrain_gaps": self._gaps,
+            "pugbrain_schema": self._schema,
+            "pugbrain_edit": self._edit,
+            "pugbrain_forget": self._forget,
+        }
+        handler = dispatch.get(name)
+        if handler:
+            return await handler(arguments)
+        return {"error": f"Unknown tool: {name}"}
+
+
+# ──────────────────── Module-level functions ────────────────────
+
+
+def create_mcp_server() -> MCPServer:
+    """Create an MCP server instance."""
+    return MCPServer()
+
+
+async def handle_message(server: MCPServer, message: dict[str, Any]) -> dict[str, Any]:
+    """Handle a single MCP message."""
+    method = message.get("method", "")
+    msg_id = message.get("id")
+    params = message.get("params", {})
+
+    if method == "initialize":
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": {
+                "protocolVersion": "2024-11-05",
+                "serverInfo": {"name": "neural-memory", "version": __version__},
+                "capabilities": {"tools": {}, "resources": {}},
+                "instructions": get_mcp_instructions(),
+            },
+        }
+
+    elif method == "tools/list":
+        return {"jsonrpc": "2.0", "id": msg_id, "result": {"tools": server.get_tools()}}
+
+    elif method == "resources/list":
+        return {"jsonrpc": "2.0", "id": msg_id, "result": {"resources": server.get_resources()}}
+
+    elif method == "resources/read":
+        uri = params.get("uri", "")
+        content = server.get_resource_content(uri)
+        if content is None:
+            return {
+                "jsonrpc": "2.0",
+                "id": msg_id,
+                "error": {"code": -32002, "message": f"Resource not found: {uri}"},
+            }
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": {"contents": [{"uri": uri, "mimeType": "text/plain", "text": content}]},
+        }
+
+    elif method == "tools/call":
+        tool_name = params.get("name", "")
+        raw_args = params.get("arguments", {})
+        # Some MCP clients (e.g. OpenClaw) pass arguments as a JSON string
+        # instead of a parsed dict. Parse it gracefully.
+        if isinstance(raw_args, str):
+            try:
+                raw_args = json.loads(raw_args)
+            except (json.JSONDecodeError, TypeError):
+                raw_args = {"content": raw_args}
+        tool_args = _sanitize_surrogates(raw_args)
+
+        try:
+            result = await asyncio.wait_for(
+                server.call_tool(tool_name, tool_args),
+                timeout=_TOOL_CALL_TIMEOUT,
+            )
+            result_text = json.dumps(result)
+
+            # Post-tool passive capture (fire-and-forget, never blocks response)
+            try:
+                await server._post_tool_capture(tool_name, tool_args, result_text)
+            except Exception:
+                logger.debug("Post-tool passive capture failed", exc_info=True)
+
+            return {
+                "jsonrpc": "2.0",
+                "id": msg_id,
+                "result": {"content": [{"type": "text", "text": result_text}]},
+            }
+        except TimeoutError:
+            return {
+                "jsonrpc": "2.0",
+                "id": msg_id,
+                "error": {
+                    "code": -32000,
+                    "message": f"Tool '{tool_name}' timed out after {_TOOL_CALL_TIMEOUT}s",
+                },
+            }
+        except Exception:
+            logger.error("Tool '%s' raised an exception", tool_name, exc_info=True)
+            return {
+                "jsonrpc": "2.0",
+                "id": msg_id,
+                "error": {"code": -32000, "message": f"Tool '{tool_name}' failed unexpectedly"},
+            }
+
+    elif method == "notifications/initialized" or (method and method.startswith("notifications/")):
+        return None  # type: ignore[return-value]
+
+    else:
+        if msg_id is None:
+            return None  # type: ignore[return-value]
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "error": {"code": -32601, "message": f"Method not found: {method}"},
+        }
+
+
+_TOOL_CALL_TIMEOUT = 30.0  # seconds
+_MAX_MESSAGE_SIZE = 10 * 1024 * 1024  # 10 MB
+
+
+def _lazy_init() -> None:
+    """Run first-time setup if NeuralMemory has never been initialized.
+
+    Safe to call on every MCP start — no-ops if config already exists.
+    Only touches config/brain/hooks; never writes to stdout (reserved for JSON-RPC).
+    """
+    from neural_memory.cli.setup import setup_brain, setup_config, setup_hooks_claude
+    from neural_memory.unified_config import get_neuralmemory_dir
+
+    data_dir = get_neuralmemory_dir()
+    config_path = data_dir / "config.toml"
+    if config_path.exists():
+        return  # Already initialized — fast path, no work done
+
+    try:
+        setup_config(data_dir)
+        setup_brain(data_dir)
+        hook_status = setup_hooks_claude()
+        logger.info("NeuralMemory: first-time auto-init complete (hook: %s)", hook_status)
+    except Exception:
+        logger.debug("NeuralMemory: auto-init failed (non-critical)", exc_info=True)
+
+
+async def run_mcp_server() -> None:
+    """Run the MCP server over stdio."""
+    _lazy_init()
+
+    server = create_mcp_server()
+
+    # Start background Mem0 auto-sync if configured
+    try:
+        await server.maybe_start_mem0_sync()
+    except Exception:
+        logger.debug("Mem0 auto-sync startup failed (non-critical)", exc_info=True)
+
+    # Start scheduled consolidation loop if configured
+    try:
+        await server.maybe_start_scheduled_consolidation()
+    except Exception:
+        logger.debug("Scheduled consolidation startup failed (non-critical)", exc_info=True)
+
+    # Start background version check if configured
+    try:
+        await server.maybe_start_version_check()
+    except Exception:
+        logger.debug("Version check startup failed (non-critical)", exc_info=True)
+
+    try:
+        while True:
+            try:
+                line = await asyncio.get_running_loop().run_in_executor(None, sys.stdin.readline)
+                if not line:
+                    break
+
+                line = line.strip()
+                if not line:
+                    continue
+
+                if len(line) > _MAX_MESSAGE_SIZE:
+                    error_resp = {
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {"code": -32000, "message": "Message too large"},
+                    }
+                    print(json.dumps(error_resp), flush=True)
+                    continue
+
+                message = json.loads(line)
+                response = await handle_message(server, message)
+
+                if response is not None:
+                    print(json.dumps(response), flush=True)
+
+            except json.JSONDecodeError:
+                error_resp = {
+                    "jsonrpc": "2.0",
+                    "id": None,
+                    "error": {"code": -32700, "message": "Parse error"},
+                }
+                print(json.dumps(error_resp), flush=True)
+                continue
+            except EOFError:
+                break
+            except KeyboardInterrupt:
+                break
+    finally:
+        # Cancel background tasks
+        server.cancel_mem0_sync()
+        server.cancel_expiry_cleanup()
+        server.cancel_scheduled_consolidation()
+        server.cancel_version_check()
+
+        # Close aiosqlite connection before event loop exits to prevent
+        # "Event loop is closed" noise from the background thread.
+        if server._storage is not None:
+            await server._storage.close()
+
+
+def main() -> None:
+    """Entry point for the MCP server."""
+    asyncio.run(run_mcp_server())

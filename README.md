@@ -1,0 +1,711 @@
+# 🐶 PugBrain: The Hybrid Neural-Vector Intelligence Core
+
+[![PyPI](https://img.shields.io/pypi/v/pug-brain.svg)](https://pypi.org/project/pug-brain/)
+[![CI](https://github.com/tannht/pug-brain/workflows/CI/badge.svg)](https://github.com/tannht/pug-brain/actions)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![VS Code](https://img.shields.io/visual-studio-marketplace/v/neuralmem.neuralmemory?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory)
+[![OpenClaw Plugin](https://img.shields.io/npm/v/neuralmemory?label=OpenClaw)](https://www.npmjs.com/package/neuralmemory)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+
+PugBrain is an advanced hybrid memory system that bridges the gap between **high-performance semantic search** and **associative neural reasoning**. It fuses the speed of **RuVector (Rust)** with the causal intelligence of a graph-based neural network.
+
+## 🚀 The Pug Brain Architecture
+
+```mermaid
+graph TD
+    User((User/Agent)) -->|Query/Remember| PugBrain[PugBrain Core Engine]
+
+    subgraph "Pug Brain System"
+        Encoder[Memory Encoder]
+        Retrieval[Reflex Pipeline]
+        Graph[Neural Graph Storage]
+
+        PugBrain --> Encoder
+        PugBrain --> Retrieval
+        Encoder <--> Graph
+        Retrieval <--> Graph
+    end
+
+    subgraph "Storage Backends"
+        SQLite[(SQLite - Default)]
+        FalkorDB[(FalkorDB - Optional)]
+        Neo4j[(Neo4j - Optional)]
+
+        Graph --> SQLite
+        Graph -.-> FalkorDB
+        Graph -.-> Neo4j
+    end
+
+    subgraph "Integration Layer"
+        MCP[MCP Server]
+        REST[FastAPI Server]
+        CLI[CLI Interface]
+        Dashboard[Web Dashboard]
+
+        PugBrain --> MCP
+        PugBrain --> REST
+        PugBrain --> CLI
+        REST --> Dashboard
+    end
+```
+
+**38 MCP tools** · **11 memory types** · **24 synapse types** · **Schema v21** · **3200+ tests** · **Cognitive reasoning layer**
+
+- **Neural Core**: Graph-based memory with spreading activation for contextual recall and associative reasoning.
+- **Multi-Backend**: Default SQLite storage with optional FalkorDB or Neo4j for enhanced graph operations.
+- **Integration Ready**: MCP server for AI assistants, REST API, CLI tools, and web dashboard.
+
+## 🛠 Key Features
+- ✅ **Activatable Intelligence**: Neural graph with spreading activation for context-aware memory recall.
+- ✅ **Hybrid Multiple Brains**: Support for multiple independent brain instances with seamless switching.
+- ✅ **Stabilized Dashboard**: A modernized UI with automatic brain detection and zero-config CORS for reliable remote access.
+- ✅ **Docker Native**: Ready-to-use containerized deployment with persistent volume mapping.
+- ✅ **MCP Ready**: Standard Model Context Protocol server for seamless integration with Claude Code, Cursor, and OpenClaw.
+- ✅ **Multi-format Training**: PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, and Markdown document ingestion.
+- ✅ **Code Indexing**: Index and recall from codebases with syntax awareness.
+- ✅ **Cross-Language Embedding**: Optional embedding support for multi-language memory recall.
+
+## 📦 Installation & Setup
+
+### 1. Python Package (pip)
+Install the core pug-brain package:
+```bash
+pip install "pug-brain[server]"
+```
+
+This provides the `pug` CLI command and FastAPI server with dashboard.
+
+### 2. One-Line Installer (Linux / macOS / Windows)
+
+**Linux & macOS:**
+```bash
+curl -sSL https://raw.githubusercontent.com/tannht/pug-brain/pug-master/install.sh | bash
+```
+
+**Windows (Git Bash / WSL / MSYS2):**
+```bash
+curl -sSL https://raw.githubusercontent.com/tannht/pug-brain/pug-master/install.sh | bash
+```
+
+**Windows (PowerShell — native):**
+```powershell
+irm https://raw.githubusercontent.com/tannht/pug-brain/pug-master/install.ps1 | iex
+```
+
+The installer automatically:
+- Detects your OS (Linux, macOS, Windows) and architecture (x86_64, arm64)
+- Finds Python 3.11+ and pip (tries `python3`, `python`, `py -3`)
+- Clones the repository to `~/.pugbrain/workspace/pug-brain`
+- Installs the Python package with `.[server]` extras
+- Builds the web dashboard (if Node.js v18+ is available)
+- Verifies the `pug` CLI is accessible
+
+### 3. Requirements
+- **Python**: 3.11+ (required)
+- **Git**: (required)
+- **Node.js**: v18+ (optional — for dashboard UI)
+
+## ⌨️ CLI Usage
+PugBrain provides a simple global command for all your memory needs:
+
+```bash
+# Remember a strategic decision
+pug remember "Switched primary model to Gemini 3.1 Pro for better reasoning" --type decision --tags setup,ai
+
+# Recall with context
+pug recall "What is our current model configuration?"
+
+# Check system health and stats
+pug status
+```
+
+## 🐳 Docker Deployment
+To run the PugBrain Core and Dashboard behind a proxy (like Caddy/Nginx) with persistent storage:
+```bash
+# Clone the repo
+git clone -b pug-master https://github.com/tannht/pug-brain.git
+cd pug-brain
+
+# Build and start
+docker compose up -d --build
+```
+The dashboard will be available at `http://localhost:18790`
+
+## 🔄 Maintenance
+Keep your brain sharp by running the update script:
+```bash
+~/.pugbrain/workspace/pug-brain/scripts/update-brain.sh
+```
+
+---
+
+### Optional: Embedding for Cross-Language Recall
+
+Core recall works without embeddings. Enable embeddings to recall memories across languages (e.g., search in Vietnamese, find English memories):
+
+```toml
+# ~/.neuralmemory/config.toml
+[embedding]
+enabled = true
+provider = "auto"    # Auto-detects: Ollama → sentence-transformers → Gemini → OpenAI
+```
+
+Or pick a specific provider: **sentence_transformer** (free/local), **ollama** (local via Ollama API), **gemini** (Google free tier), **openai** (paid). See the [Embedding Setup Guide](docs/guides/embedding-setup.md) for details.
+
+## 🐶 OpenClaw Plugin
+
+PugBrain provides a first-class plugin for OpenClaw with automatic memory context injection and capture.
+
+### Features
+
+- **6 MCP Tools**: `pugbrain_remember`, `pugbrain_recall`, `pugbrain_context`, `pugbrain_todo`, `pugbrain_stats`, `pugbrain_health`
+- **Auto-context**: Injects relevant memories before each agent run
+- **Auto-capture**: Extracts facts, decisions, and insights after each agent run
+- **Configurable depth**: 4 recall depths (instant, context, habit, deep)
+- **Configurable tokens**: Control how much context to inject
+
+### Installation
+
+```bash
+# 1. Install Python package
+pip install pug-brain
+
+# 2. Install the OpenClaw plugin
+npm install -g pug-brain-openclaw
+```
+
+### Configuration
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "plugins": {
+    "slots": {
+      "memory": "pug-brain"
+    },
+    "config": {
+      "pug-brain": {
+        "brain": "default",
+        "autoContext": true,
+        "autoCapture": true,
+        "contextDepth": 1,
+        "maxContextTokens": 500
+      }
+    }
+  }
+}
+```
+
+---
+
+## Quick Setup
+
+### Claude Code (Plugin — Recommended)
+
+```bash
+/plugin marketplace add tannht/pug-brain
+/plugin install pug-brain@pug-brain-marketplace
+```
+
+That's it. MCP server, skills, commands, and agent are all configured automatically via `uvx`.
+
+### OpenClaw (Plugin) — Recommended
+
+```bash
+# 1. Install Python package
+pip install pug-brain
+
+# 2. Install the OpenClaw plugin
+npm install -g pug-brain-openclaw
+
+# 3. Configure the memory slot in `~/.openclaw/openclaw.json`:
+```json
+{
+  "plugins": {
+    "slots": {
+      "memory": "pug-brain"
+    }
+  }
+}
+```
+
+Restart the gateway. See the [full setup guide](docs/guides/openclaw-plugin.md).
+
+### Cursor / Windsurf / Other MCP Clients
+
+```bash
+pip install pug-brain
+```
+
+Then add to your editor's MCP config (Cursor: `.cursor/mcp.json`, Windsurf: `~/.codeium/windsurf/mcp_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "pug-brain": {
+      "command": "pug-mcp"
+    }
+  }
+}
+```
+
+The editor spawns `pug-mcp` automatically via stdio — no manual server start needed. No `pug init` needed — auto-initializes on first use.
+
+## Usage
+
+### CLI
+
+```bash
+# Store memories (type auto-detected)
+pug remember "Fixed auth bug with null check in login.py:42"
+pug remember "We decided to use PostgreSQL" --type decision
+pug todo "Review PR #123" --priority 7
+
+# Recall memories
+pug recall "auth bug"
+pug recall "database decision" --depth 2
+
+# Shortcuts
+pug a "quick note"           # Short for remember
+pug q "auth"                 # Short for recall
+pug last 5                   # Last 5 memories
+pug today                    # Today's memories
+
+# Get context for AI injection
+pug context --limit 10 --json
+
+# Brain management
+pug brain list
+pug brain create work
+pug brain use work
+pug brain health
+pug brain export -o backup.json
+pug brain import backup.json
+
+# Codebase indexing
+pug index src/               # Index code into neural memory
+
+# Memory lifecycle
+pug decay                    # Apply forgetting curve
+pug consolidate              # Prune, merge, summarize
+pug cleanup                  # Remove expired memories
+
+# Visual tools
+pug serve                    # Start FastAPI server
+# Then open http://localhost:18790/dashboard
+
+# Telegram backup
+pug telegram status          # Show Telegram config status
+pug telegram test            # Send test message
+pug telegram backup          # Send brain .db to Telegram
+```
+
+### Python API
+
+```python
+import asyncio
+from neural_memory import Brain
+from neural_memory.storage import InMemoryStorage
+from neural_memory.engine.encoder import MemoryEncoder
+from neural_memory.engine.retrieval import ReflexPipeline
+
+async def main():
+    storage = InMemoryStorage()
+    brain = Brain.create("my_brain")
+    await storage.save_brain(brain)
+    storage.set_brain(brain.id)
+
+    # Encode memories
+    encoder = MemoryEncoder(storage, brain.config)
+    await encoder.encode("Met Alice to discuss API design")
+    await encoder.encode("Decided to use FastAPI for backend")
+
+    # Query through activation
+    pipeline = ReflexPipeline(storage, brain.config)
+    result = await pipeline.query("What did we decide about backend?")
+    print(result.context)  # "Decided to use FastAPI for backend"
+
+asyncio.run(main())
+```
+
+### MCP Tools (Claude Code / Cursor)
+
+Once configured, these 38 tools are available to your AI assistant:
+
+**Core Memory:**
+
+| Tool | Description |
+|------|-------------|
+| `pugbrain_remember` | Store a memory (auto-detects type: fact, decision, insight, error, etc.) |
+| `pugbrain_recall` | Query with spreading activation (4 depth levels: instant/context/habit/deep) |
+| `pugbrain_context` | Get recent memories as session context |
+| `pugbrain_todo` | Quick TODO with 30-day expiry |
+| `pugbrain_auto` | Auto-capture memories from conversation text |
+| `pugbrain_suggest` | Autocomplete suggestions from brain neurons |
+| `pugbrain_edit` | Edit memory type, content, or priority (preserves connections) |
+| `pugbrain_forget` | Soft delete (set expiry) or hard delete (permanent removal) |
+
+**Workflow:**
+
+| Tool | Description |
+|------|-------------|
+| `pugbrain_session` | Track session state: task, feature, progress |
+| `pugbrain_eternal` | Save project context, decisions, instructions |
+| `pugbrain_recap` | Load saved context at session start |
+| `pugbrain_stats` | Brain statistics and health metrics |
+| `pugbrain_habits` | Workflow habit suggestions from usage patterns |
+
+**Knowledge Base:**
+
+| Tool | Description |
+|------|-------------|
+| `pugbrain_train` | Train brain from docs (PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, MD) |
+| `pugbrain_train_db` | Train brain from database schema |
+| `pugbrain_index` | Index codebase for code-aware recall |
+| `pugbrain_pin` | Pin/unpin memories (pinned = permanent, skip decay/prune) |
+
+**Advanced:**
+
+| Tool | Description |
+|------|-------------|
+| `pugbrain_health` | Brain health: purity score, grade (A-F), top penalties with fix actions |
+| `pugbrain_explain` | Trace shortest path between two concepts — debug recall, verify connections |
+| `pugbrain_review` | Spaced repetition reviews (Leitner box system) |
+| `pugbrain_conflicts` | Memory conflicts: list, resolve, or pre-check |
+| `pugbrain_narrative` | Generate narratives: timeline, topic, or causal chain |
+| `pugbrain_alerts` | Brain health alerts: list or acknowledge |
+| `pugbrain_version` | Brain version control: snapshot, list, rollback, diff |
+| `pugbrain_transplant` | Transplant memories between brains by tags/types |
+| `pugbrain_import` | Import from ChromaDB, Mem0, Cognee, Graphiti, LlamaIndex |
+| `pugbrain_sync` | Multi-device sync (push/pull/full) |
+| `pugbrain_sync_status` | Sync status and pending changes |
+| `pugbrain_sync_config` | Configure sync settings |
+| `pugbrain_telegram_backup` | Send brain database backup to Telegram |
+
+**Cognitive Reasoning:**
+
+| Tool | Description |
+|------|-------------|
+| `pugbrain_hypothesize` | Create and manage hypotheses with Bayesian confidence tracking |
+| `pugbrain_evidence` | Submit evidence for/against hypotheses — auto-updates confidence |
+| `pugbrain_predict` | Make falsifiable predictions with deadlines, linked to hypotheses |
+| `pugbrain_verify` | Verify predictions as correct/wrong — propagates to linked hypotheses |
+| `pugbrain_cognitive` | Hot index: ranked summary of active hypotheses + predictions |
+| `pugbrain_gaps` | Knowledge gaps: detect, track, and resolve what the brain doesn't know |
+| `pugbrain_schema` | Schema evolution: evolve hypotheses into new versions with SUPERSEDES links |
+| `pugbrain_explain` | Trace shortest path between two concepts — debug recall, verify connections |
+
+### VS Code Extension
+
+Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory).
+
+- Memory tree view in the sidebar
+- Interactive graph explorer with Cytoscape.js
+- Encode from editor selections or comment triggers
+- CodeLens memory counts on functions and classes
+- Recap, eternal context, and codebase indexing commands
+- Real-time WebSocket sync
+
+## How It Works
+
+```
+Query: "What did Alice suggest?"
+         │
+         ▼
+┌─────────────────────┐
+│ 1. Decompose Query  │  → time hints, entities, intent
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│ 2. Find Anchors     │  → "Alice" neuron
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│ 3. Spread Activation│  → activate connected neurons
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│ 4. Find Intersection│  → high-activation subgraph
+└─────────────────────┘
+         │
+         ▼
+┌─────────────────────┐
+│ 5. Extract Context  │  → "Alice suggested rate limiting"
+└─────────────────────┘
+```
+
+### Key Concepts
+
+| Concept | What it is |
+|---------|------------|
+| **Neuron** | A memory unit (concept, entity, action, time, state, spatial, sensory, intent) |
+| **Synapse** | A weighted, typed connection between neurons (`CAUSED_BY`, `LEADS_TO`, `RESOLVED_BY`, etc.) |
+| **Fiber** | A memory trace — an ordered sequence of neurons forming a coherent experience |
+| **Spreading activation** | Signal propagates from anchor neurons through synapses, decaying with distance |
+| **Reflex pipeline** | Query → decompose → anchor → activate → intersect → extract context |
+| **Decay** | Memories lose activation over time following the Ebbinghaus forgetting curve |
+| **Consolidation** | Prune weak synapses, merge overlapping fibers, summarize topic clusters |
+
+## Features
+
+### Memory Types
+
+```bash
+pug remember "Objective fact" --type fact
+pug remember "We chose X over Y" --type decision
+pug remember "User prefers dark mode" --type preference
+pug todo "Review the PR" --priority 7 --expires 30
+pug remember "Pattern: always validate input" --type insight
+pug remember "Meeting notes from standup" --type context --expires 7
+pug remember "Always run tests before push" --type instruction
+pug remember "Import failed: missing column" --type error
+pug remember "Deploy process: build → test → push" --type workflow
+pug remember "API docs: https://..." --type reference
+```
+
+### Knowledge Base Training
+
+```bash
+# Train from documents (permanent knowledge)
+pugbrain_train(action="train", path="/docs/", domain_tag="project-docs")
+
+# Supported formats: PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, MD, TXT, RST
+# Trained memories are pinned — they never decay, prune, or compress
+
+# Pin/unpin specific memories
+pugbrain_pin(fiber_ids=["abc123"], pinned=True)
+```
+
+Install extraction dependencies:
+```bash
+pip install "pug-brain[extract]"
+```
+
+### Brain Health & Diagnostics
+
+```bash
+pugbrain_health()                       # Purity score, grade (A-F), top penalties
+pugbrain_alerts(action="list")          # Active health alerts
+pugbrain_review(action="queue")         # Spaced repetition review queue
+```
+
+Health reports include **`top_penalties`** — a ranked list of what's hurting your score most, with exact fix actions. Always fix the highest penalty first.
+
+7 components: Connectivity (25%), Diversity (20%), Freshness (15%), Consolidation (15%), Orphan Rate (10%), Activation (10%), Recall Confidence (5%).
+
+See the [Brain Health Guide](docs/guides/brain-health.md) for detailed explanations and improvement roadmap.
+
+### Connection Tracing
+
+Trace the shortest path between two concepts in your neural graph:
+
+```bash
+# CLI
+pug explain "Redis" "auth outage"
+
+# MCP tool
+pugbrain_explain(entity_a="Redis", entity_b="auth outage")
+```
+
+Returns the path with evidence: `Redis → USED_BY → session-store → CAUSED_BY → auth outage`. Use this to debug recall, verify brain connections, or discover unexpected relationships between concepts.
+
+### Cognitive Reasoning
+
+Hypothesize, predict, verify, and evolve beliefs — the brain reasons about what it knows:
+
+```bash
+# Create a hypothesis with initial confidence
+pugbrain_hypothesize(action="create", content="Redis is causing the latency spike", confidence=0.6)
+
+# Submit evidence
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="for", content="Redis latency at 200ms")
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="against", content="Network latency was 500ms")
+
+# Make a falsifiable prediction
+pugbrain_predict(action="create", content="Switching to Valkey will fix latency",
+             hypothesis_id="h-1", deadline="2026-04-01")
+
+# Verify prediction outcome — propagates to linked hypothesis
+pugbrain_verify(prediction_id="p-1", outcome="correct")
+
+# Evolve hypothesis when understanding changes (creates SUPERSEDES chain)
+pugbrain_schema(action="evolve", hypothesis_id="h-1",
+            content="Network config was root cause, not Redis",
+            reason="New evidence from network team")
+
+# Track what the brain doesn't know
+pugbrain_gaps(action="detect", topic="Why does latency spike at 3am?", source="recall_miss")
+
+# View cognitive dashboard
+pugbrain_cognitive(action="summary")    # Hot index of active hypotheses + predictions
+pugbrain_schema(action="history", hypothesis_id="h-2")  # Version evolution chain
+```
+
+Auto-resolution: hypotheses with confidence ≥0.9 + 3 supporting evidence → auto-confirmed. Confidence ≤0.1 + 3 against → auto-refuted. Calibration score tracks prediction accuracy.
+
+### Brain Versioning
+
+```bash
+pugbrain_version(action="create", name="v1-stable")  # Snapshot
+pugbrain_version(action="list")                       # List versions
+pugbrain_version(action="rollback", version_id="...")  # Restore
+pugbrain_version(action="diff", from_version="...", to_version="...")
+```
+
+### Web Dashboard
+
+```bash
+pug serve                         # Start server on localhost:18790
+# Open http://localhost:18790/dashboard  # React dashboard (7 pages)
+# Open http://localhost:18790/docs       # API docs (Swagger)
+```
+
+Pages:
+- **Overview** — KPI cards (neurons, synapses, fibers, brains) + brain table with click-to-switch and delete
+- **Health** — Radar chart + health warnings + recommendations
+- **Graph** — Sigma.js WebGL neural graph with ForceAtlas2 layout, color-coded by type, node inspector
+- **Timeline** — Chronological memory feed with type badges
+- **Evolution** — Brain maturity, plasticity, stage distribution charts
+- **Mindmap** — ReactFlow interactive fiber mindmap (dagre tree, zoom/pan, MiniMap)
+- **Settings** — Brain files, Telegram backup config
+
+Light/Dark/System theme toggle with warm cream light mode.
+
+### Telegram Backup
+
+Send brain `.db` files to Telegram for offsite backup:
+
+```bash
+# Setup: set env var + config
+export PUG_TELEGRAM_BOT_TOKEN="your-bot-token"
+# Add to config.toml:
+# [telegram]
+# enabled = true
+# chat_ids = ["123456789"]
+
+# CLI
+pug telegram status              # Check config
+pug telegram test                # Send test message
+pug telegram backup              # Send brain backup
+pug telegram backup --brain work # Specific brain
+
+# MCP tool
+pugbrain_telegram_backup(brain_name="work")
+```
+
+### Multi-Device Sync
+
+```bash
+pugbrain_sync(action="full")           # Bidirectional sync
+pugbrain_sync_status()                 # Pending changes, devices
+pugbrain_sync_config(action="set", hub_url="http://hub:8080")
+```
+
+### External Memory Import
+
+Import from existing memory systems:
+
+```bash
+# ChromaDB
+pug import backup.json --source chromadb
+
+# Via MCP tool
+pugbrain_import(source="mem0")           # Uses MEM0_API_KEY env var
+pugbrain_import(source="chromadb", connection="/path/to/chroma")
+pugbrain_import(source="cognee")         # Uses COGNEE_API_KEY env var
+pugbrain_import(source="graphiti", connection="bolt://localhost:7687")
+pugbrain_import(source="llamaindex", connection="/path/to/index")
+```
+
+### Safety & Security
+
+```bash
+# Sensitive content detection
+pug check "API_KEY=sk-xxx"
+
+# Auto-redact before storing
+pug remember "Config: API_KEY=sk-xxx" --redact
+
+# Safe export (exclude sensitive neurons)
+pug brain export --exclude-sensitive -o safe.json
+
+# Health check (freshness + sensitive scan)
+pug brain health
+```
+
+- Content length validation (100KB limit)
+- ReDoS protection (text truncation before regex)
+- Spreading activation queue cap (prevents memory exhaustion)
+- API keys read from environment variables, never from tool parameters
+- `max_tokens` clamped to 10,000
+
+### Server Mode
+
+```bash
+pip install "pug-brain[server]"
+pug serve                    # localhost:18790
+pug serve -p 9000            # Custom port
+pug serve --host 0.0.0.0    # Expose to network
+```
+
+API endpoints:
+```
+POST /memory/encode     - Store memory
+POST /memory/query      - Query memories
+POST /brain/create      - Create brain
+GET  /brain/{id}/export - Export brain
+WS   /sync/ws           - Real-time sync
+POST /hub/sync          - Multi-device incremental sync
+GET  /hub/devices/{id}  - List registered devices
+GET  /dashboard         - Web dashboard
+GET  /docs              - API documentation
+```
+
+### Git Hooks
+
+```bash
+pug hooks install          # Post-commit reminder to save commit messages
+pug hooks show             # Show installed hooks
+pug hooks uninstall        # Remove hooks
+```
+
+## Development
+
+```bash
+git clone https://github.com/tannht/pug-brain
+cd pug-brain
+pip install -e ".[dev]"
+
+# Run tests (3200+ tests)
+pytest tests/ -v
+
+# Lint & format
+ruff check src/ tests/
+ruff format src/ tests/
+```
+
+## Documentation
+
+- **[Complete Guide](docs/index.md)** — Full documentation
+- **[Integration Guide](docs/guides/integration.md)** — AI assistant & tool integration
+- **[Safety & Limitations](docs/guides/safety.md)** — Security best practices
+- **[Architecture](docs/architecture/overview.md)** — Technical design
+
+## Support
+
+If you find PugBrain useful, consider supporting development:
+
+**Solana:** `5XVY6dZDeyuZJy6Co9KeLDxY5RZ6EwCpjsUVkacMz7HF`
+
+## Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+MIT License — see [LICENSE](LICENSE).

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  neural-memory:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "18790:18790"
+    environment:
+      - NEURAL_MEMORY_HOST=0.0.0.0
+      - NEURAL_MEMORY_PORT=18790
+      - NEURAL_MEMORY_DEBUG=false
+      - NEURAL_MEMORY_STORAGE=sqlite
+      - NEURAL_MEMORY_DATA_DIR=/data
+      - NM_HOME=/data
+    volumes:
+      - /root/.neuralmemory:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:18790/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  falkordb_data:
