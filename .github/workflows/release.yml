@@ -112,9 +112,9 @@ jobs:
 
           level = None
           if re.search(r"BREAKING CHANGE", log, re.I) or re.search(r"^\w+!:", log, re.M):
-              level = "major"
+              level = "patch"
           elif re.search(r"^feat(\(.+\))?:", log, re.M):
-              level = "minor"
+              level = "patch"
           elif re.search(r"^(fix|perf|chore)(\(.+\))?:", log, re.M):
               level = "patch"
 
