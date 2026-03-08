@@ -6,6 +6,15 @@ import os
 from dataclasses import dataclass, field
 
 
+def _detect_vector_backend() -> str:
+    """Prefer RuVector if available, otherwise fall back to numpy."""
+    try:
+        import ruvector  # type: ignore[import-untyped]  # noqa: F401
+        return "ruvector"
+    except ImportError:
+        return "numpy"
+
+
 @dataclass
 class Config:
     """
@@ -26,6 +35,7 @@ class Config:
     falkordb_port: int = 6379
     falkordb_username: str | None = None
     falkordb_password: str | None = None
+    vector_backend: str = field(default_factory=_detect_vector_backend)
 
     # Brain defaults
     default_decay_rate: float = 0.1
@@ -92,6 +102,7 @@ class Config:
             falkordb_port=get_int("NEURAL_MEMORY_FALKORDB_PORT", 6379),
             falkordb_username=os.getenv("NEURAL_MEMORY_FALKORDB_USERNAME"),
             falkordb_password=os.getenv("NEURAL_MEMORY_FALKORDB_PASSWORD"),
+            vector_backend=os.getenv("NEURAL_MEMORY_VECTOR_BACKEND", _detect_vector_backend()),
             default_decay_rate=get_float("NEURAL_MEMORY_DECAY_RATE", 0.1),
             default_activation_threshold=get_float("NEURAL_MEMORY_ACTIVATION_THRESHOLD", 0.2),
             default_max_spread_hops=get_int("NEURAL_MEMORY_MAX_SPREAD_HOPS", 4),
