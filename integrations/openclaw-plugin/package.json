@@ -1,6 +1,6 @@
 {
   "name": "pug-brain-openclaw",
-  "version": "2.27.2",
+  "version": "2.27.3",
   "description": "PugBrain plugin for OpenClaw — brain-inspired persistent memory for AI agents",
   "type": "module",
   "main": "dist/index.js",
