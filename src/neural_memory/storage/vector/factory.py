@@ -71,7 +71,7 @@ def _create_auto(
 ) -> VectorStore:
     """Try ruvector first, fall back to numpy."""
     try:
-        import ruvector  # type: ignore[import-untyped]  # noqa: F401
+        import ruvector  # noqa: F401
 
         logger.info("PugBrain Vector: Using ruvector (Rust HNSW) backend 🦀")
         return _create_ruvector(dimension, persist_dir, **kwargs)
@@ -122,7 +122,7 @@ def get_available_backends() -> list[str]:
     available = ["numpy"]  # Always available (numpy is a dependency)
 
     try:
-        import ruvector  # type: ignore[import-untyped]  # noqa: F401
+        import ruvector  # noqa: F401
 
         available.insert(0, "ruvector")
     except ImportError:

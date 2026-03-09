@@ -68,7 +68,7 @@ class RuVectorStore(VectorStore):
         self._loop = asyncio.get_event_loop()
 
         try:
-            import ruvector  # type: ignore[import-untyped]
+            import ruvector
 
             # Try to load existing index
             if self._persist_dir and (self._persist_dir / "index.ruv").exists():

@@ -28,7 +28,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 # Callback type: (records_processed, total_records, current_record_id)
-ProgressCallback = Callable[[int, int, str], None]
+# Can be sync or async
+ProgressCallback = Callable[[int, int, str], None] | Callable[[int, int, str], Coroutine[Any, Any, None]]
 
 
 class SyncEngine:
@@ -311,12 +312,13 @@ class SyncEngine:
                     continue
 
                 # Get fiber content from primary neuron
-                neurons = await self._storage.get_neurons_by_ids(fiber.neuron_ids)
-                if not neurons:
+                neurons_dict = await self._storage.get_neurons_batch(fiber.neuron_ids)
+                if not neurons_dict:
                     skipped_count += 1
                     continue
 
                 # Combine content from neurons
+                neurons = list(neurons_dict.values())
                 content_parts = [n.content for n in neurons if n.content]
                 if not content_parts:
                     skipped_count += 1
