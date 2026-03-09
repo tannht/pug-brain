@@ -52,7 +52,7 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -78,3 +78,10 @@ jobs:
         run: |
           npm ci
           npm audit --audit-level=high --omit=dev
+
+      - name: Build and test OpenClaw plugin
+        working-directory: integrations/openclaw-plugin
+        run: |
+          npm ci
+          npm run build
+          npm test

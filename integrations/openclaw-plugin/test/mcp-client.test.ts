@@ -10,7 +10,7 @@ vi.mock("node:child_process", () => ({
 }));
 
 // Must import after mocking
-const { NeuralMemoryMcpClient } = await import("../src/mcp-client.js");
+const { PugBrainMcpClient } = await import("../src/mcp-client.js");
 
 function makeLogger(): PluginLogger {
   return {
@@ -41,13 +41,12 @@ function makeMockProc(): MockProc {
   return proc;
 }
 
-function buildJsonRpcFrame(message: object): Buffer {
-  const json = JSON.stringify(message);
-  const byteLength = Buffer.byteLength(json, "utf-8");
-  return Buffer.from(`Content-Length: ${byteLength}\r\n\r\n${json}`);
+function buildJsonRpcLine(message: object): Buffer {
+  // MCP uses newline-delimited JSON Lines (not Content-Length headers)
+  return Buffer.from(JSON.stringify(message) + "\n");
 }
 
-describe("NeuralMemoryMcpClient", () => {
+describe("PugBrainMcpClient", () => {
   let logger: PluginLogger;
 
   beforeEach(() => {
@@ -57,7 +56,7 @@ describe("NeuralMemoryMcpClient", () => {
 
   describe("constructor", () => {
     it("sets defaults correctly", () => {
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python3",
         brain: "test-brain",
         logger,
@@ -71,7 +70,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "/usr/bin/python3",
         brain: "default",
         logger,
@@ -80,7 +79,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
 
       // Simulate initialize response
-      const initResponse = buildJsonRpcFrame({
+      const initResponse = buildJsonRpcLine({
         jsonrpc: "2.0",
         id: 1,
         result: { protocolVersion: "2024-11-05" },
@@ -91,7 +90,7 @@ describe("NeuralMemoryMcpClient", () => {
 
       expect(mockSpawn).toHaveBeenCalledWith(
         "/usr/bin/python3",
-        ["-m", "neural_memory.mcp"],
+        ["pug-mcp"],
         expect.objectContaining({
           stdio: ["pipe", "pipe", "pipe"],
         }),
@@ -103,7 +102,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "custom",
         logger,
@@ -111,7 +110,7 @@ describe("NeuralMemoryMcpClient", () => {
 
       const connectPromise = client.connect();
 
-      const initResponse = buildJsonRpcFrame({
+      const initResponse = buildJsonRpcLine({
         jsonrpc: "2.0",
         id: 1,
         result: {},
@@ -124,7 +123,7 @@ describe("NeuralMemoryMcpClient", () => {
       const env = spawnCall[2].env as Record<string, string>;
 
       // Should NOT contain full process.env
-      expect(env).toHaveProperty("NEURALMEMORY_BRAIN", "custom");
+      expect(env).toHaveProperty("PUGBRAIN_BRAIN", "custom");
       // Should not have random env vars
       expect(Object.keys(env).length).toBeLessThan(
         Object.keys(process.env).length,
@@ -135,17 +134,17 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
-        timeout: 100,
+        initTimeout: 100,
       });
 
       const connectPromise = client.connect();
 
       // Emit stderr before the timeout
-      proc.stderr.emit("data", Buffer.from("ModuleNotFoundError: neural_memory"));
+      proc.stderr.emit("data", Buffer.from("ModuleNotFoundError: pug_brain"));
 
       // Let timeout trigger
       await expect(connectPromise).rejects.toThrow("MCP initialize failed");
@@ -157,7 +156,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -167,7 +166,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -177,7 +176,7 @@ describe("NeuralMemoryMcpClient", () => {
       // Respond
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({
+        buildJsonRpcLine({
           jsonrpc: "2.0",
           id: 2,
           result: {
@@ -194,7 +193,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -203,14 +202,14 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
       const callPromise = client.callTool("pugbrain_stats", {});
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({
+        buildJsonRpcLine({
           jsonrpc: "2.0",
           id: 2,
           result: {
@@ -229,7 +228,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -238,7 +237,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -261,7 +260,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -270,7 +269,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -286,7 +285,7 @@ describe("NeuralMemoryMcpClient", () => {
 
   describe("writeMessage / notify guards", () => {
     it("send rejects when process not available", async () => {
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -304,7 +303,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -314,7 +313,7 @@ describe("NeuralMemoryMcpClient", () => {
 
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: { ok: true } }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: { ok: true } }),
       );
 
       await connectPromise;
@@ -325,7 +324,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -334,7 +333,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
 
       // Send a partial frame (header but incomplete body)
-      const fullFrame = buildJsonRpcFrame({
+      const fullFrame = buildJsonRpcLine({
         jsonrpc: "2.0",
         id: 1,
         result: {},
@@ -353,7 +352,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -364,7 +363,7 @@ describe("NeuralMemoryMcpClient", () => {
       // Send init response
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -372,12 +371,12 @@ describe("NeuralMemoryMcpClient", () => {
       const call1Promise = client.callTool("pugbrain_stats", {});
       const call2Promise = client.callTool("pugbrain_health", {});
 
-      const frame1 = buildJsonRpcFrame({
+      const frame1 = buildJsonRpcLine({
         jsonrpc: "2.0",
         id: 2,
         result: { content: [{ type: "text", text: '{"stats": 1}' }] },
       });
-      const frame2 = buildJsonRpcFrame({
+      const frame2 = buildJsonRpcLine({
         jsonrpc: "2.0",
         id: 3,
         result: { content: [{ type: "text", text: '{"health": "A"}' }] },
@@ -398,7 +397,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -407,7 +406,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -417,7 +416,7 @@ describe("NeuralMemoryMcpClient", () => {
       const unicodeText = '{"answer": "こんにちは 🧠"}';
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({
+        buildJsonRpcLine({
           jsonrpc: "2.0",
           id: 2,
           result: { content: [{ type: "text", text: unicodeText }] },
@@ -434,7 +433,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -443,7 +442,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -460,7 +459,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -469,7 +468,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -484,7 +483,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -493,7 +492,7 @@ describe("NeuralMemoryMcpClient", () => {
       const connectPromise = client.connect();
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 
@@ -501,7 +500,7 @@ describe("NeuralMemoryMcpClient", () => {
 
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({
+        buildJsonRpcLine({
           jsonrpc: "2.0",
           id: 2,
           error: { code: -32600, message: "Invalid request" },
@@ -517,7 +516,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -532,7 +531,7 @@ describe("NeuralMemoryMcpClient", () => {
 
       proc.stdout.emit(
         "data",
-        buildJsonRpcFrame({ jsonrpc: "2.0", id: 1, result: {} }),
+        buildJsonRpcLine({ jsonrpc: "2.0", id: 1, result: {} }),
       );
       await connectPromise;
 

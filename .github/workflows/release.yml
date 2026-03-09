@@ -78,6 +78,19 @@ jobs:
         run: |
           npm publish --access public || echo "npm publish skipped or failed"
 
+      - name: Build OpenClaw plugin
+        working-directory: integrations/openclaw-plugin
+        run: |
+          npm install
+          npm run build
+
+      - name: Publish OpenClaw plugin to npm
+        working-directory: integrations/openclaw-plugin
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --access public || echo "OpenClaw plugin npm publish skipped or failed"
+
       - name: Upload to GitHub Release
         if: github.event_name == 'release'
         env:

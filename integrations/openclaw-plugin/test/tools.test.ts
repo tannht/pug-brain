@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { createTools, type ToolDefinition } from "../src/tools.js";
-import type { NeuralMemoryMcpClient } from "../src/mcp-client.js";
+import type { PugBrainMcpClient } from "../src/mcp-client.js";
 
 function makeMockMcp(
-  overrides: Partial<NeuralMemoryMcpClient> = {},
-): NeuralMemoryMcpClient {
+  overrides: Partial<PugBrainMcpClient> = {},
+): PugBrainMcpClient {
   return {
     connected: true,
     callTool: vi.fn().mockResolvedValue("{}"),
@@ -12,7 +12,7 @@ function makeMockMcp(
     ensureConnected: vi.fn().mockResolvedValue(undefined),
     close: vi.fn(),
     ...overrides,
-  } as unknown as NeuralMemoryMcpClient;
+  } as unknown as PugBrainMcpClient;
 }
 
 // ── Schema helpers ────────────────────────────────────────
@@ -328,7 +328,7 @@ describe("tool execution", () => {
     const tools = createTools(mcp);
     await tools[0].execute("call-1", { content: "test" });
     expect(ensureConnected).toHaveBeenCalledOnce();
-    expect(callTool).toHaveBeenCalledWith("nmem_remember", { content: "test" });
+    expect(callTool).toHaveBeenCalledWith("pugbrain_remember", { content: "test" });
   });
 
   it("returns error when auto-connect fails", async () => {
@@ -340,7 +340,7 @@ describe("tool execution", () => {
     const result = await tools[0].execute("call-1", { content: "test" });
     expect(result).toEqual({
       error: true,
-      message: "NeuralMemory auto-connect failed: python not found",
+      message: "PugBrain auto-connect failed: python not found",
     });
   });
 

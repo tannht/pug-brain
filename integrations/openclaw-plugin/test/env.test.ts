@@ -24,14 +24,14 @@ describe("buildChildEnv", () => {
     expect(env).toEqual({});
   });
 
-  it("does not set NEURALMEMORY_BRAIN for default brain", () => {
+  it("does not set PUGBRAIN_BRAIN for default brain", () => {
     const env = buildChildEnv("default");
-    expect(env).not.toHaveProperty("NEURALMEMORY_BRAIN");
+    expect(env).not.toHaveProperty("PUGBRAIN_BRAIN");
   });
 
-  it("sets NEURALMEMORY_BRAIN for custom brain", () => {
+  it("sets PUGBRAIN_BRAIN for custom brain", () => {
     const env = buildChildEnv("my-brain");
-    expect(env.NEURALMEMORY_BRAIN).toBe("my-brain");
+    expect(env.PUGBRAIN_BRAIN).toBe("my-brain");
   });
 
   it("only passes through whitelisted keys", () => {
@@ -76,15 +76,15 @@ describe("buildChildEnv", () => {
     }
   });
 
-  it("passes through all NeuralMemory-specific env vars", () => {
-    process.env.NEURALMEMORY_DIR = "/data/nm";
+  it("passes through all PugBrain-specific env vars", () => {
+    process.env.PUGBRAIN_DIR = "/data/nm";
     process.env.NEURAL_MEMORY_DIR = "/alt/dir";
     process.env.NEURAL_MEMORY_JSON = "/config.json";
     process.env.NEURAL_MEMORY_DEBUG = "1";
 
     const env = buildChildEnv("default");
 
-    expect(env.NEURALMEMORY_DIR).toBe("/data/nm");
+    expect(env.PUGBRAIN_DIR).toBe("/data/nm");
     expect(env.NEURAL_MEMORY_DIR).toBe("/alt/dir");
     expect(env.NEURAL_MEMORY_JSON).toBe("/config.json");
     expect(env.NEURAL_MEMORY_DEBUG).toBe("1");
@@ -111,7 +111,7 @@ describe("ALLOWED_ENV_KEYS", () => {
     expect(ALLOWED_ENV_KEYS.has("PATH")).toBe(true);
     expect(ALLOWED_ENV_KEYS.has("HOME")).toBe(true);
     expect(ALLOWED_ENV_KEYS.has("VIRTUAL_ENV")).toBe(true);
-    expect(ALLOWED_ENV_KEYS.has("NEURALMEMORY_BRAIN")).toBe(true);
+    expect(ALLOWED_ENV_KEYS.has("PUGBRAIN_BRAIN")).toBe(true);
   });
 
   it("does not contain secret-like keys", () => {
