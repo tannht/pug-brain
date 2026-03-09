@@ -149,8 +149,8 @@ artifacts = ["src/neural_memory/server/static/dist"]
 packages = ["src/neural_memory"]
 artifacts = ["src/neural_memory/server/static/dist"]
 
-# Dashboard is pre-built and committed to src/neural_memory/server/static/dist
-# Build hook removed to avoid isolated build environment issues
+# Custom build hook for dashboard (uses default hatch_build.py in project root)
+[tool.hatch.build.hooks.custom]
 
 [tool.ruff]
 line-length = 100
