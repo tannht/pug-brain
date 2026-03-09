@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from unittest.mock import AsyncMock, MagicMock, Mock
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -18,8 +18,6 @@ from neural_memory.integration.batch_operations import (
     BatchConfig,
     BatchOperationManager,
     BatchOperationStatus,
-    ProgressCallback,
-    StatusCallback,
     _RateLimiter,
 )
 from neural_memory.integration.models import (
@@ -31,7 +29,6 @@ from neural_memory.integration.models import (
 )
 from neural_memory.storage.memory_store import InMemoryStorage
 from neural_memory.utils.timeutils import utcnow
-
 
 # ---------------------------------------------------------------------------
 # Mock Adapter
@@ -1196,7 +1193,7 @@ class TestBatchOperationsEdgeCases:
         manager = BatchOperationManager(mock_engine)
         adapter = MockAdapter()
 
-        result = await manager.import_with_progress(
+        await manager.import_with_progress(
             adapter=adapter,
             collection=None,
         )
@@ -1211,7 +1208,7 @@ class TestBatchOperationsEdgeCases:
         manager = BatchOperationManager(mock_engine)
         adapter = MockAdapter()
 
-        result = await manager.import_with_progress(
+        await manager.import_with_progress(
             adapter=adapter,
             limit=None,
         )
@@ -1224,7 +1221,7 @@ class TestBatchOperationsEdgeCases:
         """Test handling concurrent cancellation and pause."""
         mock_engine = MockSyncEngine(delay_seconds=0.2)
         manager = BatchOperationManager(mock_engine)
-        adapter = MockAdapter()
+        MockAdapter()
 
         # The mock sync_engine doesn't actually call the async callback,
         # so cancellation won't be triggered. Let's test that flags are set correctly.

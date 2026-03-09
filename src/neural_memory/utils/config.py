@@ -89,7 +89,7 @@ class Config:
         # Define default home directory for PugBrain
         pug_home = os.path.expanduser(os.getenv("PUGBRAIN_HOME", "~/.pugbrain"))
         os.makedirs(pug_home, exist_ok=True)
-        
+
         default_sqlite_path = os.path.join(pug_home, "brain.db")
 
         return cls(

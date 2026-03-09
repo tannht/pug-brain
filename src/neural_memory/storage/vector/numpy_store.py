@@ -105,7 +105,7 @@ class NumpyVectorStore(VectorStore):
         metadatas: list[dict[str, Any]] | None = None,
     ) -> None:
         """Batch insert/update."""
-        for i, (vid, emb) in enumerate(zip(ids, embeddings)):
+        for i, (vid, emb) in enumerate(zip(ids, embeddings, strict=False)):
             meta = metadatas[i] if metadatas and i < len(metadatas) else None
             await self.upsert(vid, emb, meta)
 

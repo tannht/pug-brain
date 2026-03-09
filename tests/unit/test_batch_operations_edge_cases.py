@@ -20,9 +20,6 @@ from __future__ import annotations
 import asyncio
 import gc
 import json
-import os
-import tempfile
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
@@ -33,7 +30,6 @@ from neural_memory.core.brain import BrainConfig
 from neural_memory.core.fiber import Fiber
 from neural_memory.core.neuron import Neuron
 from neural_memory.integration.batch_operations import (
-    BatchCheckpoint,
     BatchConfig,
     BatchOperationManager,
     BatchOperationStatus,
@@ -47,7 +43,6 @@ from neural_memory.integration.models import (
     SourceSystemType,
 )
 from neural_memory.utils.timeutils import utcnow
-
 
 # ============================================================================
 # Fixtures
@@ -633,7 +628,7 @@ class TestPauseResume:
         pause_count = [0]
 
         async def sync_with_multiple_pauses(*args: Any, **kwargs: Any) -> tuple[ImportResult, Any]:
-            for i in range(20):
+            for _i in range(20):
                 while manager._paused:
                     pause_count[0] += 1
                     await asyncio.sleep(0.01)
@@ -1065,7 +1060,7 @@ class TestMemoryLeaks:
         checkpoint_path = temp_checkpoint_dir / "test_checkpoint.json"
 
         # Run multiple operations with the same checkpoint path
-        for i in range(5):
+        for _i in range(5):
             async def export_op(*args: Any, **kwargs: Any) -> ExportResult:
                 return ExportResult(
                     target_system="test_adapter",
@@ -1104,7 +1099,8 @@ class TestMemoryLeaks:
 
         # Run with many different callbacks
         for i in range(10):  # Reduced from 100 for faster test
-            callback = lambda c, t, iid, i=i: callbacks.append(i)  # Capture i by default
+            def callback(c, t, iid, i=i):
+                return callbacks.append(i)  # Capture i by default
             await manager.import_with_progress(
                 adapter=mock_adapter,
                 on_progress=callback,
@@ -1560,9 +1556,6 @@ class TestLargeRecords:
         manager = BatchOperationManager(mock_sync_engine)
 
         # Create record with huge metadata
-        large_metadata = {
-            "data": "x" * 100000,  # 100KB of data
-        }
 
         async def sync_with_large_metadata(*args: Any, **kwargs: Any) -> tuple[ImportResult, Any]:
             return ImportResult(

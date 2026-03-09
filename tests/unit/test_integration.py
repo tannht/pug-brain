@@ -1479,8 +1479,9 @@ class TestBatchConfig:
 
     def test_custom_values(self) -> None:
         """Test custom configuration values."""
-        from neural_memory.integration.batch_operations import BatchConfig
         from pathlib import Path
+
+        from neural_memory.integration.batch_operations import BatchConfig
 
         config = BatchConfig(
             batch_size=100,
@@ -1562,11 +1563,9 @@ class TestBatchOperationManager:
     ) -> None:
         """Test export with checkpointing."""
         from neural_memory.integration.batch_operations import (
-            BatchCheckpoint,
             BatchOperationManager,
         )
         from neural_memory.integration.sync_engine import SyncEngine
-        from neural_memory.core.neuron import Neuron
 
         # Create test neurons
         for i in range(3):
@@ -1603,10 +1602,10 @@ class TestBatchOperationManager:
     ) -> None:
         """Test export with adapter that doesn't support create_record."""
         from neural_memory.integration.batch_operations import BatchOperationManager
-        from neural_memory.integration.sync_engine import SyncEngine
 
         # Create adapter without CREATE_RECORD capability
         from neural_memory.integration.models import SourceCapability
+        from neural_memory.integration.sync_engine import SyncEngine
 
         class NoCreateAdapter(MockAdapter):
             @property
@@ -1631,9 +1630,9 @@ class TestBatchOperationManager:
         tmp_path: Any,
     ) -> None:
         """Test that checkpoints are persisted to disk."""
+
         from neural_memory.integration.batch_operations import BatchOperationManager
         from neural_memory.integration.sync_engine import SyncEngine
-        from pathlib import Path
 
         adapter = MockAdapter(records=[])
         engine = SyncEngine(storage, brain_config)
@@ -1677,7 +1676,6 @@ class TestBatchOperationManager:
         """Test that progress callback is invoked during export."""
         from neural_memory.integration.batch_operations import BatchOperationManager
         from neural_memory.integration.sync_engine import SyncEngine
-        from neural_memory.core.neuron import Neuron
 
         # Create test neurons
         for i in range(3):
@@ -1721,7 +1719,6 @@ class TestSyncEngineExport:
     ) -> None:
         """Test export with collection parameter."""
         from neural_memory.integration.sync_engine import SyncEngine
-        from neural_memory.core.neuron import Neuron
 
         neuron = Neuron.create(
             type=NeuronType.CONCEPT,

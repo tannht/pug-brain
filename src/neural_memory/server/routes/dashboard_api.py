@@ -13,7 +13,7 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from neural_memory.server.dependencies import get_storage, require_local_request
+from neural_memory.server.dependencies import get_storage
 from neural_memory.storage.base import NeuralStorage
 
 logger = logging.getLogger(__name__)
