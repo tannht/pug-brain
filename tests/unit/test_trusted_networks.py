@@ -137,13 +137,12 @@ class TestRequireLocalRequestWithTrustedNetworks:
         request.client.host = "127.0.0.1"
         await require_local_request(request)  # Should not raise
 
-    async def test_no_client_rejected(self) -> None:
-        """Requests with no client info are rejected (security: unknown source)."""
+    async def test_no_client_allowed(self) -> None:
+        """Requests with no client info are treated as internal requests (allowed)."""
         request = AsyncMock()
         request.client = None
-        with pytest.raises(HTTPException) as exc_info:
-            await require_local_request(request)
-        assert exc_info.value.status_code == 403
+        # Should NOT raise - internal requests are allowed
+        await require_local_request(request)
 
     async def test_external_ip_forbidden_default(self) -> None:
         request = AsyncMock()

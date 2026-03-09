@@ -158,7 +158,7 @@ class TestMem0SelfHostedAdapter:
         assert SourceCapability.FETCH_ALL in caps
         assert SourceCapability.FETCH_METADATA in caps
         assert SourceCapability.HEALTH_CHECK in caps
-        assert SourceCapability.FETCH_SINCE not in caps
+        assert SourceCapability.FETCH_SINCE in caps  # Mem0 supports fetch_since
 
     @pytest.mark.asyncio
     async def test_fetch_all_empty(self) -> None:
@@ -252,10 +252,26 @@ class TestMem0SelfHostedAdapter:
         mock_client.get_all.assert_called_once_with(agent_id="agent-1")
 
     @pytest.mark.asyncio
-    async def test_fetch_since_not_implemented(self) -> None:
+    async def test_fetch_since_with_mock(self) -> None:
+        """Test fetch_since with a mocked client."""
         adapter = self._make_adapter()
-        with pytest.raises(NotImplementedError):
-            await adapter.fetch_since(since=datetime.now())
+        mock_client = MagicMock()
+        mock_client.get_all = MagicMock(
+            return_value=[
+                {
+                    "id": "mem-1",
+                    "memory": "Recent memory",
+                    "metadata": {"type": "fact"},
+                    "created_at": "2026-01-15T10:00:00Z",
+                    "updated_at": "2026-01-20T10:00:00Z",
+                }
+            ]
+        )
+        adapter._client = mock_client
+
+        records = await adapter.fetch_since(since=datetime(2026, 1, 1))
+        assert len(records) == 1
+        assert records[0].content == "Recent memory"
 
     @pytest.mark.asyncio
     async def test_health_check_healthy(self) -> None:

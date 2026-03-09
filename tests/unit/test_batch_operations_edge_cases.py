@@ -718,7 +718,7 @@ class TestLargeDatasets:
 
             for i in range(total):
                 if progress_callback:
-                    progress_callback(i + 1, total, f"record-{i}")
+                    await progress_callback(i + 1, total, f"record-{i}")
 
                 # Simulate some work
                 if i % 100 == 0:
@@ -730,7 +730,7 @@ class TestLargeDatasets:
                 records_imported=total,
             ), None
 
-        mock_sync_engine.sync = sync_large_dataset  # type: ignore[method-assign]
+        mock_sync_engine.sync = AsyncMock(side_effect=sync_large_dataset)  # type: ignore[method-assign]
 
         result = await manager.import_with_progress(
             adapter=mock_adapter,
