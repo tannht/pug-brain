@@ -84,8 +84,7 @@ class BatchCheckpoint:
         """
         # Convert Path objects to strings for JSON serialization
         serializable_metadata = {
-            k: str(v) if isinstance(v, Path) else v
-            for k, v in self.metadata.items()
+            k: str(v) if isinstance(v, Path) else v for k, v in self.metadata.items()
         }
 
         return {
@@ -119,10 +118,7 @@ class BatchCheckpoint:
         # Convert Path objects in metadata to strings for JSON compatibility
         metadata = data.get("metadata", {})
         if metadata:
-            metadata = {
-                k: str(v) if isinstance(v, Path) else v
-                for k, v in metadata.items()
-            }
+            metadata = {k: str(v) if isinstance(v, Path) else v for k, v in metadata.items()}
 
         return cls(
             operation_id=data["operation_id"],
@@ -266,7 +262,9 @@ class BatchOperationManager:
                     adapter=adapter,
                     collection=collection,
                     limit=limit,
-                    progress_callback=tracked_callback if on_progress or self._config.requests_per_second > 0 else None,
+                    progress_callback=tracked_callback
+                    if on_progress or self._config.requests_per_second > 0
+                    else None,
                 )
             )
 
@@ -292,28 +290,37 @@ class BatchOperationManager:
             result = await sync_with_cancel_check()
 
             if on_status:
-                on_status("completed", {
-                    "operation_id": operation_id,
-                    "records_imported": result.records_imported,
-                    "duration": result.duration_seconds,
-                })
+                on_status(
+                    "completed",
+                    {
+                        "operation_id": operation_id,
+                        "records_imported": result.records_imported,
+                        "duration": result.duration_seconds,
+                    },
+                )
 
             return result
 
         except asyncio.CancelledError:
             if on_status:
-                on_status("cancelled", {
-                    "operation_id": operation_id,
-                    "processed": tracked_progress[0],
-                })
+                on_status(
+                    "cancelled",
+                    {
+                        "operation_id": operation_id,
+                        "processed": tracked_progress[0],
+                    },
+                )
             raise
         except Exception as e:
             if on_status:
-                on_status("failed", {
-                    "operation_id": operation_id,
-                    "error": str(e),
-                    "processed": tracked_progress[0],
-                })
+                on_status(
+                    "failed",
+                    {
+                        "operation_id": operation_id,
+                        "error": str(e),
+                        "processed": tracked_progress[0],
+                    },
+                )
             raise
 
     async def export_with_checkpoint(
@@ -418,11 +425,14 @@ class BatchOperationManager:
                 save_checkpoint()
 
             if on_status:
-                on_status("completed", {
-                    "operation_id": checkpoint.operation_id if checkpoint else None,
-                    "records_exported": result.records_exported,
-                    "duration": result.duration_seconds,
-                })
+                on_status(
+                    "completed",
+                    {
+                        "operation_id": checkpoint.operation_id if checkpoint else None,
+                        "records_exported": result.records_exported,
+                        "duration": result.duration_seconds,
+                    },
+                )
 
             return result, checkpoint
 
@@ -431,10 +441,13 @@ class BatchOperationManager:
                 checkpoint.status = BatchOperationStatus.CANCELLED
                 save_checkpoint()
             if on_status:
-                on_status("cancelled", {
-                    "operation_id": checkpoint.operation_id if checkpoint else None,
-                    "processed": tracked_progress[0],
-                })
+                on_status(
+                    "cancelled",
+                    {
+                        "operation_id": checkpoint.operation_id if checkpoint else None,
+                        "processed": tracked_progress[0],
+                    },
+                )
             raise
         except Exception as e:
             if checkpoint:
@@ -442,11 +455,14 @@ class BatchOperationManager:
                 checkpoint.metadata["error"] = str(e)
                 save_checkpoint()
             if on_status:
-                on_status("failed", {
-                    "operation_id": checkpoint.operation_id if checkpoint else None,
-                    "error": str(e),
-                    "processed": tracked_progress[0],
-                })
+                on_status(
+                    "failed",
+                    {
+                        "operation_id": checkpoint.operation_id if checkpoint else None,
+                        "error": str(e),
+                        "processed": tracked_progress[0],
+                    },
+                )
             raise
 
     @staticmethod

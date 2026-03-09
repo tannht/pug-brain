@@ -786,6 +786,7 @@ async def telegram_backup_api(
 
 # ── Vector Store Health API ────────────────────────────
 
+
 class VectorStoreStatus(BaseModel):
     """PugBrain vector store status for dashboard health monitoring."""
 

@@ -570,9 +570,7 @@ class TestBatchOperationManagerImport:
     """Tests for BatchOperationManager.import_with_progress."""
 
     @pytest.mark.asyncio
-    async def test_import_with_progress_basic(
-        self, sample_import_result: ImportResult
-    ) -> None:
+    async def test_import_with_progress_basic(self, sample_import_result: ImportResult) -> None:
         """Test basic import with progress tracking."""
         mock_engine = MockSyncEngine(import_result=sample_import_result)
         manager = BatchOperationManager(mock_engine)
@@ -622,13 +620,9 @@ class TestBatchOperationManagerImport:
         assert "records_imported" in status_calls[-1][1]
 
     @pytest.mark.asyncio
-    async def test_import_with_cancellation(
-        self, sample_import_result: ImportResult
-    ) -> None:
+    async def test_import_with_cancellation(self, sample_import_result: ImportResult) -> None:
         """Test that import can be cancelled."""
-        mock_engine = MockSyncEngine(
-            import_result=sample_import_result, delay_seconds=0.1
-        )
+        mock_engine = MockSyncEngine(import_result=sample_import_result, delay_seconds=0.1)
         manager = BatchOperationManager(mock_engine)
         adapter = MockAdapter()
 
@@ -655,13 +649,9 @@ class TestBatchOperationManagerImport:
         assert any(s[0] == "cancelled" for s in status_calls)
 
     @pytest.mark.asyncio
-    async def test_import_with_pause_resume(
-        self, sample_import_result: ImportResult
-    ) -> None:
+    async def test_import_with_pause_resume(self, sample_import_result: ImportResult) -> None:
         """Test that import can be paused and resumed."""
-        mock_engine = MockSyncEngine(
-            import_result=sample_import_result, delay_seconds=0.1
-        )
+        mock_engine = MockSyncEngine(import_result=sample_import_result, delay_seconds=0.1)
         manager = BatchOperationManager(mock_engine)
         adapter = MockAdapter()
 
@@ -710,9 +700,7 @@ class TestBatchOperationManagerImport:
         assert "error" in status_calls[-1][1]
 
     @pytest.mark.asyncio
-    async def test_import_with_zero_rate_limit(
-        self, sample_import_result: ImportResult
-    ) -> None:
+    async def test_import_with_zero_rate_limit(self, sample_import_result: ImportResult) -> None:
         """Test import with rate limiting disabled."""
         mock_engine = MockSyncEngine(import_result=sample_import_result)
         config = BatchConfig(requests_per_second=0)
@@ -724,9 +712,7 @@ class TestBatchOperationManagerImport:
         assert result.records_imported == 3
 
     @pytest.mark.asyncio
-    async def test_import_without_callbacks(
-        self, sample_import_result: ImportResult
-    ) -> None:
+    async def test_import_without_callbacks(self, sample_import_result: ImportResult) -> None:
         """Test import works without any callbacks."""
         mock_engine = MockSyncEngine(import_result=sample_import_result)
         manager = BatchOperationManager(mock_engine)
@@ -916,9 +902,7 @@ class TestBatchOperationManagerExport:
         assert checkpoint.status == BatchOperationStatus.COMPLETED
 
     @pytest.mark.asyncio
-    async def test_export_with_error_saves_checkpoint(
-        self, tmp_path: Path
-    ) -> None:
+    async def test_export_with_error_saves_checkpoint(self, tmp_path: Path) -> None:
         """Test export error saves checkpoint with failed status."""
         checkpoint_path = tmp_path / "failed_checkpoint.json"
 
@@ -939,9 +923,7 @@ class TestBatchOperationManagerExport:
         assert "error" in data["metadata"]
 
     @pytest.mark.asyncio
-    async def test_export_without_checkpoint_path(
-        self, sample_export_result: ExportResult
-    ) -> None:
+    async def test_export_without_checkpoint_path(self, sample_export_result: ExportResult) -> None:
         """Test export without checkpoint path doesn't save file."""
         mock_engine = MockSyncEngine(export_result=sample_export_result)
         manager = BatchOperationManager(mock_engine)

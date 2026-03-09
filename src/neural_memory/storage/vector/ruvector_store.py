@@ -72,9 +72,7 @@ class RuVectorStore(VectorStore):
 
             # Try to load existing index
             if self._persist_dir and (self._persist_dir / "index.ruv").exists():
-                logger.info(
-                    "PugBrain RuVector: Loading index from %s", self._persist_dir
-                )
+                logger.info("PugBrain RuVector: Loading index from %s", self._persist_dir)
                 self._index = await asyncio.to_thread(
                     ruvector.HnswIndex.load,
                     str(self._persist_dir / "index.ruv"),
@@ -145,9 +143,7 @@ class RuVectorStore(VectorStore):
         # Over-fetch if filtering to ensure we get enough results
         fetch_k = top_k * 3 if filter_metadata else top_k
 
-        raw_results = await asyncio.to_thread(
-            self._index.search, query_embedding, fetch_k
-        )
+        raw_results = await asyncio.to_thread(self._index.search, query_embedding, fetch_k)
 
         results: list[VectorSearchResult] = []
         for rid, score in raw_results:
@@ -208,15 +204,15 @@ class RuVectorStore(VectorStore):
 
         self._persist_dir.mkdir(parents=True, exist_ok=True)
 
-        await asyncio.to_thread(
-            self._index.save, str(self._persist_dir / "index.ruv")
-        )
+        await asyncio.to_thread(self._index.save, str(self._persist_dir / "index.ruv"))
 
         meta_path = self._persist_dir / "metadata.json"
         meta_json = json.dumps(self._metadata, ensure_ascii=False)
         await asyncio.to_thread(meta_path.write_text, meta_json, "utf-8")
 
-        logger.debug("PugBrain RuVector: Flushed %d vectors to %s", len(self._metadata), self._persist_dir)
+        logger.debug(
+            "PugBrain RuVector: Flushed %d vectors to %s", len(self._metadata), self._persist_dir
+        )
 
     async def close(self) -> None:
         """Flush and close."""

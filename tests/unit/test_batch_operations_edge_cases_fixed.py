@@ -98,10 +98,12 @@ def mock_adapter() -> MagicMock:
     adapter = MagicMock()
     adapter.system_name = "test_adapter"
     adapter.system_type = SourceSystemType.MEMORY_LAYER
-    adapter.capabilities = frozenset([
-        SourceCapability.FETCH_ALL,
-        SourceCapability.CREATE_RECORD,
-    ])
+    adapter.capabilities = frozenset(
+        [
+            SourceCapability.FETCH_ALL,
+            SourceCapability.CREATE_RECORD,
+        ]
+    )
     adapter.fetch_all = AsyncMock(return_value=[])
     adapter.create_record = AsyncMock(return_value="external-id-1")
     adapter.health_check = AsyncMock(return_value={"healthy": True, "message": "OK"})
@@ -312,7 +314,9 @@ class TestRateLimiting:
         if rate >= 1000:
             assert elapsed < 0.01  # Should be nearly instant
         elif rate <= 0.1:
-            assert elapsed >= 20  # Should have noticeable delays (at least 20s for 3 requests at 0.1/sec)
+            assert (
+                elapsed >= 20
+            )  # Should have noticeable delays (at least 20s for 3 requests at 0.1/sec)
 
     async def test_rate_limiter_with_zero_rate(self) -> None:
         """Rate limiter with zero rate should not delay at all."""
@@ -388,14 +392,18 @@ class TestRateLimiting:
 class TestCancellation:
     """Test cancellation at different operation phases."""
 
-    async def test_cancel_at_start(self, mock_sync_engine: MagicMock, mock_adapter: MagicMock) -> None:
+    async def test_cancel_at_start(
+        self, mock_sync_engine: MagicMock, mock_adapter: MagicMock
+    ) -> None:
         """Cancelling immediately after start should prevent processing."""
         config = BatchConfig(requests_per_second=10)  # Enable rate limiting
         manager = BatchOperationManager(mock_sync_engine, config)
 
         started = asyncio.Event()
 
-        async def slow_sync(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def slow_sync(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             started.set()
             # Simulate processing with progress callback
             for i in range(5):
@@ -471,14 +479,18 @@ class TestCancellation:
         assert processed_count[0] > 0
         assert processed_count[0] < len(sample_records)
 
-    async def test_cancel_at_end(self, mock_sync_engine: MagicMock, mock_adapter: MagicMock) -> None:
+    async def test_cancel_at_end(
+        self, mock_sync_engine: MagicMock, mock_adapter: MagicMock
+    ) -> None:
         """Cancelling near the end should still report partial progress."""
         config = BatchConfig(requests_per_second=10)
         manager = BatchOperationManager(mock_sync_engine, config)
 
         status_updates = []
 
-        async def sync_near_complete(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_near_complete(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             for i in range(10):
                 if progress_callback:
                     progress_callback(i + 1, 10, f"record-{i}")
@@ -528,7 +540,9 @@ class TestCancellation:
         config = BatchConfig(requests_per_second=10)
         manager = BatchOperationManager(mock_sync_engine, config)
 
-        async def sync_with_pause(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_with_pause(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             # The pause check happens in the tracked_callback in BatchOperationManager
             for i in range(10):
                 if progress_callback:
@@ -594,9 +608,7 @@ class TestPauseResume:
         mock_sync_engine.sync = sync_with_pause_check  # type: ignore[method-assign]
 
         # Start operation
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=mock_adapter)
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=mock_adapter))
 
         # Wait a bit then pause
         await asyncio.sleep(0.03)
@@ -644,9 +656,7 @@ class TestPauseResume:
         mock_sync_engine.sync = sync_with_multiple_pauses  # type: ignore[method-assign]
 
         # Start operation
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=mock_adapter)
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=mock_adapter))
 
         # Multiple pause/resume cycles
         for _ in range(3):
@@ -701,7 +711,9 @@ class TestLargeDatasets:
 
         progress_updates = []
 
-        async def sync_large_dataset(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_large_dataset(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             total = 1500
 
             for i in range(total):
@@ -752,12 +764,16 @@ class TestLargeDatasets:
         checkpoint_saves = []
 
         original_write = checkpoint_path.write_text
+
         def track_writes(*args: Any, **kwargs: Any) -> int:
             checkpoint_saves.append(len(checkpoint_saves) + 1)
             return original_write(*args, **kwargs)
 
         with patch.object(Path, "write_text", track_writes):  # type: ignore[attr-defined]
-            async def export_large_dataset(*args: Any, progress_callback: Any = None, **kwargs: Any) -> ExportResult:
+
+            async def export_large_dataset(
+                *args: Any, progress_callback: Any = None, **kwargs: Any
+            ) -> ExportResult:
                 total = 2000
 
                 for i in range(total):
@@ -786,13 +802,17 @@ class TestLargeDatasets:
             # Initial + (2000 / 100) = ~21 saves
             assert len(checkpoint_saves) >= 1
 
-    async def test_progress_callback_frequency(self, mock_sync_engine: MagicMock, mock_adapter: MagicMock) -> None:
+    async def test_progress_callback_frequency(
+        self, mock_sync_engine: MagicMock, mock_adapter: MagicMock
+    ) -> None:
         """Progress callbacks should be called for each record."""
         manager = BatchOperationManager(mock_sync_engine)
 
         callback_count = [0]
 
-        async def sync_with_callbacks(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_with_callbacks(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             total = 500
 
             for i in range(total):
@@ -930,12 +950,8 @@ class TestConcurrentOperations:
         mock_sync_engine.export = export_operation  # type: ignore[method-assign]
 
         # Run import and export concurrently
-        import_task = asyncio.create_task(
-            manager.import_with_progress(adapter=source)
-        )
-        export_task = asyncio.create_task(
-            manager.export_with_checkpoint(adapter=target)
-        )
+        import_task = asyncio.create_task(manager.import_with_progress(adapter=source))
+        export_task = asyncio.create_task(manager.export_with_checkpoint(adapter=target))
 
         results = await asyncio.gather(import_task, export_task)
 
@@ -1002,6 +1018,7 @@ class TestMemoryLeaks:
 
         # Run multiple operations with the same checkpoint path
         for _i in range(5):
+
             async def export_op(*args: Any, **kwargs: Any) -> ExportResult:
                 return ExportResult(
                     target_system="test_adapter",
@@ -1020,14 +1037,18 @@ class TestMemoryLeaks:
         checkpoint_files = list(temp_checkpoint_dir.glob("*.json"))
         assert len(checkpoint_files) <= 5
 
-    async def test_callback_cleanup(self, mock_sync_engine: MagicMock, mock_adapter: MagicMock) -> None:
+    async def test_callback_cleanup(
+        self, mock_sync_engine: MagicMock, mock_adapter: MagicMock
+    ) -> None:
         """Callbacks should not accumulate references."""
         config = BatchConfig(requests_per_second=100)  # Fast rate for quick test
         manager = BatchOperationManager(mock_sync_engine, config)
 
         callbacks = []
 
-        async def sync_op(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_op(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             if progress_callback:
                 progress_callback(1, 1, "test-record")
             return ImportResult(
@@ -1040,8 +1061,10 @@ class TestMemoryLeaks:
 
         # Run with many different callbacks
         for i in range(10):  # Reduced from 100 for faster test
+
             def callback(c, t, iid, i=i):
                 return callbacks.append(i)  # Capture i by default
+
             await manager.import_with_progress(
                 adapter=mock_adapter,
                 on_progress=callback,
@@ -1127,7 +1150,9 @@ class TestNetworkTimeouts:
         # Track time between callbacks
         times = []
 
-        async def sync_with_delays(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_with_delays(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             for i in range(3):
                 times.append(asyncio.get_running_loop().time())
                 if progress_callback:
@@ -1171,9 +1196,7 @@ class TestNetworkTimeouts:
         mock_sync_engine.sync = hanging_sync  # type: ignore[method-assign]
 
         # Start operation
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=mock_adapter)
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=mock_adapter))
 
         # Give it time to start
         await asyncio.sleep(0.1)
@@ -1465,7 +1488,9 @@ class TestLargeRecords:
         # Create record with extremely long ID
         long_id = "record-" + "x" * 10000
 
-        async def sync_with_long_id(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def sync_with_long_id(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             if progress_callback:
                 progress_callback(1, 1, long_id)
 
@@ -1580,9 +1605,7 @@ class TestRaceConditions:
 
         mock_sync_engine.sync = slow_operation  # type: ignore[method-assign]
 
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=MagicMock())
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=MagicMock()))
 
         # Quickly trigger pause and cancel
         await asyncio.gather(
@@ -1619,9 +1642,7 @@ class TestRaceConditions:
 
         mock_sync_engine.sync = pausable_operation  # type: ignore[method-assign]
 
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=MagicMock())
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=MagicMock()))
 
         # Rapid resume/pause/cancel
         manager.resume()
@@ -1656,9 +1677,7 @@ class TestRaceConditions:
 
         mock_sync_engine.sync = paused_operation  # type: ignore[method-assign]
 
-        task = asyncio.create_task(
-            manager.import_with_progress(adapter=MagicMock())
-        )
+        task = asyncio.create_task(manager.import_with_progress(adapter=MagicMock()))
 
         # Pause then cancel
         await asyncio.sleep(0.02)
@@ -1678,7 +1697,9 @@ class TestRaceConditions:
 
         state_changes = []
 
-        async def operation_with_callback(*args: Any, progress_callback: Any = None, **kwargs: Any) -> tuple[ImportResult, Any]:
+        async def operation_with_callback(
+            *args: Any, progress_callback: Any = None, **kwargs: Any
+        ) -> tuple[ImportResult, Any]:
             for i in range(10):
                 if progress_callback:
                     # Change state during callback
@@ -1744,7 +1765,9 @@ class TestStressTests:
 
         assert operation_count[0] == 100
 
-    async def test_burst_operations(self, mock_sync_engine: MagicMock, mock_adapter: MagicMock) -> None:
+    async def test_burst_operations(
+        self, mock_sync_engine: MagicMock, mock_adapter: MagicMock
+    ) -> None:
         """Burst of concurrent operations should be handled."""
         manager = BatchOperationManager(mock_sync_engine)
 
@@ -1759,10 +1782,7 @@ class TestStressTests:
         mock_sync_engine.sync = quick_sync  # type: ignore[method-assign]
 
         # Burst of 50 operations
-        tasks = [
-            manager.import_with_progress(adapter=mock_adapter)
-            for _ in range(50)
-        ]
+        tasks = [manager.import_with_progress(adapter=mock_adapter) for _ in range(50)]
 
         results = await asyncio.gather(*tasks)
 

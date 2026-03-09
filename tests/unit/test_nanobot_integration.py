@@ -393,7 +393,12 @@ class TestSetup:
         store = await setup_neural_memory(mock_registry, workspace)
 
         registered_names = {call.args[0].name for call in mock_registry.register.call_args_list}
-        assert registered_names == {"pugbrain_remember", "pugbrain_recall", "pugbrain_context", "pugbrain_health"}
+        assert registered_names == {
+            "pugbrain_remember",
+            "pugbrain_recall",
+            "pugbrain_context",
+            "pugbrain_health",
+        }
 
         await store._ctx.close()
 

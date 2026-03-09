@@ -337,7 +337,9 @@ class _BaseMem0Adapter:
             )
             return True
         except Exception:
-            logger.error("%s update_record failed for %s", self.system_name, record_id, exc_info=True)
+            logger.error(
+                "%s update_record failed for %s", self.system_name, record_id, exc_info=True
+            )
             return False
 
     async def delete_record(
@@ -364,7 +366,9 @@ class _BaseMem0Adapter:
             )
             return True
         except Exception:
-            logger.error("%s delete_record failed for %s", self.system_name, record_id, exc_info=True)
+            logger.error(
+                "%s delete_record failed for %s", self.system_name, record_id, exc_info=True
+            )
             return False
 
 

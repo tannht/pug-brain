@@ -342,7 +342,9 @@ class SyncEngine:
                 if external_id:
                     exported_count += 1
                     exported_ids.append((fiber.id, external_id))
-                    logger.debug("Exported fiber %s to %s as %s", fiber.id, target_name, external_id)
+                    logger.debug(
+                        "Exported fiber %s to %s as %s", fiber.id, target_name, external_id
+                    )
                 else:
                     failed_count += 1
                     errors.append(f"Failed to export fiber {fiber.id}: no ID returned")

@@ -10,6 +10,7 @@ def _detect_vector_backend() -> str:
     """Prefer RuVector if available, otherwise fall back to numpy."""
     try:
         import ruvector  # type: ignore[import-untyped]  # noqa: F401
+
         return "ruvector"
     except ImportError:
         return "numpy"

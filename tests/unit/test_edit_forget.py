@@ -44,14 +44,18 @@ class TestNmemEdit:
     @pytest.mark.asyncio
     async def test_edit_invalid_type(self) -> None:
         server = _make_server()
-        result = await server.call_tool("pugbrain_edit", {"memory_id": "abc", "type": "invalid_type"})
+        result = await server.call_tool(
+            "pugbrain_edit", {"memory_id": "abc", "type": "invalid_type"}
+        )
         assert "error" in result
         assert "Invalid memory type" in result["error"]
 
     @pytest.mark.asyncio
     async def test_edit_content_too_long(self) -> None:
         server = _make_server()
-        result = await server.call_tool("pugbrain_edit", {"memory_id": "abc", "content": "x" * 200_000})
+        result = await server.call_tool(
+            "pugbrain_edit", {"memory_id": "abc", "content": "x" * 200_000}
+        )
         assert "error" in result
         assert "too long" in result["error"]
 
@@ -65,7 +69,9 @@ class TestNmemEdit:
         storage.get_neuron = AsyncMock(return_value=None)
         server.get_storage = AsyncMock(return_value=storage)
 
-        result = await server.call_tool("pugbrain_edit", {"memory_id": "nonexistent", "type": "fact"})
+        result = await server.call_tool(
+            "pugbrain_edit", {"memory_id": "nonexistent", "type": "fact"}
+        )
         assert "error" in result
         assert "not found" in result["error"]
 

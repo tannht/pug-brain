@@ -310,7 +310,9 @@ class TestMCPToolCalls:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
         ):
-            result = await server.call_tool("pugbrain_recall", {"query": "test", "min_confidence": 0.5})
+            result = await server.call_tool(
+                "pugbrain_recall", {"query": "test", "min_confidence": 0.5}
+            )
 
         assert result["answer"] is None
         assert "No memories found" in result["message"]
@@ -438,7 +440,9 @@ class TestMCPToolCalls:
     @pytest.mark.asyncio
     async def test_auto_tool_analyze_empty(self, server: MCPServer) -> None:
         """Test pugbrain_auto with no detectable content."""
-        result = await server.call_tool("pugbrain_auto", {"action": "analyze", "text": "Hello world"})
+        result = await server.call_tool(
+            "pugbrain_auto", {"action": "analyze", "text": "Hello world"}
+        )
 
         assert result["detected"] == []
 
@@ -491,7 +495,9 @@ class TestMCPToolCalls:
     @pytest.mark.asyncio
     async def test_auto_tool_process_empty(self, server: MCPServer) -> None:
         """Test pugbrain_auto process with no detectable content."""
-        result = await server.call_tool("pugbrain_auto", {"action": "process", "text": "Hello world"})
+        result = await server.call_tool(
+            "pugbrain_auto", {"action": "process", "text": "Hello world"}
+        )
 
         assert result["saved"] == 0
 
@@ -2385,7 +2391,9 @@ class TestMCPInputValidation:
         """Text over 100KB is rejected in analyze action."""
         server = self._make_server()
 
-        result = await server.call_tool("pugbrain_auto", {"action": "analyze", "text": "x" * 200_000})
+        result = await server.call_tool(
+            "pugbrain_auto", {"action": "analyze", "text": "x" * 200_000}
+        )
 
         assert "error" in result
         assert "too long" in result["error"].lower()
@@ -2395,7 +2403,9 @@ class TestMCPInputValidation:
         """Text over 100KB is rejected in process action."""
         server = self._make_server()
 
-        result = await server.call_tool("pugbrain_auto", {"action": "process", "text": "x" * 200_000})
+        result = await server.call_tool(
+            "pugbrain_auto", {"action": "process", "text": "x" * 200_000}
+        )
 
         assert "error" in result
         assert "too long" in result["error"].lower()
