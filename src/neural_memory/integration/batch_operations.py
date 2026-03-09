@@ -17,7 +17,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 from neural_memory.integration.models import ExportResult, ImportResult
 from neural_memory.utils.timeutils import utcnow
@@ -273,7 +274,7 @@ class BatchOperationManager:
             while not sync_task.done():
                 try:
                     await asyncio.wait_for(asyncio.shield(sync_task), timeout=0.1)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     # Check cancellation flag periodically
                     if self._cancelled:
                         sync_task.cancel()

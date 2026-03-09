@@ -14,9 +14,10 @@ from neural_memory.integration.models import (
     SourceSystemType,
 )
 
+from neural_memory.utils.timeutils import utcnow
+
 # Default implementations for optional write methods
 _NOT_IMPLEMENTED_MSG = "{} adapter does not support this operation"
-from neural_memory.utils.timeutils import utcnow
 
 logger = logging.getLogger(__name__)
 
