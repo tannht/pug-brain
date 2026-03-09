@@ -176,3 +176,5 @@ en_core_web_lg/
 # Gemini CLI settings (contains user-specific config)
 .gemini/
 .npmrc
+/node_modules
+/src/neural_memory/server/static/dist
