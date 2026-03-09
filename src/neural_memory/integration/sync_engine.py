@@ -29,7 +29,9 @@ logger = logging.getLogger(__name__)
 
 # Callback type: (records_processed, total_records, current_record_id)
 # Can be sync or async
-ProgressCallback = Callable[[int, int, str], None] | Callable[[int, int, str], Coroutine[Any, Any, None]]
+ProgressCallback = (
+    Callable[[int, int, str], None] | Callable[[int, int, str], Coroutine[Any, Any, None]]
+)
 
 
 class SyncEngine:
