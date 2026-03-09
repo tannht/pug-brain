@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import logging
 import time
-from collections.abc import Callable
-from typing import Coroutine
+from collections.abc import Callable, Coroutine
 from typing import TYPE_CHECKING, Any
 
 from neural_memory.integration.mapper import RecordMapper
