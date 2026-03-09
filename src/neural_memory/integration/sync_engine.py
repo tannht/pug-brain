@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import time
 from collections.abc import Callable
+from typing import Coroutine
 from typing import TYPE_CHECKING, Any
 
 from neural_memory.integration.mapper import RecordMapper
@@ -312,7 +313,7 @@ class SyncEngine:
                     continue
 
                 # Get fiber content from primary neuron
-                neurons_dict = await self._storage.get_neurons_batch(fiber.neuron_ids)
+                neurons_dict = await self._storage.get_neurons_batch(list(fiber.neuron_ids))
                 if not neurons_dict:
                     skipped_count += 1
                     continue
