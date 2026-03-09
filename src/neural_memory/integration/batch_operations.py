@@ -13,11 +13,11 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import StrEnum
 from pathlib import Path
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from neural_memory.integration.models import ExportResult, ImportResult
@@ -284,7 +284,6 @@ class BatchOperationManager:
                             # Re-raise with our custom message
                             raise asyncio.CancelledError("Operation cancelled")
                     # Continue waiting
-                    pass
 
             result = await sync_task
             return result[0]  # sync returns (ImportResult, SyncState)
@@ -370,7 +369,6 @@ class BatchOperationManager:
         if on_status:
             on_status("started", {"operation_id": checkpoint.operation_id})
 
-        rate_limiter = _RateLimiter(self._config.requests_per_second)
         checkpoint_counter = 0
 
         def save_checkpoint() -> None:
@@ -382,7 +380,7 @@ class BatchOperationManager:
                 try:
                     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
                     checkpoint_path.write_text(json.dumps(checkpoint.to_dict(), indent=2))
-                except (OSError, IOError) as e:
+                except OSError as e:
                     # Log error but don't fail the operation
                     logger.warning("Failed to save checkpoint to %s: %s", checkpoint_path, e)
 

@@ -9,9 +9,9 @@ from typing import TYPE_CHECKING, Any
 
 from neural_memory.integration.mapper import RecordMapper
 from neural_memory.integration.models import (
+    ExportResult,
     ExternalRecord,
     ExternalRelationship,
-    ExportResult,
     ImportResult,
     SourceCapability,
     SyncState,

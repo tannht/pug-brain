@@ -13,7 +13,6 @@ from neural_memory.integration.models import (
     SourceCapability,
     SourceSystemType,
 )
-
 from neural_memory.utils.timeutils import utcnow
 
 # Default implementations for optional write methods
