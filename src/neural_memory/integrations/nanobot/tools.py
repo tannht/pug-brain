@@ -1,10 +1,10 @@
-"""PugBrain tools for Nanobot's ToolRegistry.
+"""NeuralMemory tools for Nanobot's ToolRegistry.
 
 Four tools conforming to Nanobot's Tool ABC interface:
-- pugbrain_remember — store a memory
-- pugbrain_recall — query with spreading activation
-- pugbrain_context — get recent context
-- pugbrain_health — brain diagnostics
+- nmem_remember — store a memory
+- nmem_recall — query with spreading activation
+- nmem_context — get recent context
+- nmem_health — brain diagnostics
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ class NMRememberTool(BaseNMTool):
 
     @property
     def name(self) -> str:
-        return "pugbrain_remember"
+        return "nmem_remember"
 
     @property
     def description(self) -> str:
@@ -172,7 +172,7 @@ class NMRecallTool(BaseNMTool):
 
     @property
     def name(self) -> str:
-        return "pugbrain_recall"
+        return "nmem_recall"
 
     @property
     def description(self) -> str:
@@ -263,7 +263,7 @@ class NMContextTool(BaseNMTool):
 
     @property
     def name(self) -> str:
-        return "pugbrain_context"
+        return "nmem_context"
 
     @property
     def description(self) -> str:
@@ -337,7 +337,7 @@ class NMHealthTool(BaseNMTool):
 
     @property
     def name(self) -> str:
-        return "pugbrain_health"
+        return "nmem_health"
 
     @property
     def description(self) -> str:
