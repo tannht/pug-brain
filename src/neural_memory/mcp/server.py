@@ -12,7 +12,7 @@ Usage:
     python -m neural_memory.mcp
 
     # Or add to Claude Code via CLI:
-    claude mcp add --scope user neural-memory -- pug-mcp
+    claude mcp add --scope user neural-memory -- nmem-mcp
 
     # Or set NEURALMEMORY_BRAIN to use a specific brain:
     NEURALMEMORY_BRAIN=myproject python -m neural_memory.mcp
@@ -177,44 +177,45 @@ class MCPServer(
     async def call_tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         """Dispatch a tool call to the appropriate handler."""
         dispatch = {
-            "pugbrain_remember": self._remember,
-            "pugbrain_recall": self._recall,
-            "pugbrain_context": self._context,
-            "pugbrain_todo": self._todo,
-            "pugbrain_stats": self._stats,
-            "pugbrain_auto": self._auto,
-            "pugbrain_suggest": self._suggest,
-            "pugbrain_session": self._session,
-            "pugbrain_index": self._index,
-            "pugbrain_import": self._import,
-            "pugbrain_eternal": self._eternal,
-            "pugbrain_recap": self._recap,
-            "pugbrain_health": self._health,
-            "pugbrain_evolution": self._evolution,
-            "pugbrain_habits": self._habits,
-            "pugbrain_version": self._version,
-            "pugbrain_transplant": self._transplant,
-            "pugbrain_conflicts": self._conflicts,
-            "pugbrain_train": self._train,
-            "pugbrain_train_db": self._train_db,
-            "pugbrain_pin": self._pin,
-            "pugbrain_alerts": self._alerts,
-            "pugbrain_review": self._review,
-            "pugbrain_narrative": self._narrative,
-            "pugbrain_sync": self._sync,
-            "pugbrain_sync_status": self._sync_status,
-            "pugbrain_sync_config": self._sync_config,
-            "pugbrain_telegram_backup": self._telegram_backup,
-            "pugbrain_explain": self._explain,
-            "pugbrain_hypothesize": self._hypothesize,
-            "pugbrain_evidence": self._evidence,
-            "pugbrain_predict": self._predict,
-            "pugbrain_verify": self._verify,
-            "pugbrain_cognitive": self._cognitive,
-            "pugbrain_gaps": self._gaps,
-            "pugbrain_schema": self._schema,
-            "pugbrain_edit": self._edit,
-            "pugbrain_forget": self._forget,
+            "nmem_remember": self._remember,
+            "nmem_remember_batch": self._remember_batch,
+            "nmem_recall": self._recall,
+            "nmem_context": self._context,
+            "nmem_todo": self._todo,
+            "nmem_stats": self._stats,
+            "nmem_auto": self._auto,
+            "nmem_suggest": self._suggest,
+            "nmem_session": self._session,
+            "nmem_index": self._index,
+            "nmem_import": self._import,
+            "nmem_eternal": self._eternal,
+            "nmem_recap": self._recap,
+            "nmem_health": self._health,
+            "nmem_evolution": self._evolution,
+            "nmem_habits": self._habits,
+            "nmem_version": self._version,
+            "nmem_transplant": self._transplant,
+            "nmem_conflicts": self._conflicts,
+            "nmem_train": self._train,
+            "nmem_train_db": self._train_db,
+            "nmem_pin": self._pin,
+            "nmem_alerts": self._alerts,
+            "nmem_review": self._review,
+            "nmem_narrative": self._narrative,
+            "nmem_sync": self._sync,
+            "nmem_sync_status": self._sync_status,
+            "nmem_sync_config": self._sync_config,
+            "nmem_telegram_backup": self._telegram_backup,
+            "nmem_explain": self._explain,
+            "nmem_hypothesize": self._hypothesize,
+            "nmem_evidence": self._evidence,
+            "nmem_predict": self._predict,
+            "nmem_verify": self._verify,
+            "nmem_cognitive": self._cognitive,
+            "nmem_gaps": self._gaps,
+            "nmem_schema": self._schema,
+            "nmem_edit": self._edit,
+            "nmem_forget": self._forget,
         }
         handler = dispatch.get(name)
         if handler:
@@ -339,13 +340,15 @@ def _lazy_init() -> None:
     Safe to call on every MCP start — no-ops if config already exists.
     Only touches config/brain/hooks; never writes to stdout (reserved for JSON-RPC).
     """
-    from neural_memory.cli.setup import setup_brain, setup_config, setup_hooks_claude
     from neural_memory.unified_config import get_neuralmemory_dir
 
     data_dir = get_neuralmemory_dir()
     config_path = data_dir / "config.toml"
     if config_path.exists():
-        return  # Already initialized — fast path, no work done
+        return  # Already initialized — fast path, no heavy imports
+
+    # Only import cli.setup when first-time init is actually needed
+    from neural_memory.cli.setup import setup_brain, setup_config, setup_hooks_claude
 
     try:
         setup_config(data_dir)

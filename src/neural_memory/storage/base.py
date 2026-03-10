@@ -482,6 +482,7 @@ class NeuralStorage(ABC):
         self,
         neuron_ids: list[str],
         limit_per_neuron: int = 10,
+        tags: set[str] | None = None,
     ) -> list[Fiber]:
         """Find fibers containing ANY of the given neurons, deduplicated.
 
@@ -491,6 +492,7 @@ class NeuralStorage(ABC):
         Args:
             neuron_ids: List of neuron IDs to search for
             limit_per_neuron: Max fibers per neuron in fallback
+            tags: Optional set of tags to filter by (AND — all must match)
 
         Returns:
             Deduplicated list of fibers containing any of the neurons
@@ -498,7 +500,7 @@ class NeuralStorage(ABC):
         seen: set[str] = set()
         result: list[Fiber] = []
         for nid in neuron_ids:
-            for f in await self.find_fibers(contains_neuron=nid, limit=limit_per_neuron):
+            for f in await self.find_fibers(contains_neuron=nid, limit=limit_per_neuron, tags=tags):
                 if f.id not in seen:
                     seen.add(f.id)
                     result.append(f)
@@ -758,6 +760,30 @@ class NeuralStorage(ABC):
 
         Returns:
             Count of soon-to-expire memories
+        """
+        raise NotImplementedError
+
+    async def get_promotion_candidates(
+        self,
+        min_frequency: int = 5,
+        source_type: str = "context",
+    ) -> list[dict[str, Any]]:
+        """Find typed memories eligible for auto-promotion.
+
+        Returns context memories whose fibers have frequency >= min_frequency.
+        """
+        raise NotImplementedError
+
+    async def promote_memory_type(
+        self,
+        fiber_id: str,
+        new_type: MemoryType,
+        new_expires_at: str | None = None,
+    ) -> bool:
+        """Promote a memory's type and update its expiry.
+
+        Stores the original type in metadata for audit trail.
+        Returns True if the promotion was applied.
         """
         raise NotImplementedError
 

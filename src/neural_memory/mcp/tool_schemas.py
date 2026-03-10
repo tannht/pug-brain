@@ -9,31 +9,48 @@ from typing import Any
 TOOL_TIERS: dict[str, frozenset[str]] = {
     "minimal": frozenset(
         {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_recap",
+            "nmem_remember",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_recap",
         }
     ),
     "standard": frozenset(
         {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_recap",
-            "pugbrain_todo",
-            "pugbrain_session",
-            "pugbrain_auto",
-            "pugbrain_eternal",
+            "nmem_remember",
+            "nmem_remember_batch",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_recap",
+            "nmem_todo",
+            "nmem_session",
+            "nmem_auto",
+            "nmem_eternal",
         }
     ),
     # "full" = all tools, no filtering
 }
 
 
+def _with_parameters_alias(schemas: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Add ``parameters`` as an alias for ``inputSchema`` on each tool.
+
+    MCP clients read ``inputSchema``, but OpenAI-compatible bridges
+    (Cursor, LiteLLM, etc.) read ``parameters``.  Including both keys
+    prevents HTTP 400 errors when tools are forwarded to OpenAI API.
+    """
+    out: list[dict[str, Any]] = []
+    for tool in schemas:
+        t = {**tool}
+        if "inputSchema" in t and "parameters" not in t:
+            t["parameters"] = t["inputSchema"]
+        out.append(t)
+    return out
+
+
 def get_tool_schemas() -> list[dict[str, Any]]:
     """Return list of all MCP tool schemas (unfiltered)."""
-    return _ALL_TOOL_SCHEMAS.copy()
+    return _with_parameters_alias(_ALL_TOOL_SCHEMAS)
 
 
 def get_tool_schemas_for_tier(tier: str) -> list[dict[str, Any]]:
@@ -49,13 +66,13 @@ def get_tool_schemas_for_tier(tier: str) -> list[dict[str, Any]]:
     allowed = TOOL_TIERS.get(tier)
     if allowed is None:
         # "full" or unknown → return all
-        return _ALL_TOOL_SCHEMAS.copy()
-    return [t for t in _ALL_TOOL_SCHEMAS if t["name"] in allowed]
+        return _with_parameters_alias(_ALL_TOOL_SCHEMAS)
+    return _with_parameters_alias([t for t in _ALL_TOOL_SCHEMAS if t["name"] in allowed])
 
 
 _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
     {
-        "name": "pugbrain_remember",
+        "name": "nmem_remember",
         "description": "Store a memory. Auto-detects type if not specified. "
         "Error resolution: when a new memory contradicts a stored error (type='error'), "
         "the system automatically creates a RESOLVED_BY synapse and demotes the error's "
@@ -91,7 +108,8 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                 },
                 "tags": {
                     "type": "array",
-                    "items": {"type": "string"},
+                    "items": {"type": "string", "maxLength": 100},
+                    "maxItems": 50,
                     "description": "Tags for categorization",
                 },
                 "expires_days": {
@@ -108,12 +126,88 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                     "(e.g. '2026-03-02T08:00:00'). Defaults to current time if not provided. "
                     "Useful for batch-importing past events with correct timestamps.",
                 },
+                "trust_score": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Trust level 0.0-1.0. Capped by source ceiling "
+                    "(user_input max 0.9, ai_inference max 0.7). NULL = unscored.",
+                },
             },
             "required": ["content"],
         },
     },
     {
-        "name": "pugbrain_recall",
+        "name": "nmem_remember_batch",
+        "description": "Store multiple memories in a single call. Max 20 items, 500K total chars. "
+        "Each item supports the same fields as nmem_remember. Returns per-item results "
+        "(partial success — one bad item won't block the rest).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "memories": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "content": {"type": "string", "description": "The content to remember"},
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "fact",
+                                    "decision",
+                                    "preference",
+                                    "todo",
+                                    "insight",
+                                    "context",
+                                    "instruction",
+                                    "error",
+                                    "workflow",
+                                    "reference",
+                                ],
+                                "description": "Memory type (auto-detected if not specified)",
+                            },
+                            "priority": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 10,
+                                "description": "Priority 0-10 (5=normal, 10=critical)",
+                            },
+                            "tags": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "Tags for categorization",
+                            },
+                            "expires_days": {
+                                "type": "integer",
+                                "description": "Days until memory expires",
+                            },
+                            "encrypted": {
+                                "type": "boolean",
+                                "description": "Force encrypt this memory",
+                            },
+                            "event_at": {
+                                "type": "string",
+                                "description": "ISO datetime of when the event originally occurred",
+                            },
+                            "trust_score": {
+                                "type": "number",
+                                "minimum": 0.0,
+                                "maximum": 1.0,
+                                "description": "Trust level 0.0-1.0",
+                            },
+                        },
+                        "required": ["content"],
+                    },
+                    "description": "Array of memories to store (max 20)",
+                    "maxItems": 20,
+                },
+            },
+            "required": ["memories"],
+        },
+    },
+    {
+        "name": "nmem_recall",
         "description": "Query memories by semantic search with confidence ranking.",
         "inputSchema": {
             "type": "object",
@@ -156,12 +250,24 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                     "items": {"type": "string"},
                     "description": "Optional list of brain names to query across (max 5). When provided, runs parallel recall across all specified brains and merges results.",
                 },
+                "min_trust": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Filter: only return memories with trust_score >= this value. Unscored memories (NULL) are always included.",
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string", "maxLength": 100},
+                    "maxItems": 20,
+                    "description": "Filter by tags (AND — all must match). Checks tags, auto_tags, and agent_tags columns.",
+                },
             },
             "required": ["query"],
         },
     },
     {
-        "name": "pugbrain_context",
+        "name": "nmem_context",
         "description": "Get recent memories as context.",
         "inputSchema": {
             "type": "object",
@@ -186,7 +292,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_todo",
+        "name": "nmem_todo",
         "description": "Add a TODO memory (30-day expiry).",
         "inputSchema": {
             "type": "object",
@@ -203,12 +309,12 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_stats",
+        "name": "nmem_stats",
         "description": "Brain stats: memory counts and freshness.",
-        "inputSchema": {"type": "object", "properties": {}},
+        "inputSchema": {"type": "object", "properties": {}, "required": []},
     },
     {
-        "name": "pugbrain_auto",
+        "name": "nmem_auto",
         "description": "Auto-capture memories from text. 'process' analyzes+saves, 'flush' for emergency capture.",
         "inputSchema": {
             "type": "object",
@@ -231,7 +337,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_suggest",
+        "name": "nmem_suggest",
         "description": "Autocomplete suggestions from brain neurons. "
         "When called with no prefix, returns idle neurons that have never been "
         "accessed — useful for discovering neglected knowledge that needs reinforcement.",
@@ -266,7 +372,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_session",
+        "name": "nmem_session",
         "description": "Track session state: task, feature, progress.",
         "inputSchema": {
             "type": "object",
@@ -299,7 +405,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_index",
+        "name": "nmem_index",
         "description": "Index codebase for code-aware recall.",
         "inputSchema": {
             "type": "object",
@@ -323,7 +429,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_import",
+        "name": "nmem_import",
         "description": "Import from external systems (ChromaDB, Mem0, Cognee, etc.).",
         "inputSchema": {
             "type": "object",
@@ -356,7 +462,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_eternal",
+        "name": "nmem_eternal",
         "description": "Save project context, decisions, instructions for cross-session persistence.",
         "inputSchema": {
             "type": "object",
@@ -392,7 +498,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_recap",
+        "name": "nmem_recap",
         "description": "Load saved project context, decisions, and progress.",
         "inputSchema": {
             "type": "object",
@@ -411,17 +517,17 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_health",
+        "name": "nmem_health",
         "description": "Brain health: purity score, grade, warnings.",
-        "inputSchema": {"type": "object", "properties": {}},
+        "inputSchema": {"type": "object", "properties": {}, "required": []},
     },
     {
-        "name": "pugbrain_evolution",
+        "name": "nmem_evolution",
         "description": "Brain evolution: maturation, plasticity, coherence.",
-        "inputSchema": {"type": "object", "properties": {}},
+        "inputSchema": {"type": "object", "properties": {}, "required": []},
     },
     {
-        "name": "pugbrain_habits",
+        "name": "nmem_habits",
         "description": "Workflow habits: suggest, list, or clear.",
         "inputSchema": {
             "type": "object",
@@ -440,7 +546,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_version",
+        "name": "nmem_version",
         "description": "Brain version control: snapshot, list, rollback, diff.",
         "inputSchema": {
             "type": "object",
@@ -481,7 +587,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_transplant",
+        "name": "nmem_transplant",
         "description": "Transplant memories between brains by tags/types.",
         "inputSchema": {
             "type": "object",
@@ -515,7 +621,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_conflicts",
+        "name": "nmem_conflicts",
         "description": "Memory conflicts: list, resolve, or pre-check.",
         "inputSchema": {
             "type": "object",
@@ -554,7 +660,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_train",
+        "name": "nmem_train",
         "description": "Train brain from documentation files. "
         "Supports PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV (requires: pip install neural-memory[extract]). "
         "Trained memories are pinned by default (no decay, no compression, permanent KB).",
@@ -615,7 +721,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_pin",
+        "name": "nmem_pin",
         "description": "Pin or unpin memories. Pinned memories skip decay, pruning, and compression — "
         "use for permanent knowledge base content.",
         "inputSchema": {
@@ -635,7 +741,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_train_db",
+        "name": "nmem_train_db",
         "description": "Train brain from database schema.",
         "inputSchema": {
             "type": "object",
@@ -675,7 +781,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_alerts",
+        "name": "nmem_alerts",
         "description": "Brain health alerts: list or acknowledge.",
         "inputSchema": {
             "type": "object",
@@ -700,7 +806,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_narrative",
+        "name": "nmem_narrative",
         "description": "Generate narratives: timeline, topic, or causal chain.",
         "inputSchema": {
             "type": "object",
@@ -739,7 +845,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_review",
+        "name": "nmem_review",
         "description": "Spaced repetition reviews (Leitner box system).",
         "inputSchema": {
             "type": "object",
@@ -768,7 +874,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_sync",
+        "name": "nmem_sync",
         "description": "Trigger manual sync with hub server.",
         "inputSchema": {
             "type": "object",
@@ -792,7 +898,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_sync_status",
+        "name": "nmem_sync_status",
         "description": "Show sync status: pending changes, devices, last sync.",
         "inputSchema": {
             "type": "object",
@@ -800,7 +906,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_sync_config",
+        "name": "nmem_sync_config",
         "description": "View or update sync configuration.",
         "inputSchema": {
             "type": "object",
@@ -838,7 +944,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_telegram_backup",
+        "name": "nmem_telegram_backup",
         "description": "Send brain database file as backup to Telegram.",
         "inputSchema": {
             "type": "object",
@@ -851,11 +957,11 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_hypothesize",
+        "name": "nmem_hypothesize",
         "description": "Create, list, or inspect hypotheses — evolving beliefs with Bayesian "
         "confidence tracking. Hypotheses auto-resolve when evidence is strong enough "
         "(confirmed at >=0.9 confidence with >=3 evidence-for, refuted at <=0.1 with "
-        ">=3 evidence-against). Use pugbrain_evidence to add supporting/opposing evidence.",
+        ">=3 evidence-against). Use nmem_evidence to add supporting/opposing evidence.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -905,7 +1011,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_evidence",
+        "name": "nmem_evidence",
         "description": "Add evidence for or against a hypothesis. Updates confidence via "
         "Bayesian update with surprise weighting and diminishing returns. "
         "Auto-resolves hypothesis when evidence threshold is met.",
@@ -947,11 +1053,11 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_predict",
+        "name": "nmem_predict",
         "description": "Create, list, or inspect predictions — falsifiable claims about future "
         "observations. Predictions track confidence, optional deadlines, and can link "
         "to hypotheses via PREDICTED synapse. Verified predictions propagate evidence "
-        "back to linked hypotheses. Use pugbrain_verify to record outcomes.",
+        "back to linked hypotheses. Use nmem_verify to record outcomes.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1009,7 +1115,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_verify",
+        "name": "nmem_verify",
         "description": "Verify a prediction as correct or wrong. Optionally records an observation, "
         "creates VERIFIED_BY or FALSIFIED_BY synapse, and propagates evidence to "
         "linked hypotheses. Returns updated calibration score.",
@@ -1045,7 +1151,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_cognitive",
+        "name": "nmem_cognitive",
         "description": "Cognitive overview — O(1) summary of active hypotheses, pending predictions, "
         "calibration score, and knowledge gaps. Use 'summary' for instant dashboard, "
         "'refresh' to recompute scores from current state.",
@@ -1068,7 +1174,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_gaps",
+        "name": "nmem_gaps",
         "description": "Metacognition — track what the brain doesn't know. Detect knowledge gaps "
         "from contradictions, low-confidence hypotheses, recall misses, or manual flagging. "
         "Resolve gaps when new information fills them.",
@@ -1129,7 +1235,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_schema",
+        "name": "nmem_schema",
         "description": "Schema evolution — evolve hypotheses into new versions. "
         "Creates a version chain via SUPERSEDES synapse so the brain tracks how beliefs changed over time. "
         "Use when a hypothesis needs updating with new understanding.",
@@ -1173,7 +1279,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_explain",
+        "name": "nmem_explain",
         "description": "Find and explain the shortest path between two entities in the neural graph. Returns a step-by-step explanation with synapse types, weights, and supporting memory evidence.",
         "inputSchema": {
             "type": "object",
@@ -1197,7 +1303,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_edit",
+        "name": "nmem_edit",
         "description": "Edit an existing memory's type, content, or priority. "
         "Use when a memory was auto-typed incorrectly or needs content correction. "
         "Preserves all connections (synapses) and fiber associations.",
@@ -1239,7 +1345,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "pugbrain_forget",
+        "name": "nmem_forget",
         "description": "Explicitly delete or close a specific memory. "
         "Soft delete by default (marks as expired). Use hard=true for permanent removal. "
         "Use for closing completed TODOs or removing outdated/incorrect memories.",

@@ -188,7 +188,7 @@ def check_tests() -> None:
 def check_plugin() -> None:
     print("\n6. OpenClaw Plugin")
 
-    plugin_dir = ROOT / "integrations" / "openclaw-plugin"
+    plugin_dir = ROOT / "integrations" / "neuralmemory"
     pkg = plugin_dir / "package.json"
     manifest = plugin_dir / "openclaw.plugin.json"
 

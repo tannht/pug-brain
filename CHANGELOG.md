@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Tag filtering in Query API and MCP** — `POST /query` accepts `tags: list[str]` (AND filter, max 20). `nmem_recall` accepts `tags: list[str]` to scope results to specific tag sets. Filters across `tags`, `auto_tags`, and `agent_tags` columns. Backward compatible — `tags=None` returns all results as before.
+
+## [2.28.0] - 2026-03-08
+
+### Added
+
+- **`nmem_remember_batch`** — Bulk remember up to 20 memories in a single call. Partial success supported (individual failures don't block others). Added to `standard` tool tier.
+- **Trust score** — First-class `trust_score` (0.0–1.0) and `source` fields on TypedMemory. Source-specific ceiling caps: `user_input=0.9`, `ai_inference=0.7`, `auto_capture=0.5`, `verified=1.0`. Schema v22 migration adds columns + index.
+- **`min_trust` filter** — `nmem_recall` accepts optional `min_trust` parameter to filter out low-confidence memories.
+- **Auto-promote context→fact** — Frequently-recalled context memories (frequency ≥ 5) are automatically promoted to `fact` during consolidation. Audit trail in metadata (`auto_promoted`, `promoted_from`, `promoted_at`).
+- **SEMANTIC alternative path** — Memories can reach SEMANTIC stage via intensive reinforcement (`rehearsal_count ≥ 15` + `5 distinct 2h-windows`) as alternative to the 3-distinct-days spacing requirement. Enables agents with burst usage patterns.
+
+### Fixed
+
+- **FK constraint race condition** — `update_fiber()` no longer raises ValueError when a fiber is deleted between deferred-write enqueue and flush. Gracefully skips with debug log.
+
+### Changed
+
+- **MCP startup 3x faster** — Lazy-import `cli.setup` (defer until first-time init actually needed) and `sync.client`/`sync.sync_engine` (defer aiohttp until first sync call). Cold start: 611ms → 197ms.
+
+## [2.27.3] - 2026-03-08
+
+### Fixed
+
+- **OpenAI-compatible client HTTP 400** — Tool schemas now include `parameters` alias alongside `inputSchema`, fixing "schema must be type object, got type None" errors when MCP tools are forwarded through OpenAI-compatible bridges (Cursor, LiteLLM, etc.)
+
+### Added
+
+- **Cognitive Reasoning Guide** — Full workflow documentation: hypothesize, evidence, predict, verify loop with Bayesian confidence formula, end-to-end examples (`docs/guides/cognitive-reasoning.md`)
+- **Schema v21 Migration Guide** — New tables, auto-migration behavior, rollback instructions (`docs/guides/schema-v21-migration.md`)
+- **Learning Habits Guide** — 3-stage pipeline, thresholds, confidence calculation, suggestion engine (`docs/guides/learning-habits.md`)
+- **Pre-ship smoke tests** — Auto-type classifier (13 cases) and cognitive engine integration test in `scripts/pre_ship.py`
+
+
 ## [2.27.2] - 2026-03-07
 
 ### Fixed

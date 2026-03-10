@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any, Literal
@@ -12,6 +13,8 @@ from neural_memory.storage.sqlite_row_mappers import row_to_fiber
 
 if TYPE_CHECKING:
     import aiosqlite
+
+logger = logging.getLogger(__name__)
 
 
 class SQLiteFiberMixin:
@@ -145,6 +148,7 @@ class SQLiteFiberMixin:
         self,
         neuron_ids: list[str],
         limit_per_neuron: int = 10,
+        tags: set[str] | None = None,
     ) -> list[Fiber]:
         """Find fibers containing any of the given neurons in a single SQL query."""
         if not neuron_ids:
@@ -156,16 +160,24 @@ class SQLiteFiberMixin:
         placeholders = ",".join("?" for _ in neuron_ids)
         # Use junction table for efficient lookup, limit total results
         total_limit = limit_per_neuron * len(neuron_ids)
-        query = f"""
-            SELECT DISTINCT f.* FROM fibers f
-            JOIN fiber_neurons fn ON f.brain_id = fn.brain_id AND f.id = fn.fiber_id
-            WHERE fn.brain_id = ? AND fn.neuron_id IN ({placeholders})
-            ORDER BY f.salience DESC
-            LIMIT ?
-        """
-        params: list[Any] = [brain_id, *neuron_ids, total_limit]
+        sql = (
+            f"SELECT DISTINCT f.* FROM fibers f"
+            f" JOIN fiber_neurons fn ON f.brain_id = fn.brain_id AND f.id = fn.fiber_id"
+            f" WHERE fn.brain_id = ? AND fn.neuron_id IN ({placeholders})"
+        )
+        params: list[Any] = [brain_id, *neuron_ids]
 
-        async with conn.execute(query, params) as cursor:
+        # Tag filter: f.tags column stores the union of auto_tags + agent_tags,
+        # so checking only f.tags is sufficient (AND semantics — all must match)
+        if tags:
+            for tag in tags:
+                sql += " AND EXISTS (SELECT 1 FROM json_each(f.tags) WHERE value = ?)"
+                params.append(tag)
+
+        sql += " ORDER BY f.salience DESC LIMIT ?"
+        params.append(total_limit)
+
+        async with conn.execute(sql, params) as cursor:
             rows = await cursor.fetchall()
             return [row_to_fiber(row) for row in rows]
 
@@ -206,18 +218,28 @@ class SQLiteFiberMixin:
         )
 
         if cursor.rowcount == 0:
-            raise ValueError(f"Fiber {fiber.id} does not exist")
+            # Fiber was deleted (e.g. by consolidation prune) between
+            # deferred queue enqueue and flush — skip gracefully.
+            logger.debug("Skipping update for deleted fiber %s", fiber.id)
+            return
 
         # Refresh junction table
-        await conn.execute(
-            "DELETE FROM fiber_neurons WHERE brain_id = ? AND fiber_id = ?",
-            (brain_id, fiber.id),
-        )
-        if fiber.neuron_ids:
-            await conn.executemany(
-                "INSERT OR IGNORE INTO fiber_neurons (brain_id, fiber_id, neuron_id) VALUES (?, ?, ?)",
-                [(brain_id, fiber.id, nid) for nid in fiber.neuron_ids],
+        try:
+            await conn.execute(
+                "DELETE FROM fiber_neurons WHERE brain_id = ? AND fiber_id = ?",
+                (brain_id, fiber.id),
             )
+            if fiber.neuron_ids:
+                await conn.executemany(
+                    "INSERT OR IGNORE INTO fiber_neurons (brain_id, fiber_id, neuron_id) VALUES (?, ?, ?)",
+                    [(brain_id, fiber.id, nid) for nid in fiber.neuron_ids],
+                )
+        except sqlite3.IntegrityError:
+            logger.debug(
+                "FK constraint on fiber_neurons for fiber %s — fiber or neuron deleted concurrently",
+                fiber.id,
+            )
+            return
 
         await conn.commit()
 

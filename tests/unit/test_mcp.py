@@ -40,47 +40,48 @@ class TestMCPServer:
         """Test that get_tools returns all expected tools."""
         tools = server.get_tools()
 
-        assert len(tools) == 38
+        assert len(tools) == 39
         tool_names = {tool["name"] for tool in tools}
         assert tool_names == {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_todo",
-            "pugbrain_stats",
-            "pugbrain_auto",
-            "pugbrain_suggest",
-            "pugbrain_session",
-            "pugbrain_index",
-            "pugbrain_import",
-            "pugbrain_eternal",
-            "pugbrain_recap",
-            "pugbrain_health",
-            "pugbrain_evolution",
-            "pugbrain_habits",
-            "pugbrain_version",
-            "pugbrain_transplant",
-            "pugbrain_conflicts",
-            "pugbrain_train",
-            "pugbrain_train_db",
-            "pugbrain_alerts",
-            "pugbrain_review",
-            "pugbrain_narrative",
-            "pugbrain_sync",
-            "pugbrain_sync_status",
-            "pugbrain_sync_config",
-            "pugbrain_pin",
-            "pugbrain_telegram_backup",
-            "pugbrain_explain",
-            "pugbrain_hypothesize",
-            "pugbrain_evidence",
-            "pugbrain_predict",
-            "pugbrain_verify",
-            "pugbrain_cognitive",
-            "pugbrain_gaps",
-            "pugbrain_schema",
-            "pugbrain_edit",
-            "pugbrain_forget",
+            "nmem_remember",
+            "nmem_remember_batch",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_todo",
+            "nmem_stats",
+            "nmem_auto",
+            "nmem_suggest",
+            "nmem_session",
+            "nmem_index",
+            "nmem_import",
+            "nmem_eternal",
+            "nmem_recap",
+            "nmem_health",
+            "nmem_evolution",
+            "nmem_habits",
+            "nmem_version",
+            "nmem_transplant",
+            "nmem_conflicts",
+            "nmem_train",
+            "nmem_train_db",
+            "nmem_alerts",
+            "nmem_review",
+            "nmem_narrative",
+            "nmem_sync",
+            "nmem_sync_status",
+            "nmem_sync_config",
+            "nmem_pin",
+            "nmem_telegram_backup",
+            "nmem_explain",
+            "nmem_hypothesize",
+            "nmem_evidence",
+            "nmem_predict",
+            "nmem_verify",
+            "nmem_cognitive",
+            "nmem_gaps",
+            "nmem_schema",
+            "nmem_edit",
+            "nmem_forget",
         }
 
     def test_tool_schemas(self, server: MCPServer) -> None:
@@ -95,9 +96,9 @@ class TestMCPServer:
             assert "properties" in tool["inputSchema"]
 
     def test_remember_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_remember tool schema."""
+        """Test nmem_remember tool schema."""
         tools = server.get_tools()
-        remember_tool = next(t for t in tools if t["name"] == "pugbrain_remember")
+        remember_tool = next(t for t in tools if t["name"] == "nmem_remember")
 
         schema = remember_tool["inputSchema"]
         assert "content" in schema["properties"]
@@ -108,9 +109,9 @@ class TestMCPServer:
         assert schema["required"] == ["content"]
 
     def test_recall_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_recall tool schema."""
+        """Test nmem_recall tool schema."""
         tools = server.get_tools()
-        recall_tool = next(t for t in tools if t["name"] == "pugbrain_recall")
+        recall_tool = next(t for t in tools if t["name"] == "nmem_recall")
 
         schema = recall_tool["inputSchema"]
         assert "query" in schema["properties"]
@@ -120,18 +121,18 @@ class TestMCPServer:
         assert schema["required"] == ["query"]
 
     def test_context_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_context tool schema."""
+        """Test nmem_context tool schema."""
         tools = server.get_tools()
-        context_tool = next(t for t in tools if t["name"] == "pugbrain_context")
+        context_tool = next(t for t in tools if t["name"] == "nmem_context")
 
         schema = context_tool["inputSchema"]
         assert "limit" in schema["properties"]
         assert "fresh_only" in schema["properties"]
 
     def test_todo_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_todo tool schema."""
+        """Test nmem_todo tool schema."""
         tools = server.get_tools()
-        todo_tool = next(t for t in tools if t["name"] == "pugbrain_todo")
+        todo_tool = next(t for t in tools if t["name"] == "nmem_todo")
 
         schema = todo_tool["inputSchema"]
         assert "task" in schema["properties"]
@@ -139,17 +140,17 @@ class TestMCPServer:
         assert schema["required"] == ["task"]
 
     def test_stats_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_stats tool schema."""
+        """Test nmem_stats tool schema."""
         tools = server.get_tools()
-        stats_tool = next(t for t in tools if t["name"] == "pugbrain_stats")
+        stats_tool = next(t for t in tools if t["name"] == "nmem_stats")
 
         schema = stats_tool["inputSchema"]
         assert schema["properties"] == {}
 
     def test_suggest_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_suggest tool schema."""
+        """Test nmem_suggest tool schema."""
         tools = server.get_tools()
-        suggest_tool = next(t for t in tools if t["name"] == "pugbrain_suggest")
+        suggest_tool = next(t for t in tools if t["name"] == "nmem_suggest")
 
         schema = suggest_tool["inputSchema"]
         assert "prefix" in schema["properties"]
@@ -158,9 +159,9 @@ class TestMCPServer:
         assert "required" not in schema
 
     def test_session_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_session tool schema."""
+        """Test nmem_session tool schema."""
         tools = server.get_tools()
-        session_tool = next(t for t in tools if t["name"] == "pugbrain_session")
+        session_tool = next(t for t in tools if t["name"] == "nmem_session")
 
         schema = session_tool["inputSchema"]
         assert "action" in schema["properties"]
@@ -171,9 +172,9 @@ class TestMCPServer:
         assert schema["required"] == ["action"]
 
     def test_index_tool_schema(self, server: MCPServer) -> None:
-        """Test pugbrain_index tool schema."""
+        """Test nmem_index tool schema."""
         tools = server.get_tools()
-        index_tool = next(t for t in tools if t["name"] == "pugbrain_index")
+        index_tool = next(t for t in tools if t["name"] == "nmem_index")
 
         schema = index_tool["inputSchema"]
         assert "action" in schema["properties"]
@@ -205,7 +206,7 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_remember_tool(self, server: MCPServer) -> None:
-        """Test pugbrain_remember tool execution."""
+        """Test nmem_remember tool execution."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(
             id="test-brain",
@@ -226,7 +227,7 @@ class TestMCPToolCalls:
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
             result = await server.call_tool(
-                "pugbrain_remember",
+                "nmem_remember",
                 {"content": "Test memory", "type": "fact", "priority": 7},
             )
 
@@ -236,20 +237,20 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_remember_no_brain(self, server: MCPServer) -> None:
-        """Test pugbrain_remember when no brain is configured."""
+        """Test nmem_remember when no brain is configured."""
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_remember", {"content": "Test"})
+            result = await server.call_tool("nmem_remember", {"content": "Test"})
 
         assert "error" in result
         assert "No brain configured" in result["error"]
 
     @pytest.mark.asyncio
     async def test_recall_tool(self, server: MCPServer) -> None:
-        """Test pugbrain_recall tool execution."""
+        """Test nmem_recall tool execution."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(
             id="test-brain",
@@ -275,7 +276,7 @@ class TestMCPToolCalls:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
         ):
-            result = await server.call_tool("pugbrain_recall", {"query": "test query"})
+            result = await server.call_tool("nmem_recall", {"query": "test query"})
 
         assert result["answer"] == "Test answer"
         assert result["confidence"] == 0.85
@@ -285,7 +286,7 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_recall_low_confidence(self, server: MCPServer) -> None:
-        """Test pugbrain_recall with confidence below threshold."""
+        """Test nmem_recall with confidence below threshold."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(
             id="test-brain",
@@ -310,16 +311,14 @@ class TestMCPToolCalls:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
         ):
-            result = await server.call_tool(
-                "pugbrain_recall", {"query": "test", "min_confidence": 0.5}
-            )
+            result = await server.call_tool("nmem_recall", {"query": "test", "min_confidence": 0.5})
 
         assert result["answer"] is None
         assert "No memories found" in result["message"]
 
     @pytest.mark.asyncio
     async def test_context_tool(self, server: MCPServer) -> None:
-        """Test pugbrain_context tool execution."""
+        """Test nmem_context tool execution."""
         mock_storage = AsyncMock()
         mock_fibers = [
             MagicMock(summary="Memory 1", anchor_neuron_id=None),
@@ -328,7 +327,7 @@ class TestMCPToolCalls:
         mock_storage.get_fibers = AsyncMock(return_value=mock_fibers)
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_context", {"limit": 5})
+            result = await server.call_tool("nmem_context", {"limit": 5})
 
         assert result["count"] == 2
         assert "Memory 1" in result["context"]
@@ -338,19 +337,19 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_context_empty(self, server: MCPServer) -> None:
-        """Test pugbrain_context with no memories."""
+        """Test nmem_context with no memories."""
         mock_storage = AsyncMock()
         mock_storage.get_fibers = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_context", {})
+            result = await server.call_tool("nmem_context", {})
 
         assert result["count"] == 0
         assert "No memories stored" in result["context"]
 
     @pytest.mark.asyncio
     async def test_todo_tool(self, server: MCPServer) -> None:
-        """Test pugbrain_todo tool (delegates to remember)."""
+        """Test nmem_todo tool (delegates to remember)."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(
             id="test-brain",
@@ -370,14 +369,14 @@ class TestMCPToolCalls:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
-            result = await server.call_tool("pugbrain_todo", {"task": "Review code", "priority": 8})
+            result = await server.call_tool("nmem_todo", {"task": "Review code", "priority": 8})
 
         assert result["success"] is True
         assert result["memory_type"] == "todo"
 
     @pytest.mark.asyncio
     async def test_stats_tool(self, server: MCPServer) -> None:
-        """Test pugbrain_stats tool execution."""
+        """Test nmem_stats tool execution."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock()
         mock_brain.id = "test-brain"
@@ -400,7 +399,7 @@ class TestMCPToolCalls:
         )
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_stats", {})
+            result = await server.call_tool("nmem_stats", {})
 
         assert result["brain"] == "my-brain"
         assert result["neuron_count"] == 100
@@ -411,8 +410,8 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_auto_tool_status(self, server: MCPServer) -> None:
-        """Test pugbrain_auto status action."""
-        result = await server.call_tool("pugbrain_auto", {"action": "status"})
+        """Test nmem_auto status action."""
+        result = await server.call_tool("nmem_auto", {"action": "status"})
 
         assert "enabled" in result
         assert "capture_decisions" in result
@@ -420,18 +419,18 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_auto_tool_analyze(self, server: MCPServer) -> None:
-        """Test pugbrain_auto analyze action."""
+        """Test nmem_auto analyze action."""
         text = "We decided to use PostgreSQL for the database. TODO: Set up migrations."
-        result = await server.call_tool("pugbrain_auto", {"action": "analyze", "text": text})
+        result = await server.call_tool("nmem_auto", {"action": "analyze", "text": text})
 
         assert "detected" in result
         assert len(result["detected"]) >= 1  # Should detect at least the TODO
 
     @pytest.mark.asyncio
     async def test_auto_tool_analyze_errors(self, server: MCPServer) -> None:
-        """Test pugbrain_auto detects error patterns."""
+        """Test nmem_auto detects error patterns."""
         text = "The error was: connection timeout. The issue is that the server is down."
-        result = await server.call_tool("pugbrain_auto", {"action": "analyze", "text": text})
+        result = await server.call_tool("nmem_auto", {"action": "analyze", "text": text})
 
         assert "detected" in result
         detected_types = [d["type"] for d in result["detected"]]
@@ -439,16 +438,14 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_auto_tool_analyze_empty(self, server: MCPServer) -> None:
-        """Test pugbrain_auto with no detectable content."""
-        result = await server.call_tool(
-            "pugbrain_auto", {"action": "analyze", "text": "Hello world"}
-        )
+        """Test nmem_auto with no detectable content."""
+        result = await server.call_tool("nmem_auto", {"action": "analyze", "text": "Hello world"})
 
         assert result["detected"] == []
 
     @pytest.mark.asyncio
     async def test_auto_tool_process(self) -> None:
-        """Test pugbrain_auto process action (analyze + save)."""
+        """Test nmem_auto process action (analyze + save)."""
         # Create server with proper auto config mocked
         mock_auto_config = MagicMock(
             enabled=True,
@@ -487,23 +484,21 @@ class TestMCPToolCalls:
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
             text = "We decided to use Redis for caching. TODO: Set up Redis server."
-            result = await server.call_tool("pugbrain_auto", {"action": "process", "text": text})
+            result = await server.call_tool("nmem_auto", {"action": "process", "text": text})
 
         assert "saved" in result
         assert result["saved"] >= 1  # Should save at least the decision or TODO
 
     @pytest.mark.asyncio
     async def test_auto_tool_process_empty(self, server: MCPServer) -> None:
-        """Test pugbrain_auto process with no detectable content."""
-        result = await server.call_tool(
-            "pugbrain_auto", {"action": "process", "text": "Hello world"}
-        )
+        """Test nmem_auto process with no detectable content."""
+        result = await server.call_tool("nmem_auto", {"action": "process", "text": "Hello world"})
 
         assert result["saved"] == 0
 
     @pytest.mark.asyncio
     async def test_suggest_basic(self, server: MCPServer) -> None:
-        """Test pugbrain_suggest returns matching suggestions."""
+        """Test nmem_suggest returns matching suggestions."""
         mock_storage = AsyncMock()
         mock_storage.suggest_neurons = AsyncMock(
             return_value=[
@@ -519,7 +514,7 @@ class TestMCPToolCalls:
         )
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_suggest", {"prefix": "API"})
+            result = await server.call_tool("nmem_suggest", {"prefix": "API"})
 
         assert result["count"] == 1
         assert result["suggestions"][0]["content"] == "API design patterns"
@@ -530,12 +525,12 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_suggest_empty_prefix(self, server: MCPServer) -> None:
-        """Test pugbrain_suggest with empty prefix returns idle neurons (reinforcement mode)."""
+        """Test nmem_suggest with empty prefix returns idle neurons (reinforcement mode)."""
         mock_storage = AsyncMock()
         mock_storage.get_all_neuron_states = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_suggest", {"prefix": ""})
+            result = await server.call_tool("nmem_suggest", {"prefix": ""})
 
         assert result["suggestions"] == []
         assert result["count"] == 0
@@ -543,13 +538,13 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_suggest_with_type_filter(self, server: MCPServer) -> None:
-        """Test pugbrain_suggest with type_filter."""
+        """Test nmem_suggest with type_filter."""
         mock_storage = AsyncMock()
         mock_storage.suggest_neurons = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_suggest", {"prefix": "auth", "type_filter": "concept"}
+                "nmem_suggest", {"prefix": "auth", "type_filter": "concept"}
             )
 
         mock_storage.suggest_neurons.assert_called_once()
@@ -559,19 +554,19 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_suggest_respects_limit(self, server: MCPServer) -> None:
-        """Test pugbrain_suggest respects limit parameter."""
+        """Test nmem_suggest respects limit parameter."""
         mock_storage = AsyncMock()
         mock_storage.suggest_neurons = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            await server.call_tool("pugbrain_suggest", {"prefix": "test", "limit": 2})
+            await server.call_tool("nmem_suggest", {"prefix": "test", "limit": 2})
 
         call_kwargs = mock_storage.suggest_neurons.call_args
         assert call_kwargs.kwargs["limit"] == 2
 
     @pytest.mark.asyncio
     async def test_index_scan(self, server: MCPServer) -> None:
-        """Test pugbrain_index scan action returns file/neuron counts."""
+        """Test nmem_index scan action returns file/neuron counts."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", name="test", config=MagicMock())
         mock_storage.get_brain = AsyncMock(return_value=mock_brain)
@@ -593,7 +588,7 @@ class TestMCPToolCalls:
                 return_value=mock_encoder,
             ),
         ):
-            result = await server.call_tool("pugbrain_index", {"action": "scan", "path": "."})
+            result = await server.call_tool("nmem_index", {"action": "scan", "path": "."})
 
         assert result["files_indexed"] == 1
         assert result["neurons_created"] == 2
@@ -602,31 +597,31 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_index_status_empty(self, server: MCPServer) -> None:
-        """Test pugbrain_index status when nothing indexed."""
+        """Test nmem_index status when nothing indexed."""
         mock_storage = AsyncMock()
         mock_storage.find_neurons = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_index", {"action": "status"})
+            result = await server.call_tool("nmem_index", {"action": "status"})
 
         assert result["indexed_files"] == 0
         assert "No codebase indexed" in result["message"]
 
     @pytest.mark.asyncio
     async def test_session_get_empty(self, server: MCPServer) -> None:
-        """Test pugbrain_session get with no active session."""
+        """Test nmem_session get with no active session."""
         mock_storage = AsyncMock()
         mock_storage.find_typed_memories = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_session", {"action": "get"})
+            result = await server.call_tool("nmem_session", {"action": "get"})
 
         assert result["active"] is False
         assert "No active session" in result["message"]
 
     @pytest.mark.asyncio
     async def test_session_set_and_get(self, server: MCPServer) -> None:
-        """Test pugbrain_session set then get roundtrip."""
+        """Test nmem_session set then get roundtrip."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", name="test", config=MagicMock())
         mock_storage.get_brain = AsyncMock(return_value=mock_brain)
@@ -644,7 +639,7 @@ class TestMCPToolCalls:
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
             result = await server.call_tool(
-                "pugbrain_session",
+                "nmem_session",
                 {
                     "action": "set",
                     "feature": "auth",
@@ -663,7 +658,7 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_session_end(self, server: MCPServer) -> None:
-        """Test pugbrain_session end creates tombstone and summary."""
+        """Test nmem_session end creates tombstone and summary."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", name="test", config=MagicMock())
         mock_storage.get_brain = AsyncMock(return_value=mock_brain)
@@ -692,7 +687,7 @@ class TestMCPToolCalls:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
-            result = await server.call_tool("pugbrain_session", {"action": "end"})
+            result = await server.call_tool("nmem_session", {"action": "end"})
 
         assert result["active"] is False
         assert "auth" in result["summary"]
@@ -703,12 +698,12 @@ class TestMCPToolCalls:
 
     @pytest.mark.asyncio
     async def test_session_end_no_active(self, server: MCPServer) -> None:
-        """Test pugbrain_session end with no active session."""
+        """Test nmem_session end with no active session."""
         mock_storage = AsyncMock()
         mock_storage.find_typed_memories = AsyncMock(return_value=[])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_session", {"action": "end"})
+            result = await server.call_tool("nmem_session", {"action": "end"})
 
         assert result["active"] is False
         assert "No active session" in result["message"]
@@ -728,7 +723,7 @@ class TestMCPErrorPaths:
 
     @pytest.mark.asyncio
     async def test_session_set_no_brain(self) -> None:
-        """Test pugbrain_session set when brain is missing."""
+        """Test nmem_session set when brain is missing."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
@@ -737,7 +732,7 @@ class TestMCPErrorPaths:
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_session",
+                "nmem_session",
                 {"action": "set", "feature": "auth"},
             )
 
@@ -745,7 +740,7 @@ class TestMCPErrorPaths:
 
     @pytest.mark.asyncio
     async def test_session_end_no_brain(self) -> None:
-        """Test pugbrain_session end when brain is missing."""
+        """Test nmem_session end when brain is missing."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
@@ -770,13 +765,13 @@ class TestMCPErrorPaths:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.MemoryEncoder", return_value=mock_encoder),
         ):
-            result = await server.call_tool("pugbrain_session", {"action": "end"})
+            result = await server.call_tool("nmem_session", {"action": "end"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_eternal_save_no_brain(self) -> None:
-        """Test pugbrain_eternal save when brain is missing returns error."""
+        """Test nmem_eternal save when brain is missing returns error."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
@@ -789,7 +784,7 @@ class TestMCPErrorPaths:
             patch.object(server, "get_storage", return_value=mock_storage),
         ):
             result = await server.call_tool(
-                "pugbrain_eternal",
+                "nmem_eternal",
                 {"action": "save", "instruction": "Always use TypeScript"},
             )
 
@@ -798,7 +793,7 @@ class TestMCPErrorPaths:
 
     @pytest.mark.asyncio
     async def test_recap_topic_no_brain(self) -> None:
-        """Test pugbrain_recap with topic when brain is missing."""
+        """Test nmem_recap with topic when brain is missing."""
         server = self._make_server()
         ctx = AsyncMock()
         ctx.get_injection = AsyncMock(return_value="context")
@@ -811,7 +806,7 @@ class TestMCPErrorPaths:
             patch.object(server, "get_eternal_context", return_value=ctx),
             patch.object(server, "get_storage", return_value=mock_storage),
         ):
-            result = await server.call_tool("pugbrain_recap", {"topic": "auth"})
+            result = await server.call_tool("nmem_recap", {"topic": "auth"})
 
         assert "error" in result
 
@@ -844,7 +839,7 @@ class TestMCPErrorPaths:
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
         ):
             await server.call_tool(
-                "pugbrain_recall",
+                "nmem_recall",
                 {"query": "test", "max_tokens": 999999},
             )
 
@@ -891,7 +886,7 @@ class TestMCPProtocol:
         assert response["id"] == 2
         assert "result" in response
         assert "tools" in response["result"]
-        assert len(response["result"]["tools"]) == 38
+        assert len(response["result"]["tools"]) == 39
 
     @pytest.mark.asyncio
     async def test_tools_call_message(self, server: MCPServer) -> None:
@@ -904,7 +899,7 @@ class TestMCPProtocol:
                 "jsonrpc": "2.0",
                 "id": 3,
                 "method": "tools/call",
-                "params": {"name": "pugbrain_context", "arguments": {"limit": 5}},
+                "params": {"name": "nmem_context", "arguments": {"limit": 5}},
             }
 
             response = await handle_message(server, message)
@@ -923,7 +918,7 @@ class TestMCPProtocol:
                 "jsonrpc": "2.0",
                 "id": 4,
                 "method": "tools/call",
-                "params": {"name": "pugbrain_context", "arguments": {}},
+                "params": {"name": "nmem_context", "arguments": {}},
             }
 
             response = await handle_message(server, message)
@@ -945,7 +940,7 @@ class TestMCPProtocol:
                 "jsonrpc": "2.0",
                 "id": 5,
                 "method": "tools/call",
-                "params": {"name": "pugbrain_context", "arguments": '{"limit": 5}'},
+                "params": {"name": "nmem_context", "arguments": '{"limit": 5}'},
             }
 
             response = await handle_message(server, message)
@@ -967,7 +962,7 @@ class TestMCPProtocol:
                 "jsonrpc": "2.0",
                 "id": 6,
                 "method": "tools/call",
-                "params": {"name": "pugbrain_remember", "arguments": "some plain text"},
+                "params": {"name": "nmem_remember", "arguments": "some plain text"},
             }
 
             await handle_message(server, message)
@@ -1038,7 +1033,7 @@ class TestMCPResources:
 
         assert content is not None
         assert "NeuralMemory" in content
-        assert "pugbrain_remember" in content
+        assert "nmem_remember" in content
 
     def test_get_resource_content_compact(self, server: MCPServer) -> None:
         """Test getting compact prompt content."""
@@ -1346,7 +1341,7 @@ class TestPassiveCapture:
             long_query = (
                 "We decided to switch from MySQL to PostgreSQL because of better JSONB support"
             )
-            await server.call_tool("pugbrain_recall", {"query": long_query})
+            await server.call_tool("nmem_recall", {"query": long_query})
 
         mock_capture.assert_called_once_with(long_query)
 
@@ -1361,7 +1356,7 @@ class TestPassiveCapture:
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
             patch.object(server, "_passive_capture", new_callable=AsyncMock) as mock_capture,
         ):
-            await server.call_tool("pugbrain_recall", {"query": "auth setup"})
+            await server.call_tool("nmem_recall", {"query": "auth setup"})
 
         mock_capture.assert_not_called()
 
@@ -1379,7 +1374,7 @@ class TestPassiveCapture:
             long_query = (
                 "We decided to switch from MySQL to PostgreSQL because of better JSONB support"
             )
-            await server.call_tool("pugbrain_recall", {"query": long_query})
+            await server.call_tool("nmem_recall", {"query": long_query})
 
         mock_capture.assert_not_called()
 
@@ -1389,7 +1384,7 @@ class TestPassiveCapture:
         server = self._make_server(auto_enabled=False)
 
         result = await server.call_tool(
-            "pugbrain_auto",
+            "nmem_auto",
             {"action": "process", "text": "We decided to use Redis for caching."},
         )
 
@@ -1413,7 +1408,7 @@ class TestPassiveCapture:
             long_query = (
                 "We decided to switch from MySQL to PostgreSQL because of better JSONB support"
             )
-            result = await server.call_tool("pugbrain_recall", {"query": long_query})
+            result = await server.call_tool("nmem_recall", {"query": long_query})
 
         # Recall should still succeed despite passive capture error
         assert result["answer"] == "Test answer"
@@ -1421,7 +1416,7 @@ class TestPassiveCapture:
 
 
 class TestMCPEternal:
-    """Tests for pugbrain_eternal and pugbrain_recap tool calls."""
+    """Tests for nmem_eternal and nmem_recap tool calls."""
 
     def _make_server(self) -> MCPServer:
         """Create a server with eternal config mocked."""
@@ -1481,12 +1476,12 @@ class TestMCPEternal:
 
     @pytest.mark.asyncio
     async def test_eternal_status(self) -> None:
-        """Test pugbrain_eternal status returns memory counts and session."""
+        """Test nmem_eternal status returns memory counts and session."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_eternal", {"action": "status"})
+            result = await server.call_tool("nmem_eternal", {"action": "status"})
 
         assert result["enabled"] is True
         assert result["memory_counts"]["fact"] == 3
@@ -1499,7 +1494,7 @@ class TestMCPEternal:
 
     @pytest.mark.asyncio
     async def test_eternal_save_empty(self) -> None:
-        """Test pugbrain_eternal save with no fields returns no changes."""
+        """Test nmem_eternal save with no fields returns no changes."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
         mock_storage = AsyncMock()
@@ -1511,14 +1506,14 @@ class TestMCPEternal:
             patch.object(server, "get_eternal_context", return_value=ctx),
             patch.object(server, "get_storage", return_value=mock_storage),
         ):
-            result = await server.call_tool("pugbrain_eternal", {"action": "save"})
+            result = await server.call_tool("nmem_eternal", {"action": "save"})
 
         assert result["saved"] is True
         assert result["items"] == []
 
     @pytest.mark.asyncio
     async def test_eternal_save_project_context(self) -> None:
-        """Test pugbrain_eternal save with project_name and tech_stack."""
+        """Test nmem_eternal save with project_name and tech_stack."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
         mock_storage = AsyncMock()
@@ -1534,7 +1529,7 @@ class TestMCPEternal:
             patch.object(server, "_remember", mock_remember),
         ):
             result = await server.call_tool(
-                "pugbrain_eternal",
+                "nmem_eternal",
                 {
                     "action": "save",
                     "project_name": "NewProject",
@@ -1554,7 +1549,7 @@ class TestMCPEternal:
 
     @pytest.mark.asyncio
     async def test_eternal_save_decision_and_instruction(self) -> None:
-        """Test pugbrain_eternal save with decision and instruction."""
+        """Test nmem_eternal save with decision and instruction."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
         mock_storage = AsyncMock()
@@ -1574,7 +1569,7 @@ class TestMCPEternal:
             patch.object(server, "_remember", side_effect=track_remember),
         ):
             result = await server.call_tool(
-                "pugbrain_eternal",
+                "nmem_eternal",
                 {
                     "action": "save",
                     "decision": "Use gRPC",
@@ -1614,7 +1609,7 @@ class TestMCPEternal:
             patch.object(server, "_remember", AsyncMock(return_value={"stored": True})),
         ):
             await server.call_tool(
-                "pugbrain_eternal",
+                "nmem_eternal",
                 {"action": "save", "project_name": "Updated"},
             )
 
@@ -1622,23 +1617,23 @@ class TestMCPEternal:
 
     @pytest.mark.asyncio
     async def test_eternal_unknown_action(self) -> None:
-        """Test pugbrain_eternal with unknown action."""
+        """Test nmem_eternal with unknown action."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_eternal", {"action": "bogus"})
+            result = await server.call_tool("nmem_eternal", {"action": "bogus"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_recap_level(self) -> None:
-        """Test pugbrain_recap with level."""
+        """Test nmem_recap with level."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_recap", {"level": 2})
+            result = await server.call_tool("nmem_recap", {"level": 2})
 
         assert "context" in result
         assert result["level"] == 2
@@ -1647,41 +1642,41 @@ class TestMCPEternal:
 
     @pytest.mark.asyncio
     async def test_recap_default_level(self) -> None:
-        """Test pugbrain_recap defaults to level 1."""
+        """Test nmem_recap defaults to level 1."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_recap", {})
+            result = await server.call_tool("nmem_recap", {})
 
         assert result["level"] == 1
         ctx.get_injection.assert_called_once_with(level=1)
 
     @pytest.mark.asyncio
     async def test_recap_level_clamped(self) -> None:
-        """Test pugbrain_recap level is clamped to 1-3."""
+        """Test nmem_recap level is clamped to 1-3."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_recap", {"level": 99})
+            result = await server.call_tool("nmem_recap", {"level": 99})
 
         assert result["level"] == 3
 
     @pytest.mark.asyncio
     async def test_recap_with_feature_welcome(self) -> None:
-        """Test pugbrain_recap appends welcome when feature is set."""
+        """Test nmem_recap appends welcome when feature is set."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_recap", {"level": 1})
+            result = await server.call_tool("nmem_recap", {"level": 1})
 
         assert "Welcome back!" in result["message"]
 
     @pytest.mark.asyncio
     async def test_recap_no_welcome_without_feature(self) -> None:
-        """Test pugbrain_recap no welcome when no feature set."""
+        """Test nmem_recap no welcome when no feature set."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
         ctx.get_status = AsyncMock(
@@ -1693,13 +1688,13 @@ class TestMCPEternal:
         )
 
         with patch.object(server, "get_eternal_context", return_value=ctx):
-            result = await server.call_tool("pugbrain_recap", {"level": 1})
+            result = await server.call_tool("nmem_recap", {"level": 1})
 
         assert "Welcome back!" not in result["message"]
 
     @pytest.mark.asyncio
     async def test_recap_topic(self) -> None:
-        """Test pugbrain_recap with topic search."""
+        """Test nmem_recap with topic search."""
         server = self._make_server()
         ctx = self._mock_eternal_context()
 
@@ -1721,7 +1716,7 @@ class TestMCPEternal:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.eternal_handler.ReflexPipeline", return_value=mock_pipeline),
         ):
-            result = await server.call_tool("pugbrain_recap", {"topic": "auth"})
+            result = await server.call_tool("nmem_recap", {"topic": "auth"})
 
         assert result["topic"] == "auth"
         assert result["confidence"] == 0.9
@@ -1729,7 +1724,7 @@ class TestMCPEternal:
 
 
 class TestMCPImport:
-    """Tests for pugbrain_import tool calls."""
+    """Tests for nmem_import tool calls."""
 
     def _make_server(self) -> MCPServer:
         """Create a server with mocked config."""
@@ -1743,7 +1738,7 @@ class TestMCPImport:
 
     @pytest.mark.asyncio
     async def test_import_success(self) -> None:
-        """Test pugbrain_import with successful sync."""
+        """Test nmem_import with successful sync."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -1772,7 +1767,7 @@ class TestMCPImport:
             patch("neural_memory.integration.sync_engine.SyncEngine", return_value=mock_engine),
         ):
             result = await server.call_tool(
-                "pugbrain_import",
+                "nmem_import",
                 {"source": "chromadb", "connection": "/tmp/chroma", "collection": "test"},
             )
 
@@ -1783,20 +1778,20 @@ class TestMCPImport:
 
     @pytest.mark.asyncio
     async def test_import_no_brain(self) -> None:
-        """Test pugbrain_import when no brain configured."""
+        """Test nmem_import when no brain configured."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_import", {"source": "chromadb"})
+            result = await server.call_tool("nmem_import", {"source": "chromadb"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_import_no_source(self) -> None:
-        """Test pugbrain_import without source."""
+        """Test nmem_import without source."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -1804,13 +1799,13 @@ class TestMCPImport:
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_import", {"source": ""})
+            result = await server.call_tool("nmem_import", {"source": ""})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_import_adapter_not_found(self) -> None:
-        """Test pugbrain_import with unknown adapter."""
+        """Test nmem_import with unknown adapter."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -1824,14 +1819,14 @@ class TestMCPImport:
                 side_effect=ValueError("Unknown adapter"),
             ),
         ):
-            result = await server.call_tool("pugbrain_import", {"source": "unknown_system"})
+            result = await server.call_tool("nmem_import", {"source": "unknown_system"})
 
         assert "error" in result
         assert "Unsupported or misconfigured source" in result["error"]
 
     @pytest.mark.asyncio
     async def test_import_sync_failure(self) -> None:
-        """Test pugbrain_import when sync raises."""
+        """Test nmem_import when sync raises."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -1847,7 +1842,7 @@ class TestMCPImport:
             patch("neural_memory.integration.adapters.get_adapter", return_value=mock_adapter),
             patch("neural_memory.integration.sync_engine.SyncEngine", return_value=mock_engine),
         ):
-            result = await server.call_tool("pugbrain_import", {"source": "chromadb"})
+            result = await server.call_tool("nmem_import", {"source": "chromadb"})
 
         assert "error" in result
         assert "failed unexpectedly" in result["error"]
@@ -1881,7 +1876,7 @@ class TestMCPImport:
             patch("neural_memory.integration.sync_engine.SyncEngine", return_value=mock_engine),
         ):
             mock_get_adapter.return_value = MagicMock()
-            await server.call_tool("pugbrain_import", {"source": "awf", "connection": brain_dir})
+            await server.call_tool("nmem_import", {"source": "awf", "connection": brain_dir})
 
         from pathlib import Path as BrainPath
 
@@ -1890,7 +1885,7 @@ class TestMCPImport:
 
 
 class TestMCPAutoExtended:
-    """Extended tests for pugbrain_auto enable/disable/error paths."""
+    """Extended tests for nmem_auto enable/disable/error paths."""
 
     def _make_server(self, *, auto_enabled: bool = True) -> MCPServer:
         """Create server with controllable auto config."""
@@ -1915,7 +1910,7 @@ class TestMCPAutoExtended:
 
     @pytest.mark.asyncio
     async def test_auto_enable(self) -> None:
-        """Test pugbrain_auto enable action toggles enabled flag."""
+        """Test nmem_auto enable action toggles enabled flag."""
         server = self._make_server(auto_enabled=False)
 
         def fake_replace(obj, **kwargs):
@@ -1926,14 +1921,14 @@ class TestMCPAutoExtended:
             return new_obj
 
         with patch("dataclasses.replace", side_effect=fake_replace):
-            result = await server.call_tool("pugbrain_auto", {"action": "enable"})
+            result = await server.call_tool("nmem_auto", {"action": "enable"})
 
         assert result["enabled"] is True
         assert "enabled" in result["message"].lower()
 
     @pytest.mark.asyncio
     async def test_auto_disable(self) -> None:
-        """Test pugbrain_auto disable action toggles enabled flag."""
+        """Test nmem_auto disable action toggles enabled flag."""
         server = self._make_server(auto_enabled=True)
 
         def fake_replace(obj, **kwargs):
@@ -1944,41 +1939,41 @@ class TestMCPAutoExtended:
             return new_obj
 
         with patch("dataclasses.replace", side_effect=fake_replace):
-            result = await server.call_tool("pugbrain_auto", {"action": "disable"})
+            result = await server.call_tool("nmem_auto", {"action": "disable"})
 
         assert result["enabled"] is False
         assert "disabled" in result["message"].lower()
 
     @pytest.mark.asyncio
     async def test_auto_analyze_empty_text(self) -> None:
-        """Test pugbrain_auto analyze with empty text."""
+        """Test nmem_auto analyze with empty text."""
         server = self._make_server()
 
-        result = await server.call_tool("pugbrain_auto", {"action": "analyze", "text": ""})
+        result = await server.call_tool("nmem_auto", {"action": "analyze", "text": ""})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_auto_process_empty_text(self) -> None:
-        """Test pugbrain_auto process with empty text."""
+        """Test nmem_auto process with empty text."""
         server = self._make_server()
 
-        result = await server.call_tool("pugbrain_auto", {"action": "process", "text": ""})
+        result = await server.call_tool("nmem_auto", {"action": "process", "text": ""})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_auto_unknown_action(self) -> None:
-        """Test pugbrain_auto with unknown action."""
+        """Test nmem_auto with unknown action."""
         server = self._make_server()
 
-        result = await server.call_tool("pugbrain_auto", {"action": "bogus"})
+        result = await server.call_tool("nmem_auto", {"action": "bogus"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_auto_analyze_with_save(self) -> None:
-        """Test pugbrain_auto analyze with save=True."""
+        """Test nmem_auto analyze with save=True."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -1997,7 +1992,7 @@ class TestMCPAutoExtended:
         ):
             text = "We decided to use PostgreSQL. TODO: Set up migrations."
             result = await server.call_tool(
-                "pugbrain_auto", {"action": "analyze", "text": text, "save": True}
+                "nmem_auto", {"action": "analyze", "text": text, "save": True}
             )
 
         assert "detected" in result
@@ -2005,7 +2000,7 @@ class TestMCPAutoExtended:
 
 
 class TestMCPContextExtended:
-    """Extended tests for pugbrain_context fresh_only and anchor fallback."""
+    """Extended tests for nmem_context fresh_only and anchor fallback."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -2019,7 +2014,7 @@ class TestMCPContextExtended:
 
     @pytest.mark.asyncio
     async def test_context_fresh_only(self, server: MCPServer) -> None:
-        """Test pugbrain_context with fresh_only=True filters old fibers."""
+        """Test nmem_context with fresh_only=True filters old fibers."""
         from datetime import datetime, timedelta
 
         mock_storage = AsyncMock()
@@ -2037,34 +2032,34 @@ class TestMCPContextExtended:
         mock_storage.get_fibers = AsyncMock(return_value=[fresh_fiber, old_fiber])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_context", {"fresh_only": True, "limit": 10})
+            result = await server.call_tool("nmem_context", {"fresh_only": True, "limit": 10})
 
         assert result["count"] >= 1
         assert "Fresh memory" in result["context"]
 
     @pytest.mark.asyncio
     async def test_context_anchor_fallback(self, server: MCPServer) -> None:
-        """Test pugbrain_context falls back to anchor neuron when fiber has no summary."""
+        """Test nmem_context falls back to anchor neuron when fiber has no summary."""
         mock_storage = AsyncMock()
         fiber = MagicMock(summary=None, anchor_neuron_id="anchor-1")
         mock_storage.get_fibers = AsyncMock(return_value=[fiber])
         mock_storage.get_neuron = AsyncMock(return_value=MagicMock(content="Anchor content"))
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_context", {})
+            result = await server.call_tool("nmem_context", {})
 
         assert result["count"] == 1
         assert "Anchor content" in result["context"]
 
     @pytest.mark.asyncio
     async def test_context_no_summary_no_anchor(self, server: MCPServer) -> None:
-        """Test pugbrain_context with fiber that has no summary and no anchor."""
+        """Test nmem_context with fiber that has no summary and no anchor."""
         mock_storage = AsyncMock()
         fiber = MagicMock(summary=None, anchor_neuron_id=None)
         mock_storage.get_fibers = AsyncMock(return_value=[fiber])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_context", {})
+            result = await server.call_tool("nmem_context", {})
 
         assert result["count"] == 0
 
@@ -2086,14 +2081,14 @@ class TestMCPRecallExtended:
 
     @pytest.mark.asyncio
     async def test_recall_no_brain(self) -> None:
-        """Test pugbrain_recall when no brain configured."""
+        """Test nmem_recall when no brain configured."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_recall", {"query": "test"})
+            result = await server.call_tool("nmem_recall", {"query": "test"})
 
         assert "error" in result
         assert "No brain" in result["error"]
@@ -2127,7 +2122,7 @@ class TestMCPRecallExtended:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch("neural_memory.mcp.tool_handlers.ReflexPipeline", return_value=mock_pipeline),
         ):
-            result = await server.call_tool("pugbrain_recall", {"query": "how it works"})
+            result = await server.call_tool("nmem_recall", {"query": "how it works"})
 
         # Verify query was enriched with session context
         call_args = mock_pipeline.query.call_args
@@ -2137,7 +2132,7 @@ class TestMCPRecallExtended:
 
     @pytest.mark.asyncio
     async def test_remember_sensitive_content(self) -> None:
-        """Test pugbrain_remember handles sensitive content.
+        """Test nmem_remember handles sensitive content.
 
         With auto-redact (Phase F), severity-3 API keys are auto-redacted
         rather than blocking. The memory is stored with [REDACTED] content.
@@ -2156,7 +2151,7 @@ class TestMCPRecallExtended:
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_remember",
+                "nmem_remember",
                 {"content": "API_KEY=sk-1234567890abcdef"},
             )
 
@@ -2166,7 +2161,7 @@ class TestMCPRecallExtended:
 
     @pytest.mark.asyncio
     async def test_remember_auto_type_detection(self) -> None:
-        """Test pugbrain_remember auto-detects type when not specified."""
+        """Test nmem_remember auto-detects type when not specified."""
         server = self._make_server()
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
@@ -2185,7 +2180,7 @@ class TestMCPRecallExtended:
         ):
             # No "type" in args — should use suggest_memory_type
             result = await server.call_tool(
-                "pugbrain_remember",
+                "nmem_remember",
                 {"content": "TODO: fix the login bug"},
             )
 
@@ -2209,51 +2204,51 @@ class TestMCPMiscErrors:
 
     @pytest.mark.asyncio
     async def test_stats_no_brain(self, server: MCPServer) -> None:
-        """Test pugbrain_stats when no brain configured."""
+        """Test nmem_stats when no brain configured."""
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_stats", {})
+            result = await server.call_tool("nmem_stats", {})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_session_unknown_action(self, server: MCPServer) -> None:
-        """Test pugbrain_session with unknown action."""
+        """Test nmem_session with unknown action."""
         mock_storage = AsyncMock()
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_session", {"action": "bogus"})
+            result = await server.call_tool("nmem_session", {"action": "bogus"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_index_unknown_action(self, server: MCPServer) -> None:
-        """Test pugbrain_index with unknown action."""
+        """Test nmem_index with unknown action."""
         mock_storage = AsyncMock()
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_index", {"action": "bogus"})
+            result = await server.call_tool("nmem_index", {"action": "bogus"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_index_scan_no_brain(self, server: MCPServer) -> None:
-        """Test pugbrain_index scan with no brain."""
+        """Test nmem_index scan with no brain."""
         mock_storage = AsyncMock()
         mock_storage.get_brain = AsyncMock(return_value=None)
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_index", {"action": "scan"})
+            result = await server.call_tool("nmem_index", {"action": "scan"})
 
         assert "error" in result
 
     @pytest.mark.asyncio
     async def test_index_scan_not_directory(self, server: MCPServer) -> None:
-        """Test pugbrain_index scan with non-existent path."""
+        """Test nmem_index scan with non-existent path."""
         mock_storage = AsyncMock()
         mock_brain = MagicMock(id="test-brain", config=MagicMock())
         mock_storage.get_brain = AsyncMock(return_value=mock_brain)
@@ -2261,7 +2256,7 @@ class TestMCPMiscErrors:
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_index",
+                "nmem_index",
                 {"action": "scan", "path": "/nonexistent/dir/xyz123"},
             )
 
@@ -2270,7 +2265,7 @@ class TestMCPMiscErrors:
 
     @pytest.mark.asyncio
     async def test_session_get_active(self, server: MCPServer) -> None:
-        """Test pugbrain_session get with active session returns data."""
+        """Test nmem_session get with active session returns data."""
         mock_storage = AsyncMock()
         mock_session = MagicMock(
             metadata={
@@ -2288,7 +2283,7 @@ class TestMCPMiscErrors:
         mock_storage.find_typed_memories = AsyncMock(return_value=[mock_session])
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_session", {"action": "get"})
+            result = await server.call_tool("nmem_session", {"action": "get"})
 
         assert result["active"] is True
         assert result["feature"] == "deploy"
@@ -2381,7 +2376,7 @@ class TestMCPInputValidation:
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_remember", {"content": "x" * 200_000})
+            result = await server.call_tool("nmem_remember", {"content": "x" * 200_000})
 
         assert "error" in result
         assert "too long" in result["error"].lower()
@@ -2391,9 +2386,7 @@ class TestMCPInputValidation:
         """Text over 100KB is rejected in analyze action."""
         server = self._make_server()
 
-        result = await server.call_tool(
-            "pugbrain_auto", {"action": "analyze", "text": "x" * 200_000}
-        )
+        result = await server.call_tool("nmem_auto", {"action": "analyze", "text": "x" * 200_000})
 
         assert "error" in result
         assert "too long" in result["error"].lower()
@@ -2403,9 +2396,7 @@ class TestMCPInputValidation:
         """Text over 100KB is rejected in process action."""
         server = self._make_server()
 
-        result = await server.call_tool(
-            "pugbrain_auto", {"action": "process", "text": "x" * 200_000}
-        )
+        result = await server.call_tool("nmem_auto", {"action": "process", "text": "x" * 200_000})
 
         assert "error" in result
         assert "too long" in result["error"].lower()
@@ -2421,7 +2412,7 @@ class TestMCPInputValidation:
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_remember", {"content": "test", "type": "invalid_type"}
+                "nmem_remember", {"content": "test", "type": "invalid_type"}
             )
 
         assert "error" in result
@@ -2437,7 +2428,7 @@ class TestMCPInputValidation:
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_recall", {"query": "test", "depth": 99})
+            result = await server.call_tool("nmem_recall", {"query": "test", "depth": 99})
 
         assert "error" in result
         assert "invalid" in result["error"].lower()
@@ -2451,7 +2442,7 @@ class TestMCPInputValidation:
 
         with patch.object(server, "get_storage", return_value=mock_storage):
             result = await server.call_tool(
-                "pugbrain_suggest", {"prefix": "test", "type_filter": "bogus"}
+                "nmem_suggest", {"prefix": "test", "type_filter": "bogus"}
             )
 
         assert "error" in result

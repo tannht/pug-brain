@@ -65,7 +65,7 @@ class TestToolTiers:
 
     def test_full_tier_returns_all(self) -> None:
         tools = get_tool_schemas_for_tier("full")
-        assert len(tools) == 38
+        assert len(tools) == 39
 
     def test_full_tier_matches_get_tool_schemas(self) -> None:
         full = get_tool_schemas_for_tier("full")
@@ -75,20 +75,21 @@ class TestToolTiers:
 
     def test_standard_tier_count(self) -> None:
         tools = get_tool_schemas_for_tier("standard")
-        assert len(tools) == 8
+        assert len(tools) == 9
 
     def test_standard_tier_correct_names(self) -> None:
         tools = get_tool_schemas_for_tier("standard")
         names = {t["name"] for t in tools}
         assert names == {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_recap",
-            "pugbrain_todo",
-            "pugbrain_session",
-            "pugbrain_auto",
-            "pugbrain_eternal",
+            "nmem_remember",
+            "nmem_remember_batch",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_recap",
+            "nmem_todo",
+            "nmem_session",
+            "nmem_auto",
+            "nmem_eternal",
         }
 
     def test_minimal_tier_count(self) -> None:
@@ -99,15 +100,15 @@ class TestToolTiers:
         tools = get_tool_schemas_for_tier("minimal")
         names = {t["name"] for t in tools}
         assert names == {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_recap",
+            "nmem_remember",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_recap",
         }
 
     def test_invalid_tier_defaults_to_full(self) -> None:
         tools = get_tool_schemas_for_tier("bogus")
-        assert len(tools) == 38
+        assert len(tools) == 39
 
     def test_tier_hierarchy_minimal_subset_of_standard(self) -> None:
         assert TOOL_TIERS["minimal"] < TOOL_TIERS["standard"]
@@ -117,8 +118,8 @@ class TestToolTiers:
         assert TOOL_TIERS["standard"] < all_names
 
     def test_explain_not_in_standard_or_minimal(self) -> None:
-        assert "pugbrain_explain" not in TOOL_TIERS["standard"]
-        assert "pugbrain_explain" not in TOOL_TIERS["minimal"]
+        assert "nmem_explain" not in TOOL_TIERS["standard"]
+        assert "nmem_explain" not in TOOL_TIERS["minimal"]
 
     def test_all_schemas_have_required_fields(self) -> None:
         for tool in get_tool_schemas():
@@ -132,13 +133,13 @@ class TestToolTiers:
         a = get_tool_schemas()
         b = get_tool_schemas()
         a.pop()
-        assert len(b) == 38
+        assert len(b) == 39
 
     def test_get_tool_schemas_for_tier_returns_copy(self) -> None:
         a = get_tool_schemas_for_tier("standard")
         b = get_tool_schemas_for_tier("standard")
         a.pop()
-        assert len(b) == 8
+        assert len(b) == 9
 
 
 class TestServerTierIntegration:
@@ -157,11 +158,11 @@ class TestServerTierIntegration:
 
     def test_server_full_tier(self) -> None:
         server = self._make_server("full")
-        assert len(server.get_tools()) == 38
+        assert len(server.get_tools()) == 39
 
     def test_server_standard_tier(self) -> None:
         server = self._make_server("standard")
-        assert len(server.get_tools()) == 8
+        assert len(server.get_tools()) == 9
 
     def test_server_minimal_tier(self) -> None:
         server = self._make_server("minimal")
@@ -173,10 +174,10 @@ class TestServerTierIntegration:
         server = self._make_server("minimal")
         tools = server.get_tools()
         exposed_names = {t["name"] for t in tools}
-        assert "pugbrain_stats" not in exposed_names
+        assert "nmem_stats" not in exposed_names
 
         with patch.object(server, "_stats", return_value={"status": "ok"}) as mock_stats:
-            result = await server.call_tool("pugbrain_stats", {})
+            result = await server.call_tool("nmem_stats", {})
             mock_stats.assert_called_once_with({})
             assert result == {"status": "ok"}
 
