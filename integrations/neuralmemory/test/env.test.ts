@@ -24,14 +24,14 @@ describe("buildChildEnv", () => {
     expect(env).toEqual({});
   });
 
-  it("does not set NEURALMEMORY_BRAIN for default brain", () => {
+  it("does not set PUG_BRAIN for default brain", () => {
     const env = buildChildEnv("default");
-    expect(env).not.toHaveProperty("NEURALMEMORY_BRAIN");
+    expect(env).not.toHaveProperty("PUG_BRAIN");
   });
 
-  it("sets NEURALMEMORY_BRAIN for custom brain", () => {
+  it("sets PUG_BRAIN for custom brain", () => {
     const env = buildChildEnv("my-brain");
-    expect(env.NEURALMEMORY_BRAIN).toBe("my-brain");
+    expect(env.PUG_BRAIN).toBe("my-brain");
   });
 
   it("only passes through whitelisted keys", () => {
@@ -111,7 +111,7 @@ describe("ALLOWED_ENV_KEYS", () => {
     expect(ALLOWED_ENV_KEYS.has("PATH")).toBe(true);
     expect(ALLOWED_ENV_KEYS.has("HOME")).toBe(true);
     expect(ALLOWED_ENV_KEYS.has("VIRTUAL_ENV")).toBe(true);
-    expect(ALLOWED_ENV_KEYS.has("NEURALMEMORY_BRAIN")).toBe(true);
+    expect(ALLOWED_ENV_KEYS.has("PUG_BRAIN")).toBe(true);
   });
 
   it("does not contain secret-like keys", () => {

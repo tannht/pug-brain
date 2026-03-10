@@ -123,7 +123,7 @@ describe("NeuralMemoryMcpClient", () => {
       const env = spawnCall[2].env as Record<string, string>;
 
       // Should NOT contain full process.env
-      expect(env).toHaveProperty("NEURALMEMORY_BRAIN", "custom");
+      expect(env).toHaveProperty("PUG_BRAIN", "custom");
       // Should not have random env vars
       expect(Object.keys(env).length).toBeLessThan(
         Object.keys(process.env).length,

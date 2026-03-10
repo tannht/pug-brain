@@ -66,7 +66,7 @@ export const ALLOWED_ENV_KEYS: ReadonlySet<string> = new Set([
   "PYTHONPATH",
   "PYTHONHOME",
   "NEURALMEMORY_DIR",
-  "NEURALMEMORY_BRAIN",
+  "PUG_BRAIN",
   "NEURAL_MEMORY_DIR",
   "NEURAL_MEMORY_JSON",
   "NEURAL_MEMORY_DEBUG",
@@ -353,7 +353,7 @@ export function buildChildEnv(brain: string): Record<string, string> {
   }
 
   if (brain !== "default") {
-    env.NEURALMEMORY_BRAIN = brain;
+    env.PUG_BRAIN = brain;
   }
 
   return env;
