@@ -79,10 +79,9 @@ jobs:
           npm ci
           npm audit --audit-level=high --omit=dev
 
-      # TODO: Re-enable when openclaw-plugin has package.json tracked in git
-      # - name: Build and test OpenClaw plugin
-      #   working-directory: integrations/openclaw-plugin
-      #   run: |
-      #     npm ci
-      #     npm run build
-      #     npm test
+      - name: Build and test OpenClaw plugin
+        working-directory: integrations/neuralmemory
+        run: |
+          npm ci
+          npm run build
+          npm test
