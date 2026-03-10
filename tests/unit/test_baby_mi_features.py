@@ -208,7 +208,7 @@ class TestSemanticAlternativePath:
 
 
 class TestBulkRemember:
-    """nmem_remember_batch tool."""
+    """pugbrain_remember_batch tool."""
 
     def test_batch_constants(self):
         assert MAX_BATCH_SIZE == 20

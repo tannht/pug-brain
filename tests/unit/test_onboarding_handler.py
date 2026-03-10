@@ -143,7 +143,7 @@ class TestOnboardingIntegration:
             patch.object(server, "get_storage", return_value=mock_storage),
             patch.object(server, "_record_tool_action", new_callable=AsyncMock),
         ):
-            result = await server.call_tool("nmem_context", {"limit": 5})
+            result = await server.call_tool("pugbrain_context", {"limit": 5})
 
         assert result["count"] == 0
         assert "onboarding" in result
@@ -174,7 +174,7 @@ class TestOnboardingIntegration:
         )
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("nmem_stats", {})
+            result = await server.call_tool("pugbrain_stats", {})
 
         assert "onboarding" in result
         assert result["onboarding"]["onboarding"] is True

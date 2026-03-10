@@ -81,15 +81,15 @@ class TestToolTiers:
         tools = get_tool_schemas_for_tier("standard")
         names = {t["name"] for t in tools}
         assert names == {
-            "nmem_remember",
-            "nmem_remember_batch",
-            "nmem_recall",
-            "nmem_context",
-            "nmem_recap",
-            "nmem_todo",
-            "nmem_session",
-            "nmem_auto",
-            "nmem_eternal",
+            "pugbrain_remember",
+            "pugbrain_remember_batch",
+            "pugbrain_recall",
+            "pugbrain_context",
+            "pugbrain_recap",
+            "pugbrain_todo",
+            "pugbrain_session",
+            "pugbrain_auto",
+            "pugbrain_eternal",
         }
 
     def test_minimal_tier_count(self) -> None:
@@ -100,10 +100,10 @@ class TestToolTiers:
         tools = get_tool_schemas_for_tier("minimal")
         names = {t["name"] for t in tools}
         assert names == {
-            "nmem_remember",
-            "nmem_recall",
-            "nmem_context",
-            "nmem_recap",
+            "pugbrain_remember",
+            "pugbrain_recall",
+            "pugbrain_context",
+            "pugbrain_recap",
         }
 
     def test_invalid_tier_defaults_to_full(self) -> None:
@@ -118,8 +118,8 @@ class TestToolTiers:
         assert TOOL_TIERS["standard"] < all_names
 
     def test_explain_not_in_standard_or_minimal(self) -> None:
-        assert "nmem_explain" not in TOOL_TIERS["standard"]
-        assert "nmem_explain" not in TOOL_TIERS["minimal"]
+        assert "pugbrain_explain" not in TOOL_TIERS["standard"]
+        assert "pugbrain_explain" not in TOOL_TIERS["minimal"]
 
     def test_all_schemas_have_required_fields(self) -> None:
         for tool in get_tool_schemas():
@@ -174,10 +174,10 @@ class TestServerTierIntegration:
         server = self._make_server("minimal")
         tools = server.get_tools()
         exposed_names = {t["name"] for t in tools}
-        assert "nmem_stats" not in exposed_names
+        assert "pugbrain_stats" not in exposed_names
 
         with patch.object(server, "_stats", return_value={"status": "ok"}) as mock_stats:
-            result = await server.call_tool("nmem_stats", {})
+            result = await server.call_tool("pugbrain_stats", {})
             mock_stats.assert_called_once_with({})
             assert result == {"status": "ok"}
 
