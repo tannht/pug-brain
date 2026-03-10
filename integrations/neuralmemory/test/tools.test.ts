@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
-import { createTools, type ToolDefinition } from "../src/tools.js";
-import type { PugBrainMcpClient } from "../src/mcp-client.js";
+import { createFallbackTools, type ToolDefinition } from "../src/tools.js";
+import type { NeuralMemoryMcpClient } from "../src/mcp-client.js";
 
 function makeMockMcp(
-  overrides: Partial<PugBrainMcpClient> = {},
-): PugBrainMcpClient {
+  overrides: Partial<NeuralMemoryMcpClient> = {},
+): NeuralMemoryMcpClient {
   return {
     connected: true,
     callTool: vi.fn().mockResolvedValue("{}"),
@@ -12,7 +12,7 @@ function makeMockMcp(
     ensureConnected: vi.fn().mockResolvedValue(undefined),
     close: vi.fn(),
     ...overrides,
-  } as unknown as PugBrainMcpClient;
+  } as unknown as NeuralMemoryMcpClient;
 }
 
 // ── Schema helpers ────────────────────────────────────────
@@ -33,29 +33,28 @@ function getPropNames(tool: ToolDefinition): string[] {
   return Object.keys(schema.properties ?? {});
 }
 
-// ── createTools ───────────────────────────────────────────
+// ── createFallbackTools ───────────────────────────────────────────
 
-describe("createTools", () => {
-  it("returns 6 tools", () => {
-    const tools = createTools(makeMockMcp());
-    expect(tools).toHaveLength(6);
+describe("createFallbackTools", () => {
+  it("returns 5 tools", () => {
+    const tools = createFallbackTools(makeMockMcp());
+    expect(tools).toHaveLength(5);
   });
 
   it("returns tools with expected names", () => {
-    const tools = createTools(makeMockMcp());
+    const tools = createFallbackTools(makeMockMcp());
     const names = tools.map((t) => t.name);
     expect(names).toEqual([
-      "pugbrain_remember",
-      "pugbrain_recall",
-      "pugbrain_context",
-      "pugbrain_todo",
-      "pugbrain_stats",
-      "pugbrain_health",
+      "nmem_remember",
+      "nmem_recall",
+      "nmem_context",
+      "nmem_stats",
+      "nmem_health",
     ]);
   });
 
   it("each tool has name, description, parameters, and execute", () => {
-    const tools = createTools(makeMockMcp());
+    const tools = createFallbackTools(makeMockMcp());
     for (const tool of tools) {
       expect(typeof tool.name).toBe("string");
       expect(tool.name.length).toBeGreaterThan(0);
@@ -78,7 +77,7 @@ describe("schema compliance", () => {
     return tool;
   }
 
-  tools = createTools(makeMockMcp());
+  tools = createFallbackTools(makeMockMcp());
 
   it("every schema has type=object at root", () => {
     for (const tool of tools) {
@@ -114,13 +113,8 @@ describe("schema compliance", () => {
   it("every property has a type field", () => {
     for (const tool of tools) {
       const schema = getSchema(tool);
-      for (const [propName, propSchema] of Object.entries(
-        schema.properties ?? {},
-      )) {
-        expect(propSchema).toHaveProperty(
-          "type",
-          expect.any(String),
-        );
+      for (const [, propSchema] of Object.entries(schema.properties ?? {})) {
+        expect(propSchema).toHaveProperty("type", expect.any(String));
       }
     }
   });
@@ -128,9 +122,7 @@ describe("schema compliance", () => {
   it("every property has a description", () => {
     for (const tool of tools) {
       const schema = getSchema(tool);
-      for (const [, propSchema] of Object.entries(
-        schema.properties ?? {},
-      )) {
+      for (const [, propSchema] of Object.entries(schema.properties ?? {})) {
         expect(propSchema).toHaveProperty("description");
         expect(typeof propSchema.description).toBe("string");
         expect((propSchema.description as string).length).toBeGreaterThan(0);
@@ -158,9 +150,7 @@ describe("schema compliance", () => {
   it("no schema uses integer type (use number for Gemini compat)", () => {
     for (const tool of tools) {
       const schema = getSchema(tool);
-      for (const [, propSchema] of Object.entries(
-        schema.properties ?? {},
-      )) {
+      for (const [, propSchema] of Object.entries(schema.properties ?? {})) {
         expect(propSchema.type).not.toBe("integer");
       }
     }
@@ -186,128 +176,95 @@ describe("tool schemas", () => {
     return tool;
   }
 
-  tools = createTools(makeMockMcp());
+  tools = createFallbackTools(makeMockMcp());
 
-  describe("pugbrain_remember", () => {
+  describe("nmem_remember", () => {
     it("has content as required", () => {
-      const schema = getSchema(findTool("pugbrain_remember"));
+      const schema = getSchema(findTool("nmem_remember"));
       expect(schema.required).toContain("content");
     });
 
     it("has all expected properties", () => {
-      const props = getPropNames(findTool("pugbrain_remember"));
+      const props = getPropNames(findTool("nmem_remember"));
       expect(props).toEqual(
-        expect.arrayContaining([
-          "content",
-          "type",
-          "priority",
-          "tags",
-          "expires_days",
-        ]),
+        expect.arrayContaining(["content", "type", "priority", "tags"]),
       );
     });
 
     it("content is string type", () => {
-      const schema = getSchema(findTool("pugbrain_remember"));
+      const schema = getSchema(findTool("nmem_remember"));
       expect(schema.properties!.content).toHaveProperty("type", "string");
     });
 
     it("type has valid enum values", () => {
-      const schema = getSchema(findTool("pugbrain_remember"));
+      const schema = getSchema(findTool("nmem_remember"));
       const typeSchema = schema.properties!.type as Record<string, unknown>;
       expect(typeSchema.enum).toEqual(
         expect.arrayContaining([
           "fact",
           "decision",
           "preference",
-          "error",
-          "instruction",
+          "todo",
+          "insight",
         ]),
       );
     });
 
     it("priority has number type", () => {
-      const schema = getSchema(findTool("pugbrain_remember"));
+      const schema = getSchema(findTool("nmem_remember"));
       const prio = schema.properties!.priority as Record<string, unknown>;
       expect(prio.type).toBe("number");
     });
 
     it("tags is array of strings", () => {
-      const schema = getSchema(findTool("pugbrain_remember"));
+      const schema = getSchema(findTool("nmem_remember"));
       const tags = schema.properties!.tags as Record<string, unknown>;
       expect(tags.type).toBe("array");
       expect(tags.items).toHaveProperty("type", "string");
     });
   });
 
-  describe("pugbrain_recall", () => {
+  describe("nmem_recall", () => {
     it("has query as required", () => {
-      const schema = getSchema(findTool("pugbrain_recall"));
+      const schema = getSchema(findTool("nmem_recall"));
       expect(schema.required).toContain("query");
     });
 
     it("has all expected properties", () => {
-      const props = getPropNames(findTool("pugbrain_recall"));
-      expect(props).toEqual(
-        expect.arrayContaining([
-          "query",
-          "depth",
-          "max_tokens",
-          "min_confidence",
-        ]),
-      );
+      const props = getPropNames(findTool("nmem_recall"));
+      expect(props).toEqual(expect.arrayContaining(["query", "depth", "max_tokens"]));
     });
 
     it("depth has number type", () => {
-      const schema = getSchema(findTool("pugbrain_recall"));
+      const schema = getSchema(findTool("nmem_recall"));
       const depth = schema.properties!.depth as Record<string, unknown>;
       expect(depth.type).toBe("number");
     });
-
-    it("min_confidence is number type", () => {
-      const schema = getSchema(findTool("pugbrain_recall"));
-      const conf = schema.properties!.min_confidence as Record<string, unknown>;
-      expect(conf.type).toBe("number");
-    });
   });
 
-  describe("pugbrain_context", () => {
+  describe("nmem_context", () => {
     it("has no required fields", () => {
-      const schema = getSchema(findTool("pugbrain_context"));
+      const schema = getSchema(findTool("nmem_context"));
       expect(schema.required ?? []).toHaveLength(0);
     });
 
-    it("has limit and fresh_only properties", () => {
-      const props = getPropNames(findTool("pugbrain_context"));
+    it("has limit property", () => {
+      const props = getPropNames(findTool("nmem_context"));
       expect(props).toContain("limit");
-      expect(props).toContain("fresh_only");
     });
   });
 
-  describe("pugbrain_todo", () => {
-    it("has task as required", () => {
-      const schema = getSchema(findTool("pugbrain_todo"));
-      expect(schema.required).toContain("task");
-    });
-
-    it("has task and priority properties", () => {
-      const props = getPropNames(findTool("pugbrain_todo"));
-      expect(props).toContain("task");
-      expect(props).toContain("priority");
-    });
-  });
-
-  describe("pugbrain_stats / pugbrain_health", () => {
+  describe("nmem_stats / nmem_health", () => {
     it("have empty properties (no params)", () => {
-      const statsSchema = getSchema(findTool("pugbrain_stats"));
-      const healthSchema = getSchema(findTool("pugbrain_health"));
+      const statsSchema = getSchema(findTool("nmem_stats"));
+      const healthSchema = getSchema(findTool("nmem_health"));
       expect(Object.keys(statsSchema.properties ?? {})).toHaveLength(0);
       expect(Object.keys(healthSchema.properties ?? {})).toHaveLength(0);
     });
 
     it("still have properties key present (Anthropic API requirement)", () => {
-      const statsSchema = getSchema(findTool("pugbrain_stats"));
-      const healthSchema = getSchema(findTool("pugbrain_health"));
+      const statsSchema = getSchema(findTool("nmem_stats"));
+      const healthSchema = getSchema(findTool("nmem_health"));
       expect(statsSchema).toHaveProperty("properties");
       expect(healthSchema).toHaveProperty("properties");
     });
@@ -325,10 +282,10 @@ describe("tool execution", () => {
       ensureConnected,
       callTool,
     });
-    const tools = createTools(mcp);
+    const tools = createFallbackTools(mcp);
     await tools[0].execute("call-1", { content: "test" });
     expect(ensureConnected).toHaveBeenCalledOnce();
-    expect(callTool).toHaveBeenCalledWith("pugbrain_remember", { content: "test" });
+    expect(callTool).toHaveBeenCalledWith("nmem_remember", { content: "test" });
   });
 
   it("returns error when auto-connect fails", async () => {
@@ -336,18 +293,18 @@ describe("tool execution", () => {
       .fn()
       .mockRejectedValue(new Error("python not found"));
     const mcp = makeMockMcp({ connected: false, ensureConnected });
-    const tools = createTools(mcp);
+    const tools = createFallbackTools(mcp);
     const result = await tools[0].execute("call-1", { content: "test" });
     expect(result).toEqual({
       error: true,
-      message: "PugBrain auto-connect failed: python not found",
+      message: "NeuralMemory auto-connect failed: python not found",
     });
   });
 
   it("skips auto-connect when already connected", async () => {
     const ensureConnected = vi.fn();
     const mcp = makeMockMcp({ connected: true, ensureConnected });
-    const tools = createTools(mcp);
+    const tools = createFallbackTools(mcp);
     await tools[0].execute("call-1", { content: "test" });
     expect(ensureConnected).not.toHaveBeenCalled();
   });
@@ -356,11 +313,11 @@ describe("tool execution", () => {
     const mcp = makeMockMcp({
       callTool: vi.fn().mockRejectedValue(new Error("connection lost")),
     });
-    const tools = createTools(mcp);
-    const result = await tools[0].execute({ content: "test" });
+    const tools = createFallbackTools(mcp);
+    const result = await tools[0].execute("call-1", { content: "test" });
     expect(result).toEqual({
       error: true,
-      message: "Tool pugbrain_remember failed: connection lost",
+      message: "Tool nmem_remember failed: connection lost",
     });
   });
 
@@ -370,8 +327,8 @@ describe("tool execution", () => {
         .fn()
         .mockResolvedValue('{"answer": "hello", "confidence": 0.9}'),
     });
-    const tools = createTools(mcp);
-    const result = await tools[1].execute({ query: "test" });
+    const tools = createFallbackTools(mcp);
+    const result = await tools[1].execute("call-1", { query: "test" });
     expect(result).toEqual({ answer: "hello", confidence: 0.9 });
   });
 
@@ -379,18 +336,18 @@ describe("tool execution", () => {
     const mcp = makeMockMcp({
       callTool: vi.fn().mockResolvedValue("plain text response"),
     });
-    const tools = createTools(mcp);
-    const result = await tools[0].execute({ content: "test" });
+    const tools = createFallbackTools(mcp);
+    const result = await tools[0].execute("call-1", { content: "test" });
     expect(result).toEqual({ text: "plain text response" });
   });
 
   it("passes correct tool name and args to callTool", async () => {
     const callTool = vi.fn().mockResolvedValue("{}");
     const mcp = makeMockMcp({ callTool });
-    const tools = createTools(mcp);
+    const tools = createFallbackTools(mcp);
 
     await tools[0].execute("call-1", { content: "remember this", priority: 5 });
-    expect(callTool).toHaveBeenCalledWith("pugbrain_remember", {
+    expect(callTool).toHaveBeenCalledWith("nmem_remember", {
       content: "remember this",
       priority: 5,
     });
@@ -399,15 +356,14 @@ describe("tool execution", () => {
   it("each tool routes to correct MCP tool name", async () => {
     const callTool = vi.fn().mockResolvedValue("{}");
     const mcp = makeMockMcp({ callTool });
-    const tools = createTools(mcp);
+    const tools = createFallbackTools(mcp);
 
     const expectedNames = [
-      "pugbrain_remember",
-      "pugbrain_recall",
-      "pugbrain_context",
-      "pugbrain_todo",
-      "pugbrain_stats",
-      "pugbrain_health",
+      "nmem_remember",
+      "nmem_recall",
+      "nmem_context",
+      "nmem_stats",
+      "nmem_health",
     ];
 
     for (let i = 0; i < tools.length; i++) {
@@ -421,8 +377,8 @@ describe("tool execution", () => {
     const mcp = makeMockMcp({
       callTool: vi.fn().mockResolvedValue(""),
     });
-    const tools = createTools(mcp);
-    const result = await tools[0].execute({ content: "test" });
+    const tools = createFallbackTools(mcp);
+    const result = await tools[0].execute("call-1", { content: "test" });
     expect(result).toEqual({ text: "" });
   });
 });
