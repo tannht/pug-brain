@@ -92,18 +92,18 @@ class TestToolSchemas:
         from neural_memory.integrations.nanobot.tools import NMRememberTool
 
         tool = NMRememberTool(nm_context)
-        assert tool.name == "pugbrain_remember"
+        assert tool.name == "nmem_remember"
         assert "content" in tool.parameters["properties"]
         assert tool.parameters["required"] == ["content"]
         schema = tool.to_schema()
         assert schema["type"] == "function"
-        assert schema["function"]["name"] == "pugbrain_remember"
+        assert schema["function"]["name"] == "nmem_remember"
 
     def test_recall_schema(self, nm_context: NMContext) -> None:
         from neural_memory.integrations.nanobot.tools import NMRecallTool
 
         tool = NMRecallTool(nm_context)
-        assert tool.name == "pugbrain_recall"
+        assert tool.name == "nmem_recall"
         assert "query" in tool.parameters["properties"]
         assert tool.parameters["required"] == ["query"]
 
@@ -111,23 +111,23 @@ class TestToolSchemas:
         from neural_memory.integrations.nanobot.tools import NMContextTool
 
         tool = NMContextTool(nm_context)
-        assert tool.name == "pugbrain_context"
+        assert tool.name == "nmem_context"
         assert "limit" in tool.parameters["properties"]
 
     def test_health_schema(self, nm_context: NMContext) -> None:
         from neural_memory.integrations.nanobot.tools import NMHealthTool
 
         tool = NMHealthTool(nm_context)
-        assert tool.name == "pugbrain_health"
+        assert tool.name == "nmem_health"
         schema = tool.to_schema()
-        assert schema["function"]["name"] == "pugbrain_health"
+        assert schema["function"]["name"] == "nmem_health"
 
 
 # ── Remember tool ────────────────────────────────────────
 
 
 class TestRememberTool:
-    """Test pugbrain_remember tool execution."""
+    """Test nmem_remember tool execution."""
 
     @pytest.mark.asyncio
     async def test_remember_basic(self, nm_context: NMContext) -> None:
@@ -194,7 +194,7 @@ class TestRememberTool:
 
 
 class TestRecallTool:
-    """Test pugbrain_recall tool execution."""
+    """Test nmem_recall tool execution."""
 
     @pytest.mark.asyncio
     async def test_recall_empty_brain(self, nm_context: NMContext) -> None:
@@ -245,7 +245,7 @@ class TestRecallTool:
 
 
 class TestContextTool:
-    """Test pugbrain_context tool execution."""
+    """Test nmem_context tool execution."""
 
     @pytest.mark.asyncio
     async def test_context_empty_brain(self, nm_context: NMContext) -> None:
@@ -280,7 +280,7 @@ class TestContextTool:
 
 
 class TestHealthTool:
-    """Test pugbrain_health tool execution."""
+    """Test nmem_health tool execution."""
 
     @pytest.mark.asyncio
     async def test_health_empty_brain(self, nm_context: NMContext) -> None:
@@ -394,10 +394,10 @@ class TestSetup:
 
         registered_names = {call.args[0].name for call in mock_registry.register.call_args_list}
         assert registered_names == {
-            "pugbrain_remember",
-            "pugbrain_recall",
-            "pugbrain_context",
-            "pugbrain_health",
+            "nmem_remember",
+            "nmem_recall",
+            "nmem_context",
+            "nmem_health",
         }
 
         await store._ctx.close()
