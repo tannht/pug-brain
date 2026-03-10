@@ -10,7 +10,7 @@ from neural_memory.mcp.server import MCPServer
 
 
 class TestVersionTool:
-    """Test pugbrain_version MCP tool."""
+    """Test nmem_version MCP tool."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -35,7 +35,7 @@ class TestVersionTool:
 
         with patch.object(server, "get_storage", return_value=storage):
             result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "create", "name": "v1-test", "description": "Test snapshot"},
             )
 
@@ -56,7 +56,7 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            result = await server.call_tool("pugbrain_version", {"action": "list"})
+            result = await server.call_tool("nmem_version", {"action": "list"})
 
         assert "error" not in result
         assert result["count"] == 0
@@ -74,9 +74,9 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            await server.call_tool("pugbrain_version", {"action": "create", "name": "snap-1"})
-            await server.call_tool("pugbrain_version", {"action": "create", "name": "snap-2"})
-            result = await server.call_tool("pugbrain_version", {"action": "list"})
+            await server.call_tool("nmem_version", {"action": "create", "name": "snap-1"})
+            await server.call_tool("nmem_version", {"action": "create", "name": "snap-2"})
+            result = await server.call_tool("nmem_version", {"action": "list"})
 
         assert result["count"] == 2
 
@@ -92,7 +92,7 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            result = await server.call_tool("pugbrain_version", {"action": "create"})
+            result = await server.call_tool("nmem_version", {"action": "create"})
 
         assert "error" in result
 
@@ -109,7 +109,7 @@ class TestVersionTool:
 
         with patch.object(server, "get_storage", return_value=storage):
             result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "rollback", "version_id": "nonexistent-id"},
             )
 
@@ -127,7 +127,7 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            result = await server.call_tool("pugbrain_version", {"action": "rollback"})
+            result = await server.call_tool("nmem_version", {"action": "rollback"})
 
         assert "error" in result
 
@@ -143,7 +143,7 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            result = await server.call_tool("pugbrain_version", {"action": "diff"})
+            result = await server.call_tool("nmem_version", {"action": "diff"})
 
         assert "error" in result
 
@@ -159,7 +159,7 @@ class TestVersionTool:
         storage.set_brain(brain.id)
 
         with patch.object(server, "get_storage", return_value=storage):
-            result = await server.call_tool("pugbrain_version", {"action": "unknown"})
+            result = await server.call_tool("nmem_version", {"action": "unknown"})
 
         assert "error" in result
 
@@ -171,13 +171,13 @@ class TestVersionTool:
         mock_storage._current_brain_id = "nonexistent"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_version", {"action": "list"})
+            result = await server.call_tool("nmem_version", {"action": "list"})
 
         assert "error" in result
 
 
 class TestTransplantTool:
-    """Test pugbrain_transplant MCP tool."""
+    """Test nmem_transplant MCP tool."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -205,7 +205,7 @@ class TestTransplantTool:
             ),
         ):
             result = await server.call_tool(
-                "pugbrain_transplant", {"source_brain": "nonexistent-brain"}
+                "nmem_transplant", {"source_brain": "nonexistent-brain"}
             )
 
         assert "error" in result
@@ -220,7 +220,7 @@ class TestTransplantTool:
         mock_storage._current_brain_id = "test-brain"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_transplant", {})
+            result = await server.call_tool("nmem_transplant", {})
 
         assert "error" in result
 
@@ -232,14 +232,14 @@ class TestTransplantTool:
         mock_storage._current_brain_id = "nonexistent"
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_transplant", {"source_brain": "some-brain"})
+            result = await server.call_tool("nmem_transplant", {"source_brain": "some-brain"})
 
         assert "error" in result
 
     def test_transplant_tool_schema(self, server: MCPServer) -> None:
         """Transplant tool should have correct schema fields."""
         tools = server.get_tools()
-        transplant_tool = next(t for t in tools if t["name"] == "pugbrain_transplant")
+        transplant_tool = next(t for t in tools if t["name"] == "nmem_transplant")
         props = transplant_tool["inputSchema"]["properties"]
         assert "source_brain" in props
         assert "tags" in props
@@ -249,7 +249,7 @@ class TestTransplantTool:
     def test_version_tool_schema(self, server: MCPServer) -> None:
         """Version tool should have correct schema fields."""
         tools = server.get_tools()
-        version_tool = next(t for t in tools if t["name"] == "pugbrain_version")
+        version_tool = next(t for t in tools if t["name"] == "nmem_version")
         props = version_tool["inputSchema"]["properties"]
         assert "action" in props
         assert "name" in props
@@ -259,7 +259,7 @@ class TestTransplantTool:
 
 
 class TestVersionDiffWithData:
-    """Test pugbrain_version diff action with actual data."""
+    """Test nmem_version diff action with actual data."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -292,7 +292,7 @@ class TestVersionDiffWithData:
         with patch.object(server, "get_storage", return_value=storage):
             # Create version v1
             v1_result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "create", "name": "v1-baseline"},
             )
             assert v1_result.get("success") is True
@@ -304,7 +304,7 @@ class TestVersionDiffWithData:
 
             # Create version v2
             v2_result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "create", "name": "v2-with-deploy"},
             )
             assert v2_result.get("success") is True
@@ -312,7 +312,7 @@ class TestVersionDiffWithData:
 
             # Diff v1 -> v2
             diff_result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "diff", "from_version": v1_id, "to_version": v2_id},
             )
 
@@ -323,7 +323,7 @@ class TestVersionDiffWithData:
 
 
 class TestVersionRollbackWithData:
-    """Test pugbrain_version rollback action with actual data."""
+    """Test nmem_version rollback action with actual data."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -368,7 +368,7 @@ class TestVersionRollbackWithData:
         with patch.object(server, "get_storage", return_value=storage):
             # Create version v1 with 3 neurons
             v1_result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "create", "name": "v1-three-neurons"},
             )
             assert v1_result.get("success") is True
@@ -385,7 +385,7 @@ class TestVersionRollbackWithData:
 
             # Rollback to v1
             rollback_result = await server.call_tool(
-                "pugbrain_version",
+                "nmem_version",
                 {"action": "rollback", "version_id": v1_id},
             )
 
@@ -399,7 +399,7 @@ class TestVersionRollbackWithData:
 
 
 class TestTransplantWithData:
-    """Test pugbrain_transplant with actual data between brains."""
+    """Test nmem_transplant with actual data between brains."""
 
     @pytest.fixture
     def server(self) -> MCPServer:
@@ -487,7 +487,7 @@ class TestTransplantWithData:
             ),
         ):
             result = await server.call_tool(
-                "pugbrain_transplant",
+                "nmem_transplant",
                 {"source_brain": "source-brain", "tags": ["redis"]},
             )
 
