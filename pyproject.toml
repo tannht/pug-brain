@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "neural-memory"
+name = "pug-brain"
 version = "3.1.0"
 description = "Reflex-based memory system for AI agents - retrieval through activation, not search"
 readme = "README.md"
