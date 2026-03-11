@@ -6,13 +6,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
 
 ## [2.29.0] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -29,7 +73,29 @@ fix: trigger auto-version release for pug-master
 - **Marketplace plugin install** — Removed unrecognized `features` key from `marketplace.json` that caused Claude Code `/plugin marketplace add` to fail with schema validation error (#49).
 
 ## [2.28.0] - 2026-03-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -51,7 +117,29 @@ fix: trigger auto-version release for pug-master
 - **MCP startup 3x faster** — Lazy-import `cli.setup` (defer until first-time init actually needed) and `sync.client`/`sync.sync_engine` (defer aiohttp until first sync call). Cold start: 611ms → 197ms.
 
 ## [2.27.3] - 2026-03-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -69,7 +157,29 @@ fix: trigger auto-version release for pug-master
 
 
 ## [2.27.2] - 2026-03-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -79,7 +189,29 @@ fix: trigger auto-version release for pug-master
 - **OpenClaw plugin: lazy auto-connect** — Fixed tools returning "NeuralMemory service not running" when OpenClaw calls `register()` multiple times across subsystems (gateway, agent worker, CLI). Agent worker instance now lazily connects on first tool call via `ensureConnected()` with connection mutex to prevent race conditions (#38)
 
 ## [2.27.1] - 2026-03-06
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -116,7 +248,29 @@ fix: trigger auto-version release for pug-master
 - **Knowledge gap detection sources** — `contradiction`, `low_confidence_hypothesis`, `user_flagged`, `recall_miss`, `stale_schema`
 
 ## [2.26.1] - 2026-03-05
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -128,7 +282,29 @@ fix: trigger auto-version release for pug-master
 - **i18n: penalty translations** — English and Vietnamese keys for top penalties section
 
 ## [2.26.0] - 2026-03-05
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -148,7 +324,29 @@ fix: trigger auto-version release for pug-master
 - OpenClaw npm package renamed to `neuralmemory` (published on npm)
 
 ## [2.25.1] - 2026-03-05
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -165,7 +363,29 @@ fix: trigger auto-version release for pug-master
 - Published v2.25.0 release (was stuck in draft)
 
 ## [OpenClaw Plugin 1.5.0] - 2026-03-05
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -177,7 +397,29 @@ fix: trigger auto-version release for pug-master
 - **Pre-existing test bugs** — Config test missing `initTimeout` in expected defaults; execute tests passing args as `id` parameter
 
 ## [2.25.0] - 2026-03-04
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -200,7 +442,29 @@ fix: trigger auto-version release for pug-master
 - **CI test compatibility** — `test_remember_sensitive_content` mock fix for Python 3.11
 
 ## [2.24.2] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -225,7 +489,29 @@ fix: trigger auto-version release for pug-master
 - Added `graphology-layout-forceatlas2` (Sigma.js graph layout)
 
 ## [2.24.1] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -242,7 +528,29 @@ fix: trigger auto-version release for pug-master
 - Total: 3145 passing
 
 ## [2.24.0] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -275,7 +583,29 @@ fix: trigger auto-version release for pug-master
 - Total: 3143 passing
 
 ## [2.23.0] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -308,7 +638,29 @@ fix: trigger auto-version release for pug-master
 - Total: 3140+ passing
 
 ## [2.22.0] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -332,7 +684,29 @@ fix: trigger auto-version release for pug-master
 - Total: 3127 passing
 
 ## [2.21.0] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -367,7 +741,29 @@ fix: trigger auto-version release for pug-master
 - All 3090+ tests pass
 
 ## [2.20.0] - 2026-03-03
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -408,7 +804,29 @@ fix: trigger auto-version release for pug-master
 - Full suite: 3054 passed, 0 failed
 
 ## [2.19.0] - 2026-03-02
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -443,7 +861,29 @@ fix: trigger auto-version release for pug-master
 - MCP tool count updated (27→28)
 
 ## [2.18.0] - 2026-03-02
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -476,7 +916,29 @@ fix: trigger auto-version release for pug-master
 - 31 new tests: `test_markdown_export.py` (11), `test_health_roadmap.py` (13), `test_event_timestamp.py` (7)
 
 ## [2.17.0] - 2026-03-02
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -521,7 +983,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.16.0] - 2026-02-28
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -538,7 +1022,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.15.1] - 2026-02-28
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -553,7 +1059,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.15.0] - 2026-02-28
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -571,7 +1099,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.14.0] - 2026-02-27
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -591,7 +1141,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.13.0] - 2026-02-27
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -614,7 +1186,29 @@ fix: trigger auto-version release for pug-master
 ---
 
 ## [2.8.1] - 2026-02-23
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -651,7 +1245,29 @@ fix: trigger auto-version release for pug-master
 - **Silent error logging** — Upgraded index creation and connection close errors from debug to warning level
 
 ## [2.8.0] - 2026-02-22
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -711,7 +1327,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 2687 passed (up from 2527), +160 new tests across 8 test files
 
 ## [2.7.1] - 2026-02-21
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -734,7 +1372,29 @@ fix: trigger auto-version release for pug-master
 - Tests: added 28 new tests in `test_tool_tiers.py`
 
 ## [2.7.0] - 2026-02-18
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -787,7 +1447,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 2399 passed (up from 2314), +85 new tests across 4 features
 
 ## [2.6.0] - 2026-02-18
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -826,7 +1508,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 2314 passed (up from 2291)
 
 ## [2.5.0] - 2026-02-18
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -847,7 +1551,29 @@ fix: trigger auto-version release for pug-master
 - **Server lifecycle** — `run_mcp_server()` now starts scheduled consolidation + version check at startup, cancels all background tasks on shutdown
 
 ## [2.4.0] - 2026-02-17
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -892,7 +1618,29 @@ fix: trigger auto-version release for pug-master
 - **Error handling** — 8 bare `except Exception` blocks narrowed to specific exception types with logging
 
 ## [2.2.0] - 2026-02-13
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -914,7 +1662,29 @@ fix: trigger auto-version release for pug-master
 - **Auto-consolidation observability** — Background auto-consolidation now logs purity delta for monitoring
 
 ## [2.1.0] - 2026-02-13
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -938,7 +1708,29 @@ fix: trigger auto-version release for pug-master
 - **Dependency warning suppression** — pyvi/NumPy DeprecationWarnings are now suppressed at import time with targeted `filterwarnings`
 
 ## [2.3.1] - 2026-02-17
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -959,7 +1751,29 @@ fix: trigger auto-version release for pug-master
 - **JSON snapshot validation** — `brain_versioning.py` now validates parsed JSON is a dict before field access
 
 ## [2.3.0] - 2026-02-16
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -982,7 +1796,29 @@ fix: trigger auto-version release for pug-master
 - **Release workflow hardened** — `release.yml` now validates tag version matches `pyproject.toml` + `__init__.py` before publishing, and runs full CI (lint + typecheck + test) as a gate before PyPI upload
 
 ## [Unreleased]
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1017,7 +1853,29 @@ fix: trigger auto-version release for pug-master
 - **Config schema hardened** — Added `additionalProperties: false` and brain name `pattern` constraint
 
 ## [1.7.4] - 2026-02-11
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1038,7 +1896,29 @@ fix: trigger auto-version release for pug-master
 - **CLAUDE.md — Type Safety Rules**: New section documenting mixin protocol stubs, generic type params, Optional narrowing, and `# type: ignore` discipline to prevent future mypy regressions
 
 ## [1.7.3] - 2026-02-11
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1059,7 +1939,29 @@ fix: trigger auto-version release for pug-master
 - `skills/README.md` updated: manual copy instructions replaced with `pug install-skills`
 
 ## [1.7.2] - 2026-02-11
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1101,7 +2003,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1759 passed (up from 1696)
 
 ## [1.7.1] - 2026-02-11
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1111,7 +2035,29 @@ fix: trigger auto-version release for pug-master
 - Fix `__version__` reporting "1.6.1" instead of "1.7.0" in PyPI package (runtime version mismatch)
 
 ## [1.7.0] - 2026-02-11
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1137,7 +2083,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1696 passed (up from 1695)
 
 ## [1.6.1] - 2026-02-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1152,7 +2120,29 @@ fix: trigger auto-version release for pug-master
 - `shared sync` uses correct storage backend
 
 ## [1.6.0] - 2026-02-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1194,7 +2184,29 @@ fix: trigger auto-version release for pug-master
   - `memory-evolution` — evidence-based optimization from usage patterns, consolidation, enrichment, pruning, checkpoint Q&A
 
 ## [1.5.0] - 2026-02-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1219,7 +2231,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1372 passed (up from 1352)
 
 ## [1.4.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1236,7 +2270,29 @@ fix: trigger auto-version release for pug-master
 - Dashboard Integrations tab simplified to status-only with deep links (Option B)
 
 ## [1.3.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1252,7 +2308,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1352 passed (up from 1340)
 
 ## [1.2.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1273,7 +2351,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1340 passed (up from 1264)
 
 ## [1.1.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1289,7 +2389,29 @@ fix: trigger auto-version release for pug-master
 - OpenClaw PR [#12596](https://github.com/openclaw/openclaw/pull/12596) submitted
 
 ## [1.0.2] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1302,7 +2424,29 @@ fix: trigger auto-version release for pug-master
 - Consolidation prune crash — Fixed `Fiber(tags=...)` TypeError, uses `dataclasses.replace()`
 
 ## [1.0.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1321,7 +2465,29 @@ fix: trigger auto-version release for pug-master
 - MCP tools expanded from 14 to 16 (pugbrain_version, pugbrain_transplant)
 
 ## [0.20.0] - 2026-02-09
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1341,7 +2507,29 @@ fix: trigger auto-version release for pug-master
 - Schema version 9 → 10
 
 ## [0.19.0] - 2026-02-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1359,7 +2547,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 1019 passed (up from 987)
 
 ## [0.17.0] - 2026-02-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1373,7 +2583,29 @@ fix: trigger auto-version release for pug-master
 - **CLI command: `pug health`** — Terminal health report with ASCII progress bars
 
 ## [0.16.0] - 2026-02-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1392,7 +2624,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 950 passed (up from 908)
 
 ## [0.15.0] - 2026-02-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1414,7 +2668,29 @@ fix: trigger auto-version release for pug-master
 - Tests: 908 passed (up from 838)
 
 ## [0.14.0] - 2026-02-08
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1445,7 +2721,29 @@ fix: trigger auto-version release for pug-master
 - 838 tests passing
 
 ## [0.13.0] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1469,7 +2767,29 @@ fix: trigger auto-version release for pug-master
 - `run_benchmarks.py` now includes ground-truth evaluation with NeuralMemory vs naive baseline comparison in generated markdown output
 
 ## [0.12.0] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1493,7 +2813,29 @@ fix: trigger auto-version release for pug-master
 - `SynapseType` enum extended with `CONTRADICTS = "contradicts"`
 
 ## [0.11.0] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1525,7 +2867,29 @@ fix: trigger auto-version release for pug-master
 - Consolidation engine supports `MATURE` strategy for stage advancement and pattern extraction
 
 ## [0.10.0] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1549,7 +2913,29 @@ fix: trigger auto-version release for pug-master
 - Removed dormancy bonus from `Synapse.reinforce()` (novelty adaptation in learning rule replaces it)
 
 ## [0.9.6] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1575,7 +2961,29 @@ fix: trigger auto-version release for pug-master
 - Storage layer (SQLite + SharedStore) serializes/deserializes all new NeuronState fields
 
 ## [0.9.5] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1595,7 +3003,29 @@ fix: trigger auto-version release for pug-master
 - `_remember()` MCP handler sets type-specific decay rates on neuron states after encoding
 
 ## [0.9.4] - 2026-02-07
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1612,7 +3042,29 @@ fix: trigger auto-version release for pug-master
 - Target: 3-5x faster retrieval (800-4500ms → 200-800ms)
 
 ## [0.9.0] - 2026-02-06
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1628,7 +3080,29 @@ fix: trigger auto-version release for pug-master
 - 16 new tests for extraction, encoding, and git context
 
 ## [0.8.0]
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
@@ -1648,7 +3122,29 @@ fix: trigger auto-version release for pug-master
 - Docker support
 
 ## [0.1.0] - TBD
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 ## [v2.29.1] - 2026-03-10
+## [v2.29.2] - 2026-03-11
+
+Merge main into pug-master
+
+Resolved conflicts by keeping pugbrain_* tool naming convention:
+- server.py: Use pugbrain_* tool names with pugbrain_consolidate
+- test_mcp.py: Updated to 41 tools with pugbrain_* naming
+- README.md: Kept pug-brain branding with updated tool count
+
+Co-Authored-By: claude-flow <ruv@ruv.net>
+
 
 fix: trigger auto-version release for pug-master
 
