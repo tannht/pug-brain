@@ -805,7 +805,9 @@ class TestMCPToolCalls:
         )
 
         with patch.object(server, "get_storage", return_value=mock_storage):
-            result = await server.call_tool("pugbrain_consolidate", {"strategy": "invalid_strategy"})
+            result = await server.call_tool(
+                "pugbrain_consolidate", {"strategy": "invalid_strategy"}
+            )
 
         assert "error" in result
         assert "Invalid strategy" in result["error"]
