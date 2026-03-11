@@ -1,12 +1,12 @@
 {
-  "name": "neural-memory",
-  "version": "2.29.3",
+  "name": "pug-brain",
+  "version": "3.1.0",
   "description": "Reflex-based memory system for AI agents — stores experiences as interconnected neurons and recalls them through spreading activation, mimicking how the human brain works.",
   "author": {
-    "name": "NeuralMemory Contributors"
+    "name": "PugBrain Contributors"
   },
-  "homepage": "https://github.com/nhadaututtheky/neural-memory",
-  "repository": "https://github.com/nhadaututtheky/neural-memory",
+  "homepage": "https://github.com/tannht/pug-brain",
+  "repository": "https://github.com/tannht/pug-brain",
   "license": "MIT",
   "keywords": [
     "memory",
@@ -21,7 +21,7 @@
     "associative"
   ],
   "features": [
-    "39 MCP tools for persistent AI memory + cognitive reasoning",
+    "42 MCP tools for persistent AI memory + cognitive reasoning",
     "Knowledge base training from PDF/DOCX/PPTX/HTML/JSON/XLSX/CSV",
     "Spreading activation recall (not keyword search)",
     "Pinned KB memories — permanent, skip decay/prune",
@@ -36,15 +36,15 @@
     "Cognitive reasoning: hypotheses, evidence, predictions, schema evolution",
     "Knowledge gap detection and metacognition"
   ],
-  "instructions": "CRITICAL: Use Neural Memory proactively in EVERY session.\n\nSESSION START: pugbrain_recall('current project context') + pugbrain_recap().\nAFTER EVERY TASK: pugbrain_remember() with rich language ('Chose X over Y because Z', not just 'X').\nSESSION END: pugbrain_auto(action='process', text='<summary>').\n\nSTORE 3-5 MEMORIES PER TASK using diverse types (decision, insight, error, workflow, preference — not just fact).\nPRIORITY: 7+ for decisions/errors you'll need again. TAGS: always include project name.\nRICH LANGUAGE: Use causal ('X because Y'), temporal ('after A then B'), relational ('X depends on Y').\n\nCORRECT MISTAKES: pugbrain_edit(memory_id, type/content/priority) to fix wrong memories.\nREMOVE OUTDATED: pugbrain_forget(memory_id) for soft delete, pugbrain_forget(memory_id, hard=true) for permanent.\nHEALTH: pugbrain_health() weekly, fix highest penalty first.\n\n39 tools available. Sessions start fresh — without saves, ALL context is lost forever.",
+  "instructions": "CRITICAL: Use Neural Memory proactively in EVERY session.\n\nSESSION START: pugbrain_recall('current project context') + pugbrain_recap().\nAFTER EVERY TASK: pugbrain_remember() with rich language ('Chose X over Y because Z', not just 'X').\nSESSION END: pugbrain_auto(action='process', text='<summary>').\n\nSTORE 3-5 MEMORIES PER TASK using diverse types (decision, insight, error, workflow, preference — not just fact).\nPRIORITY: 7+ for decisions/errors you'll need again. TAGS: always include project name.\nRICH LANGUAGE: Use causal ('X because Y'), temporal ('after A then B'), relational ('X depends on Y').\n\nCORRECT MISTAKES: pugbrain_edit(memory_id, type/content/priority) to fix wrong memories.\nREMOVE OUTDATED: pugbrain_forget(memory_id) for soft delete, pugbrain_forget(memory_id, hard=true) for permanent.\nHEALTH: pugbrain_health() weekly, fix highest penalty first.\n\n42 tools available. Sessions start fresh — without saves, ALL context is lost forever.",
   "skills": "./skills",
   "commands": "./commands",
   "agents": "./agents",
   "hooks": "./hooks/hooks.json",
   "mcpServers": {
-    "neural-memory": {
+    "pug-brain": {
       "command": "uvx",
-      "args": ["--from", "neural-memory", "pug-mcp"]
+      "args": ["--from", "pug-brain", "pug-mcp"]
     }
   }
 }

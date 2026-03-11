@@ -19,8 +19,9 @@ class MockEmbeddingProvider(EmbeddingProvider):
         self._dim = dim
 
     async def embed(self, text: str) -> list[float]:
-        """Simple deterministic embedding based on text hash."""
-        h = hash(text) % 1000
+        """Simple deterministic embedding based on text content."""
+        # Use sum of character codes to ensure different texts produce different values
+        h = sum(ord(c) for c in text) % 1000
         vec = [(h + i) / 1000.0 for i in range(self._dim)]
         # Normalize
         norm = math.sqrt(sum(v * v for v in vec))
