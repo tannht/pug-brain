@@ -1,12 +1,10 @@
 name: Auto Version
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [pug-master]
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
-      - '.github/workflows/**'
 
 permissions:
   contents: write
@@ -16,12 +14,17 @@ jobs:
   auto-version:
     name: Auto Version Bump & Release
     runs-on: ubuntu-latest
-    if: "!startsWith(github.event.head_commit.message, 'chore: release')"
+    # Only run if CI passed AND it was a push event (not PR)
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      !startsWith(github.event.workflow_run.head_commit.message, 'chore: release')
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
@@ -87,7 +90,7 @@ jobs:
           print(f"Bump type: {bump_type}")
           PY
         env:
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_MSG: ${{ github.event.workflow_run.head_commit.message }}
 
       - name: Calculate new version
         id: new_version
@@ -154,7 +157,7 @@ jobs:
           NEW_VERSION="${{ steps.new_version.outputs.version }}"
           TAG="${{ steps.new_version.outputs.tag }}"
           DATE=$(date +%Y-%m-%d)
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG="${{ github.event.workflow_run.head_commit.message }}"
 
           # Create changelog entry
           TEMP_FILE=$(mktemp)
@@ -194,7 +197,7 @@ jobs:
             Automated Release for ${{ steps.new_version.outputs.tag }}
 
             Changes in this version:
-            ${{ github.event.head_commit.message }}
+            ${{ github.event.workflow_run.head_commit.message }}
           draft: false
           prerelease: false
           generate_release_notes: true
