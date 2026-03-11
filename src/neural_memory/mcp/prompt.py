@@ -329,7 +329,7 @@ pugbrain_telegram_backup()                        # Backup current brain
 pugbrain_telegram_backup(brain_name="work")       # Backup specific brain
 ```
 
-Requires: `NMEM_TELEGRAM_BOT_TOKEN` env var + `[telegram] chat_ids` in config.toml.
+Requires: `PUGBRAIN_TELEGRAM_BOT_TOKEN` env var + `[telegram] chat_ids` in config.toml.
 
 ## Import External Data (pugbrain_import)
 

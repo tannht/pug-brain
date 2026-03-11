@@ -3,7 +3,7 @@
 Checks PyPI for newer versions of neural-memory, cached for 24 hours.
 Runs in background thread to avoid slowing down CLI commands.
 
-Cache location: ~/.neuralmemory/.update_check
+Cache location: ~/.pugbrain/.update_check
 """
 
 from __future__ import annotations
@@ -25,7 +25,11 @@ REQUEST_TIMEOUT_SECONDS = 3
 
 def _get_cache_path() -> Path:
     """Get path to update check cache file."""
-    data_dir = os.environ.get("NEURALMEMORY_DIR") or str(Path.home() / ".neuralmemory")
+    data_dir = (
+        os.environ.get("PUGBRAIN_DIR")
+        or os.environ.get("NEURALMEMORY_DIR")
+        or str(Path.home() / ".pugbrain")
+    )
     return Path(data_dir) / ".update_check"
 
 

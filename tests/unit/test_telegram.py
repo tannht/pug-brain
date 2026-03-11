@@ -256,4 +256,4 @@ class TestTelegramHandler:
         server = FakeServer()
         result = await server._telegram_backup({})
         assert "error" in result
-        assert "NMEM_TELEGRAM_BOT_TOKEN" in result["error"]
+        assert "PUGBRAIN_TELEGRAM_BOT_TOKEN" in result["error"]

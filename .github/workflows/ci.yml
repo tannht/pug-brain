@@ -80,7 +80,7 @@ jobs:
           npm audit --audit-level=high --omit=dev
 
       - name: Build and test OpenClaw plugin
-        working-directory: integrations/neuralmemory
+        working-directory: integrations/pugbrain
         run: |
           npm ci
           npm run build

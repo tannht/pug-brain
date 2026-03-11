@@ -1,10 +1,10 @@
-"""MCP server implementation for NeuralMemory.
+"""MCP server implementation for PugBrain.
 
-Exposes NeuralMemory as tools via Model Context Protocol (MCP),
+Exposes PugBrain as tools via Model Context Protocol (MCP),
 allowing Claude Code, Cursor, AntiGravity and other MCP clients to
 store and recall memories.
 
-All tools share the same SQLite database at ~/.neuralmemory/brains/<brain>.db
+All tools share the same SQLite database at ~/.pugbrain/brains/<brain>.db
 This enables seamless memory sharing between different AI tools.
 
 Usage:
@@ -12,10 +12,10 @@ Usage:
     python -m neural_memory.mcp
 
     # Or add to Claude Code via CLI:
-    claude mcp add --scope user neural-memory -- nmem-mcp
+    claude mcp add --scope user pugbrain -- pug-mcp
 
-    # Or set NEURALMEMORY_BRAIN to use a specific brain:
-    NEURALMEMORY_BRAIN=myproject python -m neural_memory.mcp
+    # Or set PUGBRAIN_BRAIN to use a specific brain:
+    PUGBRAIN_BRAIN=myproject python -m neural_memory.mcp
 """
 
 from __future__ import annotations

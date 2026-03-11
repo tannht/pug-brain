@@ -5,11 +5,11 @@ New code should use unified_config.py for cross-tool compatibility.
 
 Storage locations:
 - Legacy: ~/.neural-memory/brains/<name>.json (JSON files)
-- New:    ~/.neuralmemory/brains/<name>.db (SQLite database)
+- New:    ~/.pugbrain/brains/<name>.db (SQLite database)
 
 The CLI automatically migrates to the new unified config when:
-- NEURALMEMORY_DIR environment variable is set, OR
-- ~/.neuralmemory/config.toml exists
+- PUGBRAIN_DIR environment variable is set, OR
+- ~/.pugbrain/config.toml exists
 """
 
 from __future__ import annotations
@@ -31,17 +31,18 @@ def get_default_data_dir() -> Path:
     """Get default data directory for neural-memory.
 
     Priority:
-    1. NEURALMEMORY_DIR environment variable (new unified location)
-    2. ~/.neuralmemory/ (if config.toml exists there)
-    3. ~/.neural-memory/ (legacy location)
+    1. PUGBRAIN_DIR environment variable (new unified location)
+    2. NEURALMEMORY_DIR environment variable (legacy)
+    3. ~/.pugbrain/ (if config.toml exists there)
+    4. ~/.neural-memory/ (legacy location)
     """
     # Check for env var first (new unified approach)
-    env_dir = os.environ.get("NEURALMEMORY_DIR")
+    env_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR")
     if env_dir:
         return Path(env_dir).resolve()
 
     # Check if new unified config exists
-    unified_dir = Path.home() / ".neuralmemory"
+    unified_dir = Path.home() / ".pugbrain"
     if (unified_dir / "config.toml").exists():
         return unified_dir
 
@@ -51,11 +52,11 @@ def get_default_data_dir() -> Path:
 
 def use_unified_config() -> bool:
     """Check if we should use the unified config system."""
-    env_dir = os.environ.get("NEURALMEMORY_DIR")
+    env_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR")
     if env_dir:
         return True
 
-    unified_dir = Path.home() / ".neuralmemory"
+    unified_dir = Path.home() / ".pugbrain"
     return (unified_dir / "config.toml").exists()
 
 

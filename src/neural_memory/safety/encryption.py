@@ -1,7 +1,7 @@
 """Memory encryption for sensitive neuron content.
 
 Provides Fernet symmetric encryption with per-brain keys.
-Keys are stored on disk at ~/.neuralmemory/keys/{brain_id}.key.
+Keys are stored on disk at ~/.pugbrain/keys/{brain_id}.key.
 """
 
 from __future__ import annotations

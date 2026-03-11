@@ -6,10 +6,10 @@ PugBrain is a hybrid neural-vector memory system designed for long-term agent co
 
 ## 🚀 Quick Start
 
-**40 MCP tools** · **14 memory types** · **24 synapse types** · **Schema v22** · **3500+ tests** · **Cognitive reasoning layer**
+**42 MCP tools** · **14 memory types** · **24 synapse types** · **Schema v22** · **3500+ tests** · **Cognitive reasoning layer**
 
 ```bash
-pip install "pug-brain[server]"
+pip install neural-memory
 ```
 
 ## 🛠 Features
@@ -50,7 +50,7 @@ pip install neural-memory[all]          # All features
 Core recall works without embeddings. Enable embeddings to recall memories across languages (e.g., search in Vietnamese, find English memories):
 
 ```toml
-# ~/.neuralmemory/config.toml
+# ~/.pugbrain/config.toml
 [embedding]
 enabled = true
 provider = "auto"    # Auto-detects: Ollama → sentence-transformers → Gemini → OpenAI
@@ -73,13 +73,13 @@ That's it. MCP server, skills, commands, and agent are all configured automatica
 
 ```bash
 pip install neural-memory
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Then set the memory slot in `~/.openclaw/openclaw.json`:
 
 ```json
-{ "plugins": { "slots": { "memory": "neuralmemory" } } }
+{ "plugins": { "slots": { "memory": "pugbrain" } } }
 ```
 
 Restart the gateway. See the [full setup guide](docs/guides/openclaw-plugin.md).
@@ -95,14 +95,14 @@ Then add to your editor's MCP config (Cursor: `.cursor/mcp.json`, Windsurf: `~/.
 ```json
 {
   "mcpServers": {
-    "neural-memory": {
-      "command": "nmem-mcp"
+    "pugbrain": {
+      "command": "pug-mcp"
     }
   }
 }
 ```
 
-The editor spawns `nmem-mcp` automatically via stdio — no manual server start needed. No `nmem init` needed — auto-initializes on first use.
+The editor spawns `pug-mcp` automatically via stdio — no manual server start needed. No `pugbrain init` needed — auto-initializes on first use.
 
 ## Usage
 
@@ -110,47 +110,47 @@ The editor spawns `nmem-mcp` automatically via stdio — no manual server start 
 
 ```bash
 # Store memories (type auto-detected)
-nmem remember "Fixed auth bug with null check in login.py:42"
-nmem remember "We decided to use PostgreSQL" --type decision
-nmem todo "Review PR #123" --priority 7
+pugbrain remember "Fixed auth bug with null check in login.py:42"
+pugbrain remember "We decided to use PostgreSQL" --type decision
+pugbrain todo "Review PR #123" --priority 7
 
 # Recall memories
-nmem recall "auth bug"
-nmem recall "database decision" --depth 2
+pugbrain recall "auth bug"
+pugbrain recall "database decision" --depth 2
 
 # Shortcuts
-nmem a "quick note"           # Short for remember
-nmem q "auth"                 # Short for recall
-nmem last 5                   # Last 5 memories
-nmem today                    # Today's memories
+pugbrain a "quick note"           # Short for remember
+pugbrain q "auth"                 # Short for recall
+pugbrain last 5                   # Last 5 memories
+pugbrain today                    # Today's memories
 
 # Get context for AI injection
-nmem context --limit 10 --json
+pugbrain context --limit 10 --json
 
 # Brain management
-nmem brain list
-nmem brain create work
-nmem brain use work
-nmem brain health
-nmem brain export -o backup.json
-nmem brain import backup.json
+pugbrain brain list
+pugbrain brain create work
+pugbrain brain use work
+pugbrain brain health
+pugbrain brain export -o backup.json
+pugbrain brain import backup.json
 
 # Codebase indexing
-nmem index src/               # Index code into neural memory
+pugbrain index src/               # Index code into neural memory
 
 # Memory lifecycle
-nmem decay                    # Apply forgetting curve
-nmem consolidate              # Prune, merge, summarize
-nmem cleanup                  # Remove expired memories
+pugbrain decay                    # Apply forgetting curve
+pugbrain consolidate              # Prune, merge, summarize
+pugbrain cleanup                  # Remove expired memories
 
 # Visual tools
-nmem serve                    # Start FastAPI server
+pugbrain serve                    # Start FastAPI server
 # Then open http://localhost:8000/dashboard
 
 # Telegram backup
-nmem telegram status          # Show Telegram config status
-nmem telegram test            # Send test message
-nmem telegram backup          # Send brain .db to Telegram
+pugbrain telegram status          # Show Telegram config status
+pugbrain telegram test            # Send test message
+pugbrain telegram backup          # Send brain .db to Telegram
 ```
 
 ### Python API
@@ -183,7 +183,7 @@ asyncio.run(main())
 
 ### MCP Tools (Claude Code / Cursor)
 
-Once configured, these 38 tools are available to your AI assistant:
+Once configured, these 42 tools are available to your AI assistant:
 
 **Core Memory:**
 
@@ -306,16 +306,16 @@ Query: "What did Alice suggest?"
 ### Memory Types
 
 ```bash
-nmem remember "Objective fact" --type fact
-nmem remember "We chose X over Y" --type decision
-nmem remember "User prefers dark mode" --type preference
-nmem todo "Review the PR" --priority 7 --expires 30
-nmem remember "Pattern: always validate input" --type insight
-nmem remember "Meeting notes from standup" --type context --expires 7
-nmem remember "Always run tests before push" --type instruction
-nmem remember "Import failed: missing column" --type error
-nmem remember "Deploy process: build → test → push" --type workflow
-nmem remember "API docs: https://..." --type reference
+pugbrain remember "Objective fact" --type fact
+pugbrain remember "We chose X over Y" --type decision
+pugbrain remember "User prefers dark mode" --type preference
+pugbrain todo "Review the PR" --priority 7 --expires 30
+pugbrain remember "Pattern: always validate input" --type insight
+pugbrain remember "Meeting notes from standup" --type context --expires 7
+pugbrain remember "Always run tests before push" --type instruction
+pugbrain remember "Import failed: missing column" --type error
+pugbrain remember "Deploy process: build → test → push" --type workflow
+pugbrain remember "API docs: https://..." --type reference
 ```
 
 ### Knowledge Base Training
@@ -356,7 +356,7 @@ Trace the shortest path between two concepts in your neural graph:
 
 ```bash
 # CLI
-nmem explain "Redis" "auth outage"
+pugbrain explain "Redis" "auth outage"
 
 # MCP tool
 pugbrain_explain(entity_a="Redis", entity_b="auth outage")
@@ -410,7 +410,7 @@ pugbrain_version(action="diff", from_version="...", to_version="...")
 ### Web Dashboard
 
 ```bash
-nmem serve                         # Start server on localhost:8000
+pugbrain serve                         # Start server on localhost:8000
 # Open http://localhost:8000/dashboard  # React dashboard (7 pages)
 # Open http://localhost:8000/docs       # API docs (Swagger)
 ```
@@ -432,17 +432,17 @@ Send brain `.db` files to Telegram for offsite backup:
 
 ```bash
 # Setup: set env var + config
-export NMEM_TELEGRAM_BOT_TOKEN="your-bot-token"
+export PUGBRAIN_TELEGRAM_BOT_TOKEN="your-bot-token"
 # Add to config.toml:
 # [telegram]
 # enabled = true
 # chat_ids = ["123456789"]
 
 # CLI
-nmem telegram status              # Check config
-nmem telegram test                # Send test message
-nmem telegram backup              # Send brain backup
-nmem telegram backup --brain work # Specific brain
+pugbrain telegram status              # Check config
+pugbrain telegram test                # Send test message
+pugbrain telegram backup              # Send brain backup
+pugbrain telegram backup --brain work # Specific brain
 
 # MCP tool
 pugbrain_telegram_backup(brain_name="work")
@@ -462,7 +462,7 @@ Import from existing memory systems:
 
 ```bash
 # ChromaDB
-nmem import backup.json --source chromadb
+pugbrain import backup.json --source chromadb
 
 # Via MCP tool
 pugbrain_import(source="mem0")           # Uses MEM0_API_KEY env var
@@ -476,16 +476,16 @@ pugbrain_import(source="llamaindex", connection="/path/to/index")
 
 ```bash
 # Sensitive content detection
-nmem check "API_KEY=sk-xxx"
+pugbrain check "API_KEY=sk-xxx"
 
 # Auto-redact before storing
-nmem remember "Config: API_KEY=sk-xxx" --redact
+pugbrain remember "Config: API_KEY=sk-xxx" --redact
 
 # Safe export (exclude sensitive neurons)
-nmem brain export --exclude-sensitive -o safe.json
+pugbrain brain export --exclude-sensitive -o safe.json
 
 # Health check (freshness + sensitive scan)
-nmem brain health
+pugbrain brain health
 ```
 
 - Content length validation (100KB limit)
@@ -498,9 +498,9 @@ nmem brain health
 
 ```bash
 pip install neural-memory[server]
-nmem serve                    # localhost:8000
-nmem serve -p 9000            # Custom port
-nmem serve --host 0.0.0.0    # Expose to network
+pugbrain serve                    # localhost:8000
+pugbrain serve -p 9000            # Custom port
+pugbrain serve --host 0.0.0.0    # Expose to network
 ```
 
 API endpoints:
@@ -519,9 +519,9 @@ GET  /docs              - API documentation
 ### Git Hooks
 
 ```bash
-nmem hooks install          # Post-commit reminder to save commit messages
-nmem hooks show             # Show installed hooks
-nmem hooks uninstall        # Remove hooks
+pugbrain hooks install          # Post-commit reminder to save commit messages
+pugbrain hooks show             # Show installed hooks
+pugbrain hooks uninstall        # Remove hooks
 ```
 
 ## Development
@@ -548,7 +548,7 @@ ruff format src/ tests/
 
 ## Support
 
-If you find NeuralMemory useful, consider supporting development:
+If you find PugBrain useful, consider supporting development:
 
 **Solana:** `5XVY6dZDeyuZJy6Co9KeLDxY5RZ6EwCpjsUVkacMz7HF`
 
@@ -559,4 +559,3 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT License — see [LICENSE](LICENSE).
->>>>>>> origin/main

@@ -79,13 +79,13 @@ jobs:
           npm publish --access public || echo "npm publish skipped or failed"
 
       - name: Build OpenClaw plugin
-        working-directory: integrations/neuralmemory
+        working-directory: integrations/pugbrain
         run: |
           npm ci
           npm run build
 
       - name: Publish OpenClaw plugin to npm
-        working-directory: integrations/neuralmemory
+        working-directory: integrations/pugbrain
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |

@@ -6,8 +6,8 @@ This module provides a single configuration system that works across:
 - REST API server
 - Any future integrations
 
-Configuration is stored in ~/.neuralmemory/config.toml
-Brain data is stored in ~/.neuralmemory/brains/<name>.db (SQLite)
+Configuration is stored in ~/.pugbrain/config.toml
+Brain data is stored in ~/.pugbrain/brains/<name>.db (SQLite)
 
 PugBrain 🐶 — Gâu gâu!
 """
@@ -46,23 +46,58 @@ def get_neuralmemory_dir() -> Path:
     """Get PugBrain data directory.
 
     Priority:
-    1. NEURALMEMORY_DIR environment variable
-    2. ~/.neuralmemory/
+    1. PUGBRAIN_DIR environment variable
+    2. NEURALMEMORY_DIR environment variable (legacy, for migration)
+    3. ~/.pugbrain/
+
+    Also migrates data from ~/.neuralmemory/ to ~/.pugbrain/ on first use.
     """
-    env_dir = os.environ.get("NEURALMEMORY_DIR")
+    env_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR")
     if env_dir:
         return Path(env_dir).resolve()
-    return Path.home() / ".neuralmemory"
+
+    new_dir = Path.home() / ".pugbrain"
+    old_dir = Path.home() / ".neuralmemory"
+
+    # Auto-migrate from old directory if new doesn't exist but old does
+    if not new_dir.exists() and old_dir.exists():
+        _migrate_from_neuralmemory(old_dir, new_dir)
+
+    return new_dir
+
+
+def _migrate_from_neuralmemory(old_dir: Path, new_dir: Path) -> None:
+    """Migrate data from ~/.neuralmemory/ to ~/.pugbrain/."""
+    try:
+        new_dir.mkdir(parents=True, exist_ok=True)
+
+        # Copy all files and directories
+        for item in old_dir.iterdir():
+            dest = new_dir / item.name
+            if not dest.exists():
+                if item.is_file():
+                    shutil.copy2(item, dest)
+                else:
+                    shutil.copytree(item, dest)
+
+        logger.info(
+            "Migrated PugBrain data from %s to %s",
+            old_dir,
+            new_dir,
+        )
+    except Exception as e:
+        logger.warning("Failed to migrate from %s to %s: %s", old_dir, new_dir, e)
 
 
 def get_default_brain() -> str:
     """Get default brain name.
 
     Priority:
-    1. NEURALMEMORY_BRAIN environment variable (validated)
-    2. "default"
+    1. PUGBRAIN_BRAIN environment variable (validated)
+    2. NEURALMEMORY_BRAIN environment variable (legacy, for migration)
+    3. "default"
     """
-    name = os.environ.get("NEURALMEMORY_BRAIN", "default")
+    name = os.environ.get("PUGBRAIN_BRAIN") or os.environ.get("NEURALMEMORY_BRAIN", "default")
     if not _BRAIN_NAME_PATTERN.match(name):
         return "default"
     return name
@@ -712,7 +747,7 @@ class ToolMemoryConfig:
 class TelegramConfig:
     """Telegram backup integration configuration.
 
-    Bot token is read from NMEM_TELEGRAM_BOT_TOKEN env var (never in config file).
+    Bot token is read from PUGBRAIN_TELEGRAM_BOT_TOKEN env var (never in config file).
     Chat IDs are stored in config.toml [telegram] section.
     """
 
@@ -757,8 +792,8 @@ class UnifiedConfig:
     - MCP: Claude Code, Cursor, AntiGravity
     - API: REST server
 
-    Storage location: ~/.neuralmemory/config.toml
-    Brain location: ~/.neuralmemory/brains/<name>.db
+    Storage location: ~/.pugbrain/config.toml
+    Brain location: ~/.pugbrain/brains/<name>.db
     """
 
     # Base directory for all PugBrain data
@@ -868,8 +903,8 @@ class UnifiedConfig:
         return cls(
             data_dir=data_dir,
             current_brain=(
-                os.environ.get("NEURALMEMORY_BRAIN")
-                or os.environ.get("NMEM_BRAIN")
+                os.environ.get("PUGBRAIN_BRAIN")
+                or os.environ.get("NEURALMEMORY_BRAIN")
                 or data.get("current_brain", get_default_brain())
             ),
             brain=BrainSettings.from_dict(data.get("brain", {})),
@@ -1043,7 +1078,7 @@ class UnifiedConfig:
             'password = ""',
             "",
             "# Telegram backup integration",
-            "# Bot token: set NMEM_TELEGRAM_BOT_TOKEN env var (never stored here)",
+            "# Bot token: set PUGBRAIN_TELEGRAM_BOT_TOKEN env var (never stored here)",
             "[telegram]",
             f"enabled = {'true' if self.telegram.enabled else 'false'}",
             f"chat_ids = [{', '.join(repr(cid) for cid in self.telegram.chat_ids)}]",
@@ -1222,8 +1257,8 @@ def _migrate_legacy_db(config: UnifiedConfig, brain_name: str | None) -> None:
     """Auto-migrate flat-layout default.db → brains/default.db.
 
     Before the brains/ directory was introduced, PugBrain stored its
-    database at ``~/.neuralmemory/default.db``.  The new layout puts each
-    brain in ``~/.neuralmemory/brains/<name>.db``.
+    database at ``~/.pugbrain/default.db``.  The new layout puts each
+    brain in ``~/.pugbrain/brains/<name>.db``.
 
     This function copies the old file into the new location **once**, so
     users upgrading from older versions keep their data.  The old file is
