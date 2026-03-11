@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   id-token: write
+  actions: write
 
 jobs:
   # Gate: wait for CI to pass on the merge commit
@@ -216,3 +217,16 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+
+      # NOTE: GitHub Actions' GITHUB_TOKEN cannot trigger other workflows
+      # via release events. We explicitly dispatch the Release workflow.
+      - name: Trigger Release workflow
+        if: steps.bump.outputs.bump != 'none'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Triggering Release workflow for ${{ steps.new_version.outputs.tag }}..."
+          gh workflow run release.yml \
+            --repo "${{ github.repository }}" \
+            --ref pug-master
+          echo "Release workflow dispatched successfully"
