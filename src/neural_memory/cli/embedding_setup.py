@@ -12,7 +12,7 @@ import os
 import typer
 
 # Provider definitions with detection logic
-_PROVIDERS = [
+_PROVIDERS: list[dict[str, str | None]] = [
     {
         "key": "sentence_transformer",
         "name": "Sentence Transformers",
@@ -85,7 +85,9 @@ def run_embedding_setup() -> None:
 
     # Show providers with status
     for i, p in enumerate(_PROVIDERS, 1):
-        installed = _is_installed(p["module"])
+        module = p["module"]
+        assert module is not None
+        installed = _is_installed(module)
         has_key = _has_env_key(p.get("env_key"))
 
         status_parts = []
@@ -127,7 +129,9 @@ def run_embedding_setup() -> None:
     provider = _PROVIDERS[idx]
 
     # Check installation
-    if not _is_installed(provider["module"]):
+    module = provider["module"]
+    assert module is not None
+    if not _is_installed(module):
         typer.echo()
         typer.secho(f"  {provider['name']} is not installed.", fg=typer.colors.YELLOW)
         typer.echo(f"  Install with: {provider['install']}")
@@ -155,7 +159,8 @@ def run_embedding_setup() -> None:
             model = provider["multilingual_model"]
 
     # Save config
-    _save_embedding_config(provider["key"], model)
+    provider_key = provider["key"] or ""
+    _save_embedding_config(provider_key, model or "")
 
     typer.echo()
     typer.secho(f"  Configured: {provider['name']}", fg=typer.colors.GREEN)

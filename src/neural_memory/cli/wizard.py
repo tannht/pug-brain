@@ -119,7 +119,7 @@ def _step_brain_name() -> str:
     typer.echo("  Your brain stores all memories. Most users use 'default'.")
     typer.echo()
 
-    name = typer.prompt("  Brain name", default="default").strip()
+    name = str(typer.prompt("  Brain name", default="default")).strip()
     if not name:
         name = "default"
     typer.echo()
@@ -179,15 +179,17 @@ def _step_test_memory(brain_name: str) -> None:
         return
 
     try:
-        from neural_memory.cli._helpers import get_config, get_storage, run_async
+        from neural_memory.cli._helpers import get_storage, run_async
+        from neural_memory.cli.config import CLIConfig
+        from neural_memory.core.brain import BrainConfig
 
         async def _test() -> dict[str, Any]:
-            config = get_config(reload=True)
-            storage = await get_storage(config)
+            cli_config = CLIConfig.load()
+            storage = await get_storage(cli_config)
             try:
                 from neural_memory.engine.encoder import MemoryEncoder
 
-                encoder = MemoryEncoder(storage)
+                encoder = MemoryEncoder(storage, BrainConfig())
                 result = await encoder.encode(content)
                 return {"success": True, "neuron_id": result.fiber.anchor_neuron_id}
             finally:
