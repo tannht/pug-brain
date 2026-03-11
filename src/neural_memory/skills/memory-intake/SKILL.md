@@ -8,7 +8,7 @@ metadata:
   stage: workflow
   tags: [memory, intake, structured, neuralmemory]
 context:
-  - "~/.neuralmemory/config.toml"
+  - "~/.pugbrain/config.toml"
 agent: Memory Intake Specialist
 allowed-tools:
   - pugbrain_remember

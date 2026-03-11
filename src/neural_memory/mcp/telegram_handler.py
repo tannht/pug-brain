@@ -38,7 +38,7 @@ class TelegramHandler:
             token = get_bot_token()
             if not token:
                 return {
-                    "error": "NMEM_TELEGRAM_BOT_TOKEN environment variable not set.",
+                    "error": "PUGBRAIN_TELEGRAM_BOT_TOKEN environment variable not set.",
                 }
 
             brain_name = args.get("brain_name")

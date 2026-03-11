@@ -1,6 +1,6 @@
 """Telegram Bot API client for brain backup and notifications.
 
-Bot token: NMEM_TELEGRAM_BOT_TOKEN env var (never stored in config file).
+Bot token: PUGBRAIN_TELEGRAM_BOT_TOKEN env var (never stored in config file).
 Chat IDs: config.toml [telegram] section.
 """
 
@@ -39,8 +39,11 @@ def get_telegram_config() -> TelegramConfig:
 
 
 def get_bot_token() -> str | None:
-    """Get bot token from environment variable only."""
-    return os.environ.get("NMEM_TELEGRAM_BOT_TOKEN")
+    """Get bot token from environment variable only.
+
+    Priority: PUGBRAIN_TELEGRAM_BOT_TOKEN > NMEM_TELEGRAM_BOT_TOKEN (legacy)
+    """
+    return os.environ.get("PUGBRAIN_TELEGRAM_BOT_TOKEN") or os.environ.get("NMEM_TELEGRAM_BOT_TOKEN")
 
 
 class TelegramClient:
@@ -213,7 +216,7 @@ async def get_telegram_status() -> TelegramStatus:
             configured=False,
             chat_ids=list(config.chat_ids),
             backup_on_consolidation=config.backup_on_consolidation,
-            error="NMEM_TELEGRAM_BOT_TOKEN not set",
+            error="PUGBRAIN_TELEGRAM_BOT_TOKEN not set",
         )
 
     try:

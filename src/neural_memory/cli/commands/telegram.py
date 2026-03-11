@@ -46,7 +46,7 @@ def telegram_test() -> None:
     token = get_bot_token()
     if not token:
         typer.secho(
-            "Error: NMEM_TELEGRAM_BOT_TOKEN environment variable not set.",
+            "Error: PUGBRAIN_TELEGRAM_BOT_TOKEN environment variable not set.",
             fg=typer.colors.RED,
         )
         raise typer.Exit(1)
@@ -96,7 +96,7 @@ def telegram_backup(
     token = get_bot_token()
     if not token:
         typer.secho(
-            "Error: NMEM_TELEGRAM_BOT_TOKEN environment variable not set.",
+            "Error: PUGBRAIN_TELEGRAM_BOT_TOKEN environment variable not set.",
             fg=typer.colors.RED,
         )
         raise typer.Exit(1)

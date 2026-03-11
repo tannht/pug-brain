@@ -35,7 +35,7 @@ def find_pugbrain_command() -> dict[str, Any]:
 
 
 def setup_config(data_dir: Path, *, force: bool = False) -> bool:
-    """Create ~/.neuralmemory/ with config.toml and brains/ directory.
+    """Create ~/.pugbrain/ with config.toml and brains/ directory.
 
     Returns True if config was created/updated, False if skipped.
     """

@@ -8,7 +8,7 @@ metadata:
   stage: workflow
   tags: [memory, evolution, optimization, patterns, neuralmemory]
 context:
-  - "~/.neuralmemory/config.toml"
+  - "~/.pugbrain/config.toml"
 agent: Memory Evolution Specialist
 allowed-tools:
   - pugbrain_recall

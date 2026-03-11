@@ -1,6 +1,6 @@
 """OpenClaw configuration model and persistence.
 
-Stores OpenClaw integration settings in ~/.neuralmemory/openclaw.json.
+Stores OpenClaw integration settings in ~/.pugbrain/openclaw.json.
 Covers: API keys, channel connections (Telegram/Discord),
 function toggles, and security restrictions.
 """
@@ -132,7 +132,7 @@ DEFAULT_FUNCTIONS: list[dict[str, Any]] = [
 
 
 class OpenClawConfigManager:
-    """Load/save OpenClaw config from ~/.neuralmemory/openclaw.json."""
+    """Load/save OpenClaw config from ~/.pugbrain/openclaw.json."""
 
     def __init__(self, config_dir: Path | None = None) -> None:
         if config_dir is None:
