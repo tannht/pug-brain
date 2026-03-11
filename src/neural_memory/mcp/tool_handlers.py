@@ -28,6 +28,23 @@ from neural_memory.engine.retrieval import DepthLevel, ReflexPipeline
 from neural_memory.mcp.constants import MAX_CONTENT_LENGTH
 from neural_memory.utils.timeutils import utcnow
 
+# Max tags per recall query (remember allows 50 for storage, recall caps at 20 for filtering)
+_MAX_RECALL_TAGS = 20
+_MAX_TAG_LENGTH = 100
+
+
+def _parse_tags(args: dict[str, Any], *, max_items: int = _MAX_RECALL_TAGS) -> set[str] | None:
+    """Parse and validate tags from MCP tool arguments.
+
+    Returns a set of valid tag strings, or None if no valid tags provided.
+    """
+    raw_tags = args.get("tags")
+    if not raw_tags or not isinstance(raw_tags, list):
+        return None
+    tags = {t for t in raw_tags[:max_items] if isinstance(t, str) and 0 < len(t) <= _MAX_TAG_LENGTH}
+    return tags or None
+
+
 if TYPE_CHECKING:
     from neural_memory.engine.hooks import HookRegistry
     from neural_memory.mcp.maintenance_handler import HealthPulse
@@ -675,12 +692,7 @@ class ToolHandler:
             return {"error": f"Invalid depth level: {args.get('depth')}. Must be 0-3."}
         max_tokens = min(args.get("max_tokens", 500), 10_000)
         min_confidence = args.get("min_confidence", 0.0)
-        raw_tags = args.get("tags")
-        tags: set[str] | None = None
-        if raw_tags and isinstance(raw_tags, list):
-            tags = {t for t in raw_tags[:20] if isinstance(t, str) and 0 < len(t) <= 100}
-            if not tags:
-                tags = None
+        tags = _parse_tags(args)
         min_trust: float | None = None
         raw_min_trust = args.get("min_trust")
         if raw_min_trust is not None:
@@ -906,13 +918,7 @@ class ToolHandler:
             depth = 1
         max_tokens = min(int(args.get("max_tokens", 500)), 10_000)
 
-        # Parse tags for cross-brain filtering
-        raw_tags = args.get("tags")
-        tags: set[str] | None = None
-        if raw_tags and isinstance(raw_tags, list):
-            tags = {t for t in raw_tags[:20] if isinstance(t, str) and 0 < len(t) <= 100}
-            if not tags:
-                tags = None
+        tags = _parse_tags(args)
 
         try:
             result = await cross_brain_recall(
@@ -1855,3 +1861,63 @@ class ToolHandler:
                 "memory_id": memory_id,
                 "message": "Memory marked as expired (will be cleaned up on next consolidation)",
             }
+
+    async def _consolidate(self, args: dict[str, Any]) -> dict[str, Any]:
+        """Run memory consolidation on the current brain."""
+        from neural_memory.engine.consolidation import (
+            ConsolidationConfig,
+            ConsolidationStrategy,
+        )
+        from neural_memory.engine.consolidation_delta import run_with_delta
+
+        storage = await self.get_storage()
+        try:
+            brain_id = _require_brain_id(storage)
+        except ValueError:
+            return {"error": "No brain configured"}
+
+        # Parse strategy
+        strategy_str = args.get("strategy", "all")
+        try:
+            strategy = ConsolidationStrategy(strategy_str)
+        except ValueError:
+            valid = [s.value for s in ConsolidationStrategy]
+            return {"error": f"Invalid strategy: {strategy_str}. Valid: {valid}"}
+
+        strategies = [strategy]
+        dry_run = bool(args.get("dry_run", False))
+
+        # Build config with optional overrides
+        config_kwargs: dict[str, Any] = {}
+        if "prune_weight_threshold" in args:
+            val = args["prune_weight_threshold"]
+            if isinstance(val, (int, float)):
+                config_kwargs["prune_weight_threshold"] = float(val)
+        if "merge_overlap_threshold" in args:
+            val = args["merge_overlap_threshold"]
+            if isinstance(val, (int, float)):
+                config_kwargs["merge_overlap_threshold"] = float(val)
+        if "prune_min_inactive_days" in args:
+            val = args["prune_min_inactive_days"]
+            if isinstance(val, (int, float)):
+                config_kwargs["prune_min_inactive_days"] = float(val)
+
+        config = ConsolidationConfig(**config_kwargs) if config_kwargs else None
+
+        try:
+            delta = await run_with_delta(
+                storage,
+                brain_id,
+                strategies=strategies,
+                dry_run=dry_run,
+                config=config,
+            )
+        except Exception:
+            logger.error("Consolidation failed", exc_info=True)
+            return {"error": "Consolidation failed unexpectedly"}
+
+        result = delta.to_dict()
+        result["strategy"] = strategy_str
+        result["dry_run"] = dry_run
+        result["summary"] = delta.report.summary()
+        return result

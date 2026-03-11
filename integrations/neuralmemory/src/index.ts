@@ -11,6 +11,12 @@
  * instead of hardcoding 6 tools. Automatically exposes every tool the
  * MCP server provides (39+ tools in NM v2.28.0).
  *
+ * v1.8.0: Compatible with NM v2.29.0 — RRF score fusion, graph-based
+ * query expansion, and Personalized PageRank activation.
+ *
+ * v1.8.1: Fix async register() — OpenClaw requires synchronous registration.
+ * Fallback tools registered sync; MCP connection deferred to service.start().
+ *
  * Registers:
  *   N tools    — dynamically from MCP server (fallback: 5 core tools)
  *   1 service  — MCP process lifecycle (start/stop)
@@ -135,10 +141,10 @@ const plugin: OpenClawPluginDefinition = {
   name: "NeuralMemory",
   description:
     "Brain-inspired persistent memory for AI agents — neurons, synapses, and fibers",
-  version: "1.7.0",
+  version: "1.8.1",
   kind: "memory",
 
-  async register(api: OpenClawPluginApi): Promise<void> {
+  register(api: OpenClawPluginApi): void {
     const cfg = resolveConfig(api.pluginConfig);
 
     const mcp = new NeuralMemoryMcpClient({
@@ -149,50 +155,19 @@ const plugin: OpenClawPluginDefinition = {
       initTimeout: cfg.initTimeout,
     });
 
-    // ── Connect MCP + fetch tools during registration ───
-    // Tools must be registered in register() — OpenClaw may
-    // freeze the tool list before service.start() is called.
+    // ── Register fallback tools synchronously ────────────
+    // OpenClaw requires register() to be synchronous.
+    // Register stable fallback tools immediately; MCP connection
+    // and dynamic tool discovery happen in service.start().
+    // Fallback tools auto-reconnect MCP on first call.
 
-    let registeredTools: ToolDefinition[];
-
-    try {
-      await mcp.connect();
-      api.logger.info("NeuralMemory MCP connected");
-    } catch (err) {
-      api.logger.error(
-        `Failed to connect NeuralMemory MCP: ${(err as Error).message}`,
-      );
-      // Register fallback tools so the plugin is still partially usable
-      registeredTools = createFallbackTools(mcp);
-      for (const t of registeredTools) {
-        api.registerTool(t, { name: t.name });
-      }
-      api.logger.warn(
-        `Registered ${registeredTools.length} fallback tools (MCP not connected)`,
-      );
-      return;
-    }
-
-    // Fetch tools dynamically from MCP server
-    try {
-      registeredTools = await createToolsFromMcp(mcp);
-      api.logger.info(
-        `Fetched ${registeredTools.length} tools from MCP server`,
-      );
-    } catch (err) {
-      api.logger.warn(
-        `Failed to fetch MCP tools, using fallback: ${(err as Error).message}`,
-      );
-      registeredTools = createFallbackTools(mcp);
-    }
-
-    // Register all tools with OpenClaw
+    const registeredTools = createFallbackTools(mcp);
     for (const t of registeredTools) {
       api.registerTool(t, { name: t.name });
     }
 
     api.logger.info(
-      `Registered ${registeredTools.length} NeuralMemory tools`,
+      `Registered ${registeredTools.length} NeuralMemory tools (sync)`,
     );
 
     // ── Service: MCP process lifecycle ───────────────────
@@ -201,11 +176,23 @@ const plugin: OpenClawPluginDefinition = {
       id: "neuralmemory-mcp",
 
       async start(): Promise<void> {
-        // MCP already connected during register()
         if (!mcp.connected) {
           try {
             await mcp.connect();
-            api.logger.info("NeuralMemory MCP reconnected in service.start()");
+            api.logger.info("NeuralMemory MCP connected in service.start()");
+
+            // Log discovered tools for diagnostics (cannot re-register
+            // after register() — OpenClaw freezes the tool list).
+            try {
+              const dynamicTools = await createToolsFromMcp(mcp);
+              api.logger.info(
+                `NeuralMemory MCP discovered ${dynamicTools.length} tools`,
+              );
+            } catch (err) {
+              api.logger.warn(
+                `Tool discovery failed: ${(err as Error).message}`,
+              );
+            }
           } catch (err) {
             api.logger.error(
               `Failed to start NeuralMemory MCP: ${(err as Error).message}`,

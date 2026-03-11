@@ -12,6 +12,7 @@ const TimelinePage = lazy(() => import("@/features/timeline/TimelinePage"))
 const EvolutionPage = lazy(() => import("@/features/evolution/EvolutionPage"))
 const DiagramsPage = lazy(() => import("@/features/diagrams/DiagramsPage"))
 const SettingsPage = lazy(() => import("@/features/settings/SettingsPage"))
+const NeurodungeonPage = lazy(() => import("@/features/neurodungeon/NeurodungeonPage"))
 
 /**
  * PugBrain Dashboard — Auto-detects the 'default' brain on first load.
@@ -93,6 +94,14 @@ export default function App() {
           element={
             <Suspense fallback={<PageSkeleton />}>
               <SettingsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="neurodungeon"
+          element={
+            <Suspense fallback={<PageSkeleton />}>
+              <NeurodungeonPage />
             </Suspense>
           }
         />
