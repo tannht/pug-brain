@@ -53,12 +53,12 @@ After restarting, Claude has access to:
 
 | Tool | Description |
 |------|-------------|
-| `nmem_remember` | Store a memory with type, priority, tags |
-| `nmem_recall` | Query memories with depth and confidence |
-| `nmem_context` | Get recent context for injection |
-| `nmem_todo` | Quick TODO with 30-day expiry |
-| `nmem_stats` | Get brain statistics |
-| `nmem_auto` | Auto-capture memories from text |
+| `pugbrain_remember` | Store a memory with type, priority, tags |
+| `pugbrain_recall` | Query memories with depth and confidence |
+| `pugbrain_context` | Get recent context for injection |
+| `pugbrain_todo` | Quick TODO with 30-day expiry |
+| `pugbrain_stats` | Get brain statistics |
+| `pugbrain_auto` | Auto-capture memories from text |
 
 #### 4. Usage
 
@@ -66,11 +66,11 @@ Claude automatically uses these tools:
 
 ```
 You: Remember that we decided to use PostgreSQL
-Claude: [uses nmem_remember tool]
+Claude: [uses pugbrain_remember tool]
        Stored the decision about PostgreSQL.
 
 You: What database did we choose?
-Claude: [uses nmem_recall tool]
+Claude: [uses pugbrain_recall tool]
        Based on my memory, you decided to use PostgreSQL.
 ```
 

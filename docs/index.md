@@ -145,15 +145,15 @@ pip install neural-memory[all]      # All features
 
     Claude will have access to:
 
-    - `nmem_remember` - Store memories
-    - `nmem_recall` - Query memories
-    - `nmem_context` - Get recent context
-    - `nmem_todo` - Quick TODO
-    - `nmem_stats` - Brain statistics
-    - `nmem_auto` - Auto-capture memories
-    - `nmem_train_db` - Train brain from database schema
-    - `nmem_alerts` - View and manage brain health alerts
-    - `nmem_sync` - Multi-device sync
+    - `pugbrain_remember` - Store memories
+    - `pugbrain_recall` - Query memories
+    - `pugbrain_context` - Get recent context
+    - `pugbrain_todo` - Quick TODO
+    - `pugbrain_stats` - Brain statistics
+    - `pugbrain_auto` - Auto-capture memories
+    - `pugbrain_train_db` - Train brain from database schema
+    - `pugbrain_alerts` - View and manage brain health alerts
+    - `pugbrain_sync` - Multi-device sync
 
 ## VS Code Extension
 

@@ -30,7 +30,7 @@ Then in `~/.openclaw/openclaw.json`:
 }
 ```
 
-Restart the gateway. The plugin auto-registers 6 tools (`nmem_remember`, `nmem_recall`, `nmem_context`, `nmem_todo`, `nmem_stats`, `nmem_health`) and injects memory context before each agent run. See the [full setup guide](../guides/openclaw-plugin.md).
+Restart the gateway. The plugin auto-registers 6 tools (`pugbrain_remember`, `pugbrain_recall`, `pugbrain_context`, `pugbrain_todo`, `pugbrain_stats`, `pugbrain_health`) and injects memory context before each agent run. See the [full setup guide](../guides/openclaw-plugin.md).
 
 ### Cursor / Windsurf / Other MCP Clients
 

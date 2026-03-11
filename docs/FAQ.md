@@ -163,10 +163,10 @@ Next session, say "recap" or "what were we working on?" and everything reloads i
 
 ### Q: Can NeuralMemory learn from my database?
 
-Yes. The `nmem_train_db` tool teaches your brain to understand database structure:
+Yes. The `pugbrain_train_db` tool teaches your brain to understand database structure:
 
 ```
-nmem_train_db(action="train", connection_string="sqlite:///myapp.db", domain_tag="myapp")
+pugbrain_train_db(action="train", connection_string="sqlite:///myapp.db", domain_tag="myapp")
 ```
 
 This extracts schema knowledge (tables, relationships, patterns) — NOT raw data rows.
@@ -182,7 +182,7 @@ No. DB-to-Brain opens the database in **read-only mode** and only reads PRAGMA m
 ### Q: How do I check what schema knowledge is stored?
 
 ```
-nmem_train_db(action="status")
+pugbrain_train_db(action="status")
 ```
 
 This shows how many schema entities have been trained into the current brain.
@@ -225,7 +225,7 @@ In Claude Code, invoke by name:
 
 ### Q: Do they require anything besides NeuralMemory?
 
-Just the NeuralMemory MCP server configured in Claude Code. The skills use existing MCP tools (`nmem_remember`, `nmem_recall`, `nmem_stats`, `nmem_health`, etc.) — no new dependencies.
+Just the NeuralMemory MCP server configured in Claude Code. The skills use existing MCP tools (`pugbrain_remember`, `pugbrain_recall`, `pugbrain_stats`, `pugbrain_health`, etc.) — no new dependencies.
 
 ## Data & Multi-tool Sharing
 
@@ -311,9 +311,9 @@ The agent will automatically call the `recall` tool to search your brain.
 
 They complement each other. RAG answers "what does the document say?", NeuralMemory answers "what did we learn and decide?"
 
-### Q: What about `nmem_train` for documents — doesn't that compete with RAG?
+### Q: What about `pugbrain_train` for documents — doesn't that compete with RAG?
 
-`nmem_train` ingests documents into the neural graph as permanent (pinned) knowledge. It works well for:
+`pugbrain_train` ingests documents into the neural graph as permanent (pinned) knowledge. It works well for:
 - Project docs you reference occasionally
 - Onboarding guides where relationships matter
 - Small doc sets (<20 files) where graph traversal adds value

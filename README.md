@@ -189,63 +189,63 @@ Once configured, these 38 tools are available to your AI assistant:
 
 | Tool | Description |
 |------|-------------|
-| `nmem_remember` | Store a memory (auto-detects type: fact, decision, insight, error, etc.) |
-| `nmem_recall` | Query with spreading activation (4 depth levels: instant/context/habit/deep) |
-| `nmem_context` | Get recent memories as session context |
-| `nmem_todo` | Quick TODO with 30-day expiry |
-| `nmem_auto` | Auto-capture memories from conversation text |
-| `nmem_suggest` | Autocomplete suggestions from brain neurons |
-| `nmem_edit` | Edit memory type, content, or priority (preserves connections) |
-| `nmem_forget` | Soft delete (set expiry) or hard delete (permanent removal) |
+| `pugbrain_remember` | Store a memory (auto-detects type: fact, decision, insight, error, etc.) |
+| `pugbrain_recall` | Query with spreading activation (4 depth levels: instant/context/habit/deep) |
+| `pugbrain_context` | Get recent memories as session context |
+| `pugbrain_todo` | Quick TODO with 30-day expiry |
+| `pugbrain_auto` | Auto-capture memories from conversation text |
+| `pugbrain_suggest` | Autocomplete suggestions from brain neurons |
+| `pugbrain_edit` | Edit memory type, content, or priority (preserves connections) |
+| `pugbrain_forget` | Soft delete (set expiry) or hard delete (permanent removal) |
 
 **Workflow:**
 
 | Tool | Description |
 |------|-------------|
-| `nmem_session` | Track session state: task, feature, progress |
-| `nmem_eternal` | Save project context, decisions, instructions |
-| `nmem_recap` | Load saved context at session start |
-| `nmem_stats` | Brain statistics and health metrics |
-| `nmem_habits` | Workflow habit suggestions from usage patterns |
+| `pugbrain_session` | Track session state: task, feature, progress |
+| `pugbrain_eternal` | Save project context, decisions, instructions |
+| `pugbrain_recap` | Load saved context at session start |
+| `pugbrain_stats` | Brain statistics and health metrics |
+| `pugbrain_habits` | Workflow habit suggestions from usage patterns |
 
 **Knowledge Base:**
 
 | Tool | Description |
 |------|-------------|
-| `nmem_train` | Train brain from docs (PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, MD) |
-| `nmem_train_db` | Train brain from database schema |
-| `nmem_index` | Index codebase for code-aware recall |
-| `nmem_pin` | Pin/unpin memories (pinned = permanent, skip decay/prune) |
+| `pugbrain_train` | Train brain from docs (PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, MD) |
+| `pugbrain_train_db` | Train brain from database schema |
+| `pugbrain_index` | Index codebase for code-aware recall |
+| `pugbrain_pin` | Pin/unpin memories (pinned = permanent, skip decay/prune) |
 
 **Advanced:**
 
 | Tool | Description |
 |------|-------------|
-| `nmem_health` | Brain health: purity score, grade (A-F), top penalties with fix actions |
-| `nmem_review` | Spaced repetition reviews (Leitner box system) |
-| `nmem_conflicts` | Memory conflicts: list, resolve, or pre-check |
-| `nmem_narrative` | Generate narratives: timeline, topic, or causal chain |
-| `nmem_alerts` | Brain health alerts: list or acknowledge |
-| `nmem_version` | Brain version control: snapshot, list, rollback, diff |
-| `nmem_transplant` | Transplant memories between brains by tags/types |
-| `nmem_import` | Import from ChromaDB, Mem0, Cognee, Graphiti, LlamaIndex |
-| `nmem_sync` | Multi-device sync (push/pull/full) |
-| `nmem_sync_status` | Sync status and pending changes |
-| `nmem_sync_config` | Configure sync settings |
-| `nmem_telegram_backup` | Send brain database backup to Telegram |
+| `pugbrain_health` | Brain health: purity score, grade (A-F), top penalties with fix actions |
+| `pugbrain_review` | Spaced repetition reviews (Leitner box system) |
+| `pugbrain_conflicts` | Memory conflicts: list, resolve, or pre-check |
+| `pugbrain_narrative` | Generate narratives: timeline, topic, or causal chain |
+| `pugbrain_alerts` | Brain health alerts: list or acknowledge |
+| `pugbrain_version` | Brain version control: snapshot, list, rollback, diff |
+| `pugbrain_transplant` | Transplant memories between brains by tags/types |
+| `pugbrain_import` | Import from ChromaDB, Mem0, Cognee, Graphiti, LlamaIndex |
+| `pugbrain_sync` | Multi-device sync (push/pull/full) |
+| `pugbrain_sync_status` | Sync status and pending changes |
+| `pugbrain_sync_config` | Configure sync settings |
+| `pugbrain_telegram_backup` | Send brain database backup to Telegram |
 
 **Cognitive Reasoning:**
 
 | Tool | Description |
 |------|-------------|
-| `nmem_hypothesize` | Create and manage hypotheses with Bayesian confidence tracking |
-| `nmem_evidence` | Submit evidence for/against hypotheses — auto-updates confidence |
-| `nmem_predict` | Make falsifiable predictions with deadlines, linked to hypotheses |
-| `nmem_verify` | Verify predictions as correct/wrong — propagates to linked hypotheses |
-| `nmem_cognitive` | Hot index: ranked summary of active hypotheses + predictions |
-| `nmem_gaps` | Knowledge gaps: detect, track, and resolve what the brain doesn't know |
-| `nmem_schema` | Schema evolution: evolve hypotheses into new versions with SUPERSEDES links |
-| `nmem_explain` | Trace shortest path between two concepts — debug recall, verify connections |
+| `pugbrain_hypothesize` | Create and manage hypotheses with Bayesian confidence tracking |
+| `pugbrain_evidence` | Submit evidence for/against hypotheses — auto-updates confidence |
+| `pugbrain_predict` | Make falsifiable predictions with deadlines, linked to hypotheses |
+| `pugbrain_verify` | Verify predictions as correct/wrong — propagates to linked hypotheses |
+| `pugbrain_cognitive` | Hot index: ranked summary of active hypotheses + predictions |
+| `pugbrain_gaps` | Knowledge gaps: detect, track, and resolve what the brain doesn't know |
+| `pugbrain_schema` | Schema evolution: evolve hypotheses into new versions with SUPERSEDES links |
+| `pugbrain_explain` | Trace shortest path between two concepts — debug recall, verify connections |
 
 ### VS Code Extension
 
@@ -322,13 +322,13 @@ nmem remember "API docs: https://..." --type reference
 
 ```bash
 # Train from documents (permanent knowledge)
-nmem_train(action="train", path="/docs/", domain_tag="project-docs")
+pugbrain_train(action="train", path="/docs/", domain_tag="project-docs")
 
 # Supported formats: PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV, MD, TXT, RST
 # Trained memories are pinned — they never decay, prune, or compress
 
 # Pin/unpin specific memories
-nmem_pin(fiber_ids=["abc123"], pinned=True)
+pugbrain_pin(fiber_ids=["abc123"], pinned=True)
 ```
 
 Install extraction dependencies:
@@ -339,9 +339,9 @@ pip install neural-memory[extract]
 ### Brain Health & Diagnostics
 
 ```bash
-nmem_health()                       # Purity score, grade (A-F), top penalties
-nmem_alerts(action="list")          # Active health alerts
-nmem_review(action="queue")         # Spaced repetition review queue
+pugbrain_health()                       # Purity score, grade (A-F), top penalties
+pugbrain_alerts(action="list")          # Active health alerts
+pugbrain_review(action="queue")         # Spaced repetition review queue
 ```
 
 Health reports include **`top_penalties`** — a ranked list of what's hurting your score most, with exact fix actions. Always fix the highest penalty first.
@@ -359,7 +359,7 @@ Trace the shortest path between two concepts in your neural graph:
 nmem explain "Redis" "auth outage"
 
 # MCP tool
-nmem_explain(entity_a="Redis", entity_b="auth outage")
+pugbrain_explain(entity_a="Redis", entity_b="auth outage")
 ```
 
 Returns the path with evidence: `Redis → USED_BY → session-store → CAUSED_BY → auth outage`. Use this to debug recall, verify brain connections, or discover unexpected relationships between concepts.
@@ -370,30 +370,30 @@ Hypothesize, predict, verify, and evolve beliefs — the brain reasons about wha
 
 ```bash
 # Create a hypothesis with initial confidence
-nmem_hypothesize(action="create", content="Redis is causing the latency spike", confidence=0.6)
+pugbrain_hypothesize(action="create", content="Redis is causing the latency spike", confidence=0.6)
 
 # Submit evidence
-nmem_evidence(hypothesis_id="h-1", evidence_type="for", content="Redis latency at 200ms")
-nmem_evidence(hypothesis_id="h-1", evidence_type="against", content="Network latency was 500ms")
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="for", content="Redis latency at 200ms")
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="against", content="Network latency was 500ms")
 
 # Make a falsifiable prediction
-nmem_predict(action="create", content="Switching to Valkey will fix latency",
+pugbrain_predict(action="create", content="Switching to Valkey will fix latency",
              hypothesis_id="h-1", deadline="2026-04-01")
 
 # Verify prediction outcome — propagates to linked hypothesis
-nmem_verify(prediction_id="p-1", outcome="correct")
+pugbrain_verify(prediction_id="p-1", outcome="correct")
 
 # Evolve hypothesis when understanding changes (creates SUPERSEDES chain)
-nmem_schema(action="evolve", hypothesis_id="h-1",
+pugbrain_schema(action="evolve", hypothesis_id="h-1",
             content="Network config was root cause, not Redis",
             reason="New evidence from network team")
 
 # Track what the brain doesn't know
-nmem_gaps(action="detect", topic="Why does latency spike at 3am?", source="recall_miss")
+pugbrain_gaps(action="detect", topic="Why does latency spike at 3am?", source="recall_miss")
 
 # View cognitive dashboard
-nmem_cognitive(action="summary")    # Hot index of active hypotheses + predictions
-nmem_schema(action="history", hypothesis_id="h-2")  # Version evolution chain
+pugbrain_cognitive(action="summary")    # Hot index of active hypotheses + predictions
+pugbrain_schema(action="history", hypothesis_id="h-2")  # Version evolution chain
 ```
 
 Auto-resolution: hypotheses with confidence ≥0.9 + 3 supporting evidence → auto-confirmed. Confidence ≤0.1 + 3 against → auto-refuted. Calibration score tracks prediction accuracy.
@@ -401,10 +401,10 @@ Auto-resolution: hypotheses with confidence ≥0.9 + 3 supporting evidence → a
 ### Brain Versioning
 
 ```bash
-nmem_version(action="create", name="v1-stable")  # Snapshot
-nmem_version(action="list")                       # List versions
-nmem_version(action="rollback", version_id="...")  # Restore
-nmem_version(action="diff", from_version="...", to_version="...")
+pugbrain_version(action="create", name="v1-stable")  # Snapshot
+pugbrain_version(action="list")                       # List versions
+pugbrain_version(action="rollback", version_id="...")  # Restore
+pugbrain_version(action="diff", from_version="...", to_version="...")
 ```
 
 ### Web Dashboard
@@ -445,15 +445,15 @@ nmem telegram backup              # Send brain backup
 nmem telegram backup --brain work # Specific brain
 
 # MCP tool
-nmem_telegram_backup(brain_name="work")
+pugbrain_telegram_backup(brain_name="work")
 ```
 
 ### Multi-Device Sync
 
 ```bash
-nmem_sync(action="full")           # Bidirectional sync
-nmem_sync_status()                 # Pending changes, devices
-nmem_sync_config(action="set", hub_url="http://hub:8080")
+pugbrain_sync(action="full")           # Bidirectional sync
+pugbrain_sync_status()                 # Pending changes, devices
+pugbrain_sync_config(action="set", hub_url="http://hub:8080")
 ```
 
 ### External Memory Import
@@ -465,11 +465,11 @@ Import from existing memory systems:
 nmem import backup.json --source chromadb
 
 # Via MCP tool
-nmem_import(source="mem0")           # Uses MEM0_API_KEY env var
-nmem_import(source="chromadb", connection="/path/to/chroma")
-nmem_import(source="cognee")         # Uses COGNEE_API_KEY env var
-nmem_import(source="graphiti", connection="bolt://localhost:7687")
-nmem_import(source="llamaindex", connection="/path/to/index")
+pugbrain_import(source="mem0")           # Uses MEM0_API_KEY env var
+pugbrain_import(source="chromadb", connection="/path/to/chroma")
+pugbrain_import(source="cognee")         # Uses COGNEE_API_KEY env var
+pugbrain_import(source="graphiti", connection="bolt://localhost:7687")
+pugbrain_import(source="llamaindex", connection="/path/to/index")
 ```
 
 ### Safety & Security

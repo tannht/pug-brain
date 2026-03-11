@@ -119,10 +119,10 @@ This overrides the global config — memories stay scoped to that workspace.
 
 ## Sharing Knowledge Between Brains
 
-Use the `nmem_transplant` tool to copy memories from one brain to another:
+Use the `pugbrain_transplant` tool to copy memories from one brain to another:
 
 ```
-nmem_transplant(
+pugbrain_transplant(
   source_brain="researcher",
   tags=["architecture", "api-design"]
 )
@@ -144,7 +144,7 @@ When running **multiple agents simultaneously** (e.g., 3 Claude Code sessions fo
 ```
 Agent A: nmem brain use brain-a  → config.toml: current_brain = "brain-a"
 Agent B: nmem brain use brain-b  → config.toml: current_brain = "brain-b"  ← overwrites!
-Agent A: nmem_recall "..."       → reads config.toml → gets brain-b data ← WRONG
+Agent A: pugbrain_recall "..."       → reads config.toml → gets brain-b data ← WRONG
 ```
 
 ### The Solution: Env Var Pinning
@@ -221,7 +221,7 @@ nmem brain transplant project-alpha --tag architecture --tag api-design
 
 Or via MCP tool from any agent:
 ```
-nmem_transplant(source_brain="project-alpha", tags=["architecture"])
+pugbrain_transplant(source_brain="project-alpha", tags=["architecture"])
 ```
 
 ## Best Practices
@@ -255,4 +255,4 @@ nmem health
 nmem stats
 ```
 
-Or use the `nmem_health` / `nmem_stats` MCP tools — they always operate on the currently configured brain.
+Or use the `pugbrain_health` / `pugbrain_stats` MCP tools — they always operate on the currently configured brain.

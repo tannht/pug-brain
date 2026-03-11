@@ -621,74 +621,74 @@ Once configured, these 38 tools are available to your AI assistant:
 
 | Tool | Description |
 |------|-------------|
-| `nmem_remember` | Store a memory (fact, decision, insight, todo, error, etc.) |
-| `nmem_recall` | Query with spreading activation (depth 0-3) |
-| `nmem_context` | Inject recent context at session start |
-| `nmem_todo` | Quick TODO with 30-day expiry |
-| `nmem_auto` | Auto-capture memories from conversation text |
-| `nmem_suggest` | Autocomplete suggestions from brain neurons |
-| `nmem_edit` | Edit memory type, content, or priority by fiber ID |
-| `nmem_forget` | Soft delete (set expiry) or hard delete (permanent removal) |
+| `pugbrain_remember` | Store a memory (fact, decision, insight, todo, error, etc.) |
+| `pugbrain_recall` | Query with spreading activation (depth 0-3) |
+| `pugbrain_context` | Inject recent context at session start |
+| `pugbrain_todo` | Quick TODO with 30-day expiry |
+| `pugbrain_auto` | Auto-capture memories from conversation text |
+| `pugbrain_suggest` | Autocomplete suggestions from brain neurons |
+| `pugbrain_edit` | Edit memory type, content, or priority by fiber ID |
+| `pugbrain_forget` | Soft delete (set expiry) or hard delete (permanent removal) |
 
 ### Brain Management
 
 | Tool | Description |
 |------|-------------|
-| `nmem_stats` | Brain statistics and freshness |
-| `nmem_health` | Brain health diagnostics (purity score, grade, top penalties) |
-| `nmem_evolution` | Brain evolution metrics (maturation, plasticity) |
-| `nmem_version` | Brain version control (snapshot, rollback, diff) |
-| `nmem_transplant` | Copy memories between brains |
-| `nmem_conflicts` | View and resolve memory conflicts |
-| `nmem_alerts` | Brain health alerts lifecycle |
+| `pugbrain_stats` | Brain statistics and freshness |
+| `pugbrain_health` | Brain health diagnostics (purity score, grade, top penalties) |
+| `pugbrain_evolution` | Brain evolution metrics (maturation, plasticity) |
+| `pugbrain_version` | Brain version control (snapshot, rollback, diff) |
+| `pugbrain_transplant` | Copy memories between brains |
+| `pugbrain_conflicts` | View and resolve memory conflicts |
+| `pugbrain_alerts` | Brain health alerts lifecycle |
 
 ### Session & Context
 
 | Tool | Description |
 |------|-------------|
-| `nmem_session` | Track working session state and progress |
-| `nmem_eternal` | Save project context, decisions, instructions |
-| `nmem_recap` | Load saved context at session start |
+| `pugbrain_session` | Track working session state and progress |
+| `pugbrain_eternal` | Save project context, decisions, instructions |
+| `pugbrain_recap` | Load saved context at session start |
 
 ### Learning & Training
 
 | Tool | Description |
 |------|-------------|
-| `nmem_index` | Index codebase for code-aware recall |
-| `nmem_train` | Train brain from documentation files |
-| `nmem_train_db` | Train brain from database schema |
-| `nmem_habits` | Manage learned workflow habits |
-| `nmem_review` | Spaced repetition review system |
-| `nmem_pin` | Pin/unpin memories (pinned = permanent, skip decay/prune) |
+| `pugbrain_index` | Index codebase for code-aware recall |
+| `pugbrain_train` | Train brain from documentation files |
+| `pugbrain_train_db` | Train brain from database schema |
+| `pugbrain_habits` | Manage learned workflow habits |
+| `pugbrain_review` | Spaced repetition review system |
+| `pugbrain_pin` | Pin/unpin memories (pinned = permanent, skip decay/prune) |
 
 ### Cognitive Reasoning
 
 | Tool | Description |
 |------|-------------|
-| `nmem_hypothesize` | Create and manage hypotheses with Bayesian confidence tracking |
-| `nmem_evidence` | Submit evidence for/against — auto-updates confidence |
-| `nmem_predict` | Falsifiable predictions with deadlines, linked to hypotheses |
-| `nmem_verify` | Verify predictions correct/wrong — propagates to hypotheses |
-| `nmem_cognitive` | Hot index: ranked summary of active hypotheses + predictions |
-| `nmem_gaps` | Knowledge gap metacognition: detect, track, resolve |
-| `nmem_schema` | Schema evolution: evolve hypotheses via SUPERSEDES chain |
-| `nmem_explain` | Trace shortest path between two concepts |
+| `pugbrain_hypothesize` | Create and manage hypotheses with Bayesian confidence tracking |
+| `pugbrain_evidence` | Submit evidence for/against — auto-updates confidence |
+| `pugbrain_predict` | Falsifiable predictions with deadlines, linked to hypotheses |
+| `pugbrain_verify` | Verify predictions correct/wrong — propagates to hypotheses |
+| `pugbrain_cognitive` | Hot index: ranked summary of active hypotheses + predictions |
+| `pugbrain_gaps` | Knowledge gap metacognition: detect, track, resolve |
+| `pugbrain_schema` | Schema evolution: evolve hypotheses via SUPERSEDES chain |
+| `pugbrain_explain` | Trace shortest path between two concepts |
 
 ### Utilities
 
 | Tool | Description |
 |------|-------------|
-| `nmem_import` | Import from ChromaDB, Mem0, Cognee, Graphiti, LlamaIndex |
-| `nmem_narrative` | Generate timeline/topic/causal narratives |
-| `nmem_telegram_backup` | Send brain .db backup to Telegram |
+| `pugbrain_import` | Import from ChromaDB, Mem0, Cognee, Graphiti, LlamaIndex |
+| `pugbrain_narrative` | Generate timeline/topic/causal narratives |
+| `pugbrain_telegram_backup` | Send brain .db backup to Telegram |
 
 ### Sync (Multi-Device)
 
 | Tool | Description |
 |------|-------------|
-| `nmem_sync` | Trigger manual sync (push/pull/full) |
-| `nmem_sync_status` | Show pending changes, devices, last sync |
-| `nmem_sync_config` | Configure hub URL, auto-sync, conflict strategy |
+| `pugbrain_sync` | Trigger manual sync (push/pull/full) |
+| `pugbrain_sync_status` | Show pending changes, devices, last sync |
+| `pugbrain_sync_config` | Configure hub URL, auto-sync, conflict strategy |
 
 ---
 
@@ -768,24 +768,24 @@ See [`docs/agent-instructions/.cursorrules`](../agent-instructions/.cursorrules)
 ## Memory System — NeuralMemory
 
 This workspace uses NeuralMemory for persistent memory.
-Use nmem_* MCP tools PROACTIVELY.
+Use pugbrain_* MCP tools PROACTIVELY.
 
 ### Session Start (ALWAYS)
-1. nmem_recap() — Resume context
-2. nmem_context(limit=20, fresh_only=true) — Recent memories
-3. nmem_session(action="get") — Current task
+1. pugbrain_recap() — Resume context
+2. pugbrain_context(limit=20, fresh_only=true) — Recent memories
+3. pugbrain_session(action="get") — Current task
 
 ### Auto-Remember
-- Decision made → nmem_remember(content="...", type="decision", priority=7)
-- Bug fixed → nmem_remember(content="...", type="error", priority=7)
-- TODO found → nmem_todo(task="...", priority=6)
+- Decision made → pugbrain_remember(content="...", type="decision", priority=7)
+- Bug fixed → pugbrain_remember(content="...", type="error", priority=7)
+- TODO found → pugbrain_todo(task="...", priority=6)
 
 ### Auto-Recall
-Before asking user → nmem_recall(query="<topic>", depth=1)
+Before asking user → pugbrain_recall(query="<topic>", depth=1)
 
 ### Session End
-nmem_auto(action="process", text="<session summary>")
-nmem_session(action="set", feature="...", progress=0.8)
+pugbrain_auto(action="process", text="<session summary>")
+pugbrain_session(action="set", feature="...", progress=0.8)
 ```
 
 ---

@@ -106,7 +106,7 @@ This means habits are queryable, recallable, and participate in spreading activa
 nmem habits list
 
 # MCP
-nmem_habits(action="list")
+pugbrain_habits(action="list")
 ```
 
 **Output:**
@@ -132,7 +132,7 @@ nmem_habits(action="list")
 nmem habits suggest --current recall
 
 # MCP
-nmem_habits(action="suggest", current_action="recall")
+pugbrain_habits(action="suggest", current_action="recall")
 ```
 
 **Output:**
@@ -179,7 +179,7 @@ Emerging patterns:
 nmem habits clear
 
 # MCP
-nmem_habits(action="clear")
+pugbrain_habits(action="clear")
 ```
 
 Removes all learned habit fibers. Action events are preserved, so habits can be re-learned on next consolidation.
@@ -207,7 +207,7 @@ Session 3: recall → remember → recall
 **Day 5+**: Pattern continues. Each consolidation reinforces the synapse weight and increments `sequential_count`.
 
 **Day 10**: After 7+ observations and synapse weight ≥ 0.8:
-- `nmem_habits(action="suggest", current_action="recall")` → suggests "remember"
+- `pugbrain_habits(action="suggest", current_action="recall")` → suggests "remember"
 
 ## Limitations
 

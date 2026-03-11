@@ -71,7 +71,7 @@ Specialized pipelines for training brains from external sources:
 - **SchemaIntrospector** - Database schema metadata extraction (SQLite dialect)
 - **KnowledgeExtractor** - Transform schema snapshots into confidence-scored teachable knowledge
 - **ConsolidationEngine** - ENRICH, DREAM, LEARN_HABITS, MATURE, INFER, PRUNE strategies
-- **ContextOptimizer** - Composite scoring, SimHash dedup, token budget allocation for `nmem_context`
+- **ContextOptimizer** - Composite scoring, SimHash dedup, token budget allocation for `pugbrain_context`
 - **QueryPatternMining** - Topic co-occurrence mining from recall events, pattern materialization
 - **AlertHandler** - Persistent alert lifecycle (active → seen → acknowledged → resolved)
 

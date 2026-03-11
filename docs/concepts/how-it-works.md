@@ -198,7 +198,7 @@ Compressed: [1 summary neuron: "API design meeting with Alice"]
 
 ## Smart Context Optimization (v2.6.0+)
 
-When you request context (`nmem_context`), NeuralMemory doesn't just return the most recent memories. It uses a **5-factor composite scoring** system to select the most relevant items:
+When you request context (`pugbrain_context`), NeuralMemory doesn't just return the most recent memories. It uses a **5-factor composite scoring** system to select the most relevant items:
 
 ```
 Score = 0.30 * activation     # How recently/actively recalled
@@ -242,7 +242,7 @@ NeuralMemory monitors brain health and creates persistent alerts when issues are
 - **Expired memories** — Stale content needs cleanup
 - **Stale fibers** — Unused pathways degrading
 
-Alerts follow a lifecycle: `active → seen → acknowledged → resolved`. They're surfaced as a `pending_alerts` count in regular tool responses, and can be managed via `nmem_alerts`.
+Alerts follow a lifecycle: `active → seen → acknowledged → resolved`. They're surfaced as a `pending_alerts` count in regular tool responses, and can be managed via `pugbrain_alerts`.
 
 ## Training from External Sources
 

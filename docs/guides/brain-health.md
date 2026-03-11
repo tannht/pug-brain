@@ -12,7 +12,7 @@ Your brain's health grade (A through F) reflects how well-connected, diverse, an
 | **D** | 40-59 | Poor — significant gaps in connectivity or activity |
 | **F** | 0-39 | Failing — empty or severely neglected brain |
 
-Run `nmem_health()` (MCP) or `nmem brain health` (CLI) to see your current grade.
+Run `pugbrain_health()` (MCP) or `nmem brain health` (CLI) to see your current grade.
 
 ---
 
@@ -79,13 +79,13 @@ Purity = Connectivity (25%) + Diversity (20%) + Freshness (15%)
 
 **How to improve:**
 
-- Use `nmem_recall` regularly on topics you're working on
+- Use `pugbrain_recall` regularly on topics you're working on
 - Each recall refreshes the memory's timestamp
-- Start sessions with `nmem_recap()` — this touches recent memories
+- Start sessions with `pugbrain_recap()` — this touches recent memories
 - Don't just store — **recall** your memories to keep them fresh
 
 !!! warning "Stale Brain"
-    If freshness hits 0% (no activity in 7 days), you get a CRITICAL warning. Even one `nmem_recall` call fixes this.
+    If freshness hits 0% (no activity in 7 days), you get a CRITICAL warning. Even one `pugbrain_recall` call fixes this.
 
 ### 4. Consolidation Ratio (15% weight)
 
@@ -110,7 +110,7 @@ EPISODIC → WORKING → SEMANTIC
 nmem consolidate --strategy mature
 
 # Or via MCP
-nmem_auto(action="process", text="consolidate")
+pugbrain_auto(action="process", text="consolidate")
 ```
 
 !!! note "Realistic expectations"
@@ -138,7 +138,7 @@ nmem brain health
 nmem consolidate --strategy prune
 
 # Or build connections by recalling related topics
-nmem_recall("topic related to orphaned entities")
+pugbrain_recall("topic related to orphaned entities")
 ```
 
 !!! tip "Prune is safe"
@@ -154,7 +154,7 @@ nmem_recall("topic related to orphaned entities")
 
 **How to improve:**
 
-- Recall memories across different topics: `nmem_recall("auth")`, `nmem_recall("database")`, `nmem_recall("deployment")`
+- Recall memories across different topics: `pugbrain_recall("auth")`, `pugbrain_recall("database")`, `pugbrain_recall("deployment")`
 - Each recall activates the matched neurons and their neighbors
 - Aim to recall 5+ different topics per week
 
@@ -177,7 +177,7 @@ nmem_recall("topic related to orphaned entities")
 
 ## Understanding Your Health Report
 
-When you run `nmem_health()`, you get:
+When you run `pugbrain_health()`, you get:
 
 ```json
 {
@@ -224,14 +224,14 @@ When you run `nmem_health()`, you get:
 
 - [ ] Run `nmem consolidate --strategy mature` to advance memory stages
 - [ ] Use varied language (causal, temporal, relational) for diversity
-- [ ] Start sessions with `nmem_recap()` to maintain freshness
-- [ ] Resolve any memory conflicts: `nmem_conflicts(action="list")`
+- [ ] Start sessions with `pugbrain_recap()` to maintain freshness
+- [ ] Resolve any memory conflicts: `pugbrain_conflicts(action="list")`
 
 ### Month 1+: Maturity (C → B → A)
 
 - [ ] Regular recall across all stored topics (activation efficiency)
-- [ ] Weekly health check: `nmem_health()` → fix top penalty
-- [ ] Knowledge base training: `nmem_train(path="docs/")` for permanent foundation
+- [ ] Weekly health check: `pugbrain_health()` → fix top penalty
+- [ ] Knowledge base training: `pugbrain_train(path="docs/")` for permanent foundation
 - [ ] Repeated recalls over time naturally strengthen recall confidence
 
 ---
@@ -251,7 +251,7 @@ Orphans above 20% trigger a warning. Run `nmem consolidate --strategy prune` to 
 Quantity doesn't equal quality. Check your `top_penalties`:
 
 - **Low connectivity?** → Your memories are flat statements, not rich relationships
-- **Low activation?** → You store but never recall. Use `nmem_recall` more
+- **Low activation?** → You store but never recall. Use `pugbrain_recall` more
 - **Low diversity?** → Use varied language (causes, sequences, comparisons)
 
 ### "How often should I run consolidation?"
@@ -262,16 +262,16 @@ Quantity doesn't equal quality. Check your `top_penalties`:
 
 ---
 
-## Connection Tracing with nmem_explain
+## Connection Tracing with pugbrain_explain
 
-Use `nmem_explain` to understand **why** two concepts are (or aren't) connected:
+Use `pugbrain_explain` to understand **why** two concepts are (or aren't) connected:
 
 ```bash
 # CLI
 nmem explain "Redis" "auth outage"
 
 # MCP tool
-nmem_explain(entity_a="Redis", entity_b="auth outage")
+pugbrain_explain(entity_a="Redis", entity_b="auth outage")
 ```
 
 This traces the shortest path through your neural graph:

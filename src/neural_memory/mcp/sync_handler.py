@@ -42,7 +42,7 @@ class SyncToolHandler:
                     "total": total,
                     "message": (
                         f"Seeded {total} entities into change log. "
-                        "Run nmem_sync(action='push') to push to hub."
+                        "Run pugbrain_sync(action='push') to push to hub."
                         if total > 0
                         else "No new entities to seed — change log already up to date."
                     ),

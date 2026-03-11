@@ -38,7 +38,7 @@ import type { ToolDefinition } from "./tools.js";
 
 /**
  * Build a system prompt listing all registered tool names.
- * This makes the agent aware of which nmem_* tools are available.
+ * This makes the agent aware of which pugbrain_* tools are available.
  */
 function buildToolInstructions(tools: ToolDefinition[]): string {
   const toolList = tools
@@ -49,11 +49,11 @@ function buildToolInstructions(tools: ToolDefinition[]): string {
 
 ${toolList}
 
-CRITICAL: NeuralMemory (nmem_*) is your ONLY memory system. Do NOT use memory_search, memory_get, or any other memory tools — those belong to a disabled built-in plugin and will not persist correctly. Always use nmem_* tools exclusively.
+CRITICAL: NeuralMemory (pugbrain_*) is your ONLY memory system. Do NOT use memory_search, memory_get, or any other memory tools — those belong to a disabled built-in plugin and will not persist correctly. Always use pugbrain_* tools exclusively.
 
-These are tool calls, NOT shell commands. Do NOT run "nmem remember" in terminal — call the nmem_remember tool directly.
+These are tool calls, NOT shell commands. Do NOT run "nmem remember" in terminal — call the pugbrain_remember tool directly.
 
-PROACTIVE MEMORY: Use nmem_remember after decisions, errors, and insights. Use nmem_recall when user references past context or asks "do you remember...". Use nmem_remember_batch to store multiple memories at once.`;
+PROACTIVE MEMORY: Use pugbrain_remember after decisions, errors, and insights. Use pugbrain_recall when user references past context or asks "do you remember...". Use pugbrain_remember_batch to store multiple memories at once.`;
 }
 
 // ── Config ─────────────────────────────────────────────────
@@ -224,7 +224,7 @@ const plugin: OpenClawPluginDefinition = {
           const ev = event as BeforeAgentStartEvent;
 
           try {
-            const raw = await mcp.callTool("nmem_recall", {
+            const raw = await mcp.callTool("pugbrain_recall", {
               query: ev.prompt,
               depth: cfg.contextDepth,
               max_tokens: cfg.maxContextTokens,
@@ -276,7 +276,7 @@ const plugin: OpenClawPluginDefinition = {
               .slice(0, MAX_AUTO_CAPTURE_CHARS);
 
             if (text.length > 50) {
-              await mcp.callTool("nmem_auto", {
+              await mcp.callTool("pugbrain_auto", {
                 action: "process",
                 text,
               });

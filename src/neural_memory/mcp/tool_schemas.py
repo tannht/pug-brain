@@ -135,6 +135,11 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                     "description": "Trust level 0.0-1.0. Capped by source ceiling "
                     "(user_input max 0.9, ai_inference max 0.7). NULL = unscored.",
                 },
+                "source_id": {
+                    "type": "string",
+                    "description": "Link this memory to a registered source. "
+                    "Creates a SOURCE_OF synapse for provenance tracking.",
+                },
             },
             "required": ["content"],
         },
@@ -142,7 +147,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
     {
         "name": "pugbrain_remember_batch",
         "description": "Store multiple memories in a single call. Max 20 items, 500K total chars. "
-        "Each item supports the same fields as nmem_remember. Returns per-item results "
+        "Each item supports the same fields as pugbrain_remember. Returns per-item results "
         "(partial success — one bad item won't block the rest).",
         "inputSchema": {
             "type": "object",
@@ -197,6 +202,10 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                                 "minimum": 0.0,
                                 "maximum": 1.0,
                                 "description": "Trust level 0.0-1.0",
+                            },
+                            "source_id": {
+                                "type": "string",
+                                "description": "Link to a registered source",
                             },
                         },
                         "required": ["content"],
@@ -264,8 +273,84 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
                     "maxItems": 20,
                     "description": "Filter by tags (AND — all must match). Checks tags, auto_tags, and agent_tags columns.",
                 },
+                "mode": {
+                    "type": "string",
+                    "enum": ["associative", "exact"],
+                    "description": "Recall mode: 'associative' (default) returns formatted context, 'exact' returns raw neuron contents verbatim without truncation or summarization.",
+                },
             },
             "required": ["query"],
+        },
+    },
+    {
+        "name": "pugbrain_show",
+        "description": "Get full verbatim content + metadata + synapses for a specific memory by ID. "
+        "Use this when you need the exact, unmodified content of a stored memory.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "memory_id": {
+                    "type": "string",
+                    "description": "The fiber_id or neuron_id of the memory to retrieve",
+                },
+            },
+            "required": ["memory_id"],
+        },
+    },
+    {
+        "name": "pugbrain_source",
+        "description": "Manage memory sources (provenance). Register external documents, laws, APIs, "
+        "or other origins so memories can answer 'where did this come from?'.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": ["register", "list", "get", "update", "delete"],
+                    "description": "Action to perform on sources.",
+                },
+                "source_id": {
+                    "type": "string",
+                    "description": "Source ID (required for get/update/delete).",
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Source name (required for register).",
+                },
+                "source_type": {
+                    "type": "string",
+                    "enum": [
+                        "law",
+                        "contract",
+                        "ledger",
+                        "document",
+                        "api",
+                        "manual",
+                        "website",
+                        "book",
+                        "research",
+                    ],
+                    "description": "Type of source (default: document).",
+                },
+                "version": {
+                    "type": "string",
+                    "description": "Version string (e.g. '2024-01', 'v2.0').",
+                },
+                "status": {
+                    "type": "string",
+                    "enum": ["active", "superseded", "repealed", "draft"],
+                    "description": "Source lifecycle status.",
+                },
+                "file_hash": {
+                    "type": "string",
+                    "description": "File hash for integrity checking.",
+                },
+                "metadata": {
+                    "type": "object",
+                    "description": "Additional metadata.",
+                },
+            },
+            "required": ["action"],
         },
     },
     {
@@ -963,7 +1048,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         "description": "Create, list, or inspect hypotheses — evolving beliefs with Bayesian "
         "confidence tracking. Hypotheses auto-resolve when evidence is strong enough "
         "(confirmed at >=0.9 confidence with >=3 evidence-for, refuted at <=0.1 with "
-        ">=3 evidence-against). Use nmem_evidence to add supporting/opposing evidence.",
+        ">=3 evidence-against). Use pugbrain_evidence to add supporting/opposing evidence.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1059,7 +1144,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         "description": "Create, list, or inspect predictions — falsifiable claims about future "
         "observations. Predictions track confidence, optional deadlines, and can link "
         "to hypotheses via PREDICTED synapse. Verified predictions propagate evidence "
-        "back to linked hypotheses. Use nmem_verify to record outcomes.",
+        "back to linked hypotheses. Use pugbrain_verify to record outcomes.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1371,7 +1456,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "nmem_consolidate",
+        "name": "pugbrain_consolidate",
         "description": "Run memory consolidation on the current brain. "
         "Strategies: prune (remove weak synapses/orphans), merge (combine overlapping fibers), "
         "summarize (cluster topic neurons), mature (episodic→semantic), infer (co-activation synapses), "

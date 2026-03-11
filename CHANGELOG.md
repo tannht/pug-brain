@@ -66,7 +66,7 @@ fix: trigger auto-version release for pug-master
 - **Reciprocal Rank Fusion (RRF)** — Multi-retriever score blending for anchor ranking. Combines BM25/FTS5, embedding similarity, and graph expansion ranks into unified scores using the RRF formula (`score = Σ weight_i / (k + rank_i)`). Anchors now start with differentiated activation levels instead of uniform 1.0. Config: `rrf_k` (default 60).
 - **Graph-based query expansion** — 1-hop neighbor traversal from entity/concept anchors adds soft expansion anchors. Exploits knowledge graph structure for associative priming (e.g., "auth" → OAuth2 → JWT, session). Config: `graph_expansion_enabled`, `graph_expansion_max`, `graph_expansion_min_weight`.
 - **Personalized PageRank (PPR) activation** — Optional replacement for classic BFS spreading activation. Distributes activation proportional to edge weights / out-degree with damping (teleport back to seed set), naturally handling hub dampening. Opt-in via `activation_strategy = "ppr"` or `"hybrid"` (PPR + reflex). Config: `ppr_damping`, `ppr_iterations`, `ppr_epsilon`.
-- **Tag filtering in Query API and MCP** — `POST /query` accepts `tags: list[str]` (AND filter, max 20). `nmem_recall` accepts `tags: list[str]` to scope results to specific tag sets. Filters across `tags`, `auto_tags`, and `agent_tags` columns. Backward compatible — `tags=None` returns all results as before.
+- **Tag filtering in Query API and MCP** — `POST /query` accepts `tags: list[str]` (AND filter, max 20). `pugbrain_recall` accepts `tags: list[str]` to scope results to specific tag sets. Filters across `tags`, `auto_tags`, and `agent_tags` columns. Backward compatible — `tags=None` returns all results as before.
 
 ### Fixed
 
@@ -102,9 +102,9 @@ fix: trigger auto-version release for pug-master
 
 ### Added
 
-- **`nmem_remember_batch`** — Bulk remember up to 20 memories in a single call. Partial success supported (individual failures don't block others). Added to `standard` tool tier.
+- **`pugbrain_remember_batch`** — Bulk remember up to 20 memories in a single call. Partial success supported (individual failures don't block others). Added to `standard` tool tier.
 - **Trust score** — First-class `trust_score` (0.0–1.0) and `source` fields on TypedMemory. Source-specific ceiling caps: `user_input=0.9`, `ai_inference=0.7`, `auto_capture=0.5`, `verified=1.0`. Schema v22 migration adds columns + index.
-- **`min_trust` filter** — `nmem_recall` accepts optional `min_trust` parameter to filter out low-confidence memories.
+- **`min_trust` filter** — `pugbrain_recall` accepts optional `min_trust` parameter to filter out low-confidence memories.
 - **Auto-promote context→fact** — Frequently-recalled context memories (frequency ≥ 5) are automatically promoted to `fact` during consolidation. Audit trail in metadata (`auto_promoted`, `promoted_from`, `promoted_at`).
 - **SEMANTIC alternative path** — Memories can reach SEMANTIC stage via intensive reinforcement (`rehearsal_count ≥ 15` + `5 distinct 2h-windows`) as alternative to the 3-distinct-days spacing requirement. Enables agents with burst usage patterns.
 

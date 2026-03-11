@@ -56,7 +56,7 @@ logger = logging.getLogger(__name__)
 
 def _require_brain_id(storage: NeuralStorage) -> str:
     """Return the current brain ID or raise ValueError if not set."""
-    brain_id = storage._current_brain_id
+    brain_id = storage.brain_id
     if not brain_id:
         raise ValueError("No brain context set")
     return brain_id
@@ -422,6 +422,16 @@ class ToolHandler:
                     )
                     await storage.update_neuron_state(updated_state)
 
+            # Link to registered source if source_id provided
+            source_id = args.get("source_id")
+            if source_id and isinstance(source_id, str):
+                source_obj = await storage.get_source(source_id)
+                if source_obj is not None:
+                    # Store source_id in typed_memory's source field
+                    await storage.update_typed_memory_source(result.fiber.id, f"source:{source_id}")
+                else:
+                    logger.warning("source_id '%s' not found, skipping source link", source_id)
+
             await storage.batch_save()
         finally:
             storage.enable_auto_save()
@@ -460,6 +470,9 @@ class ToolHandler:
             "neurons_created": len(result.neurons_created),
             "message": f"Remembered: {content[:50]}{'...' if len(content) > 50 else ''}",
         }
+
+        if source_id and isinstance(source_id, str):
+            response["source_id"] = source_id
 
         if redacted_matches:
             response["auto_redacted"] = True
@@ -692,6 +705,9 @@ class ToolHandler:
             return {"error": f"Invalid depth level: {args.get('depth')}. Must be 0-3."}
         max_tokens = min(args.get("max_tokens", 500), 10_000)
         min_confidence = args.get("min_confidence", 0.0)
+        recall_mode = args.get("mode", "associative")
+        if recall_mode not in ("associative", "exact"):
+            return {"error": f"Invalid mode: {recall_mode}. Must be 'associative' or 'exact'."}
         tags = _parse_tags(args)
         min_trust: float | None = None
         raw_min_trust = args.get("min_trust")
@@ -777,14 +793,62 @@ class ToolHandler:
             except Exception:
                 logger.debug("Trust filter failed (non-critical)", exc_info=True)
 
-        response: dict[str, Any] = {
-            "answer": result.context or "No relevant memories found.",
-            "confidence": result.confidence,
-            "neurons_activated": result.neurons_activated,
-            "fibers_matched": result.fibers_matched,
-            "depth_used": result.depth_used.value,
-            "tokens_used": result.tokens_used,
-        }
+        # Exact mode: return raw neuron contents without truncation
+        if recall_mode == "exact" and result.fibers_matched:
+            exact_items: list[dict[str, Any]] = []
+            for fid in result.fibers_matched:
+                fiber = await storage.get_fiber(fid)
+                if not fiber:
+                    continue
+                anchor = await storage.get_neuron(fiber.anchor_neuron_id)
+                if not anchor:
+                    continue
+                content = anchor.content
+                # Decrypt if needed
+                if fiber.metadata.get("encrypted"):
+                    try:
+                        from pathlib import Path
+
+                        from neural_memory.safety.encryption import MemoryEncryptor
+
+                        keys_dir_str = getattr(self.config.encryption, "keys_dir", "")
+                        keys_dir = (
+                            Path(keys_dir_str) if keys_dir_str else (self.config.data_dir / "keys")
+                        )
+                        encryptor = MemoryEncryptor(keys_dir=keys_dir)
+                        bid = storage.brain_id or ""
+                        content = encryptor.decrypt(content, bid)
+                    except Exception:
+                        logger.debug("Decryption failed in exact recall", exc_info=True)
+                tm = await storage.get_typed_memory(fid)
+                exact_items.append(
+                    {
+                        "fiber_id": fid,
+                        "content": content,
+                        "memory_type": tm.memory_type.value if tm else None,
+                        "priority": tm.priority.value if tm else None,
+                        "tags": list(tm.tags) if tm and tm.tags else [],
+                        "created_at": fiber.created_at.isoformat() if fiber.created_at else None,
+                    }
+                )
+
+            response: dict[str, Any] = {
+                "mode": "exact",
+                "memories": exact_items,
+                "confidence": result.confidence,
+                "neurons_activated": result.neurons_activated,
+                "fibers_matched": result.fibers_matched,
+                "depth_used": result.depth_used.value,
+            }
+        else:
+            response = {
+                "answer": result.context or "No relevant memories found.",
+                "confidence": result.confidence,
+                "neurons_activated": result.neurons_activated,
+                "fibers_matched": result.fibers_matched,
+                "depth_used": result.depth_used.value,
+                "tokens_used": result.tokens_used,
+            }
 
         if result.score_breakdown is not None:
             response["score_breakdown"] = {
@@ -836,6 +900,29 @@ class ToolHandler:
                     ]
             except Exception:
                 logger.debug("Expiry warning check failed", exc_info=True)
+
+        # Enrich results with source metadata from typed_memory.source
+        try:
+            if result.fibers_matched:
+                source_map: dict[str, dict[str, Any]] = {}
+                for fid in result.fibers_matched:
+                    tm = await storage.get_typed_memory(fid)
+                    if not tm or not tm.source or not tm.source.startswith("source:"):
+                        continue
+                    src_id = tm.source[len("source:") :]
+                    src = await storage.get_source(src_id)
+                    if src:
+                        source_map[fid] = {
+                            "source_id": src.id,
+                            "name": src.name,
+                            "source_type": src.source_type.value,
+                            "version": src.version,
+                            "status": src.status.value,
+                        }
+                if source_map:
+                    response["sources"] = source_map
+        except Exception:
+            logger.debug("Source enrichment failed (non-critical)", exc_info=True)
 
         await self._record_tool_action("recall", query[:100])
 
@@ -1608,7 +1695,7 @@ class ToolHandler:
         from neural_memory.unified_config import get_shared_storage
 
         target_storage = await self.get_storage()
-        target_brain_id = target_storage._current_brain_id
+        target_brain_id = target_storage.brain_id
         if not target_brain_id:
             return {"error": "No brain configured"}
 
@@ -1633,7 +1720,7 @@ class ToolHandler:
             logger.error("Failed to open source brain storage", exc_info=True)
             return {"error": "Source brain not found"}
 
-        source_brain_id = source_storage._current_brain_id
+        source_brain_id = source_storage.brain_id
         if not source_brain_id:
             return {"error": "Source brain not found"}
 
@@ -1695,7 +1782,213 @@ class ToolHandler:
         except Exception:
             logger.debug("Action recording failed (non-critical)", exc_info=True)
 
-    # ========== Edit & Forget ==========
+    # ========== Source Registry ==========
+
+    async def _source(self, args: dict[str, Any]) -> dict[str, Any]:
+        """Manage memory sources (provenance registry)."""
+        action = args.get("action", "")
+        if not action:
+            return {"error": "action is required"}
+
+        storage = await self.get_storage()
+        brain_id = _require_brain_id(storage)
+
+        if action == "register":
+            name = args.get("name")
+            if not name or not isinstance(name, str):
+                return {"error": "name is required for register"}
+
+            from neural_memory.core.source import Source
+
+            source = Source.create(
+                brain_id=brain_id,
+                name=name,
+                source_type=args.get("source_type", "document"),
+                version=args.get("version", ""),
+                file_hash=args.get("file_hash", ""),
+                metadata=args.get("metadata") or {},
+            )
+            source_id = await storage.add_source(source)
+            return {
+                "source_id": source_id,
+                "name": source.name,
+                "source_type": source.source_type.value,
+                "status": source.status.value,
+            }
+
+        if action == "list":
+            sources = await storage.list_sources(
+                source_type=args.get("source_type"),
+                status=args.get("status"),
+            )
+            return {
+                "sources": [
+                    {
+                        "source_id": s.id,
+                        "name": s.name,
+                        "source_type": s.source_type.value,
+                        "version": s.version,
+                        "status": s.status.value,
+                        "created_at": s.created_at.isoformat(),
+                    }
+                    for s in sources
+                ],
+                "count": len(sources),
+            }
+
+        if action == "get":
+            source_id = str(args.get("source_id") or "")
+            if not source_id:
+                return {"error": "source_id is required for get"}
+            source = await storage.get_source(source_id)
+            if source is None:
+                return {"error": f"Source '{source_id}' not found"}
+            neuron_count = await storage.count_neurons_for_source(source_id)
+            return {
+                "source_id": source.id,
+                "name": source.name,
+                "source_type": source.source_type.value,
+                "version": source.version,
+                "status": source.status.value,
+                "file_hash": source.file_hash,
+                "metadata": source.metadata,
+                "linked_neuron_count": neuron_count,
+                "created_at": source.created_at.isoformat(),
+                "updated_at": source.updated_at.isoformat(),
+            }
+
+        if action == "update":
+            source_id = str(args.get("source_id") or "")
+            if not source_id:
+                return {"error": "source_id is required for update"}
+            updated = await storage.update_source(
+                source_id,
+                status=args.get("status"),
+                version=args.get("version"),
+                metadata=args.get("metadata"),
+            )
+            if not updated:
+                return {"error": f"Source '{source_id}' not found"}
+            return {"updated": True, "source_id": source_id}
+
+        if action == "delete":
+            source_id = str(args.get("source_id") or "")
+            if not source_id:
+                return {"error": "source_id is required for delete"}
+            # Warn about linked neurons
+            neuron_count = await storage.count_neurons_for_source(source_id)
+            if neuron_count > 0:
+                # Soft-delete: mark superseded instead of hard delete
+                await storage.update_source(source_id, status="superseded")
+                return {
+                    "deleted": False,
+                    "superseded": True,
+                    "source_id": source_id,
+                    "warning": f"Source has {neuron_count} linked neurons. "
+                    "Marked as superseded instead of deleted.",
+                }
+            deleted = await storage.delete_source(source_id)
+            if not deleted:
+                return {"error": f"Source '{source_id}' not found"}
+            return {"deleted": True, "source_id": source_id}
+
+        return {"error": f"Unknown action: {action}"}
+
+    # ========== Show, Edit & Forget ==========
+
+    async def _show(self, args: dict[str, Any]) -> dict[str, Any]:
+        """Get full verbatim content + metadata + synapses for a memory by ID."""
+        memory_id = args.get("memory_id")
+        if not memory_id or not isinstance(memory_id, str):
+            return {"error": "memory_id is required"}
+
+        storage = await self.get_storage()
+        try:
+            _require_brain_id(storage)
+        except ValueError:
+            return {"error": "No brain configured"}
+
+        # Try as fiber_id first (typed memory), then as neuron_id
+        typed_mem = await storage.get_typed_memory(memory_id)
+        fiber = await storage.get_fiber(memory_id) if typed_mem else None
+
+        if typed_mem and fiber:
+            anchor = await storage.get_neuron(fiber.anchor_neuron_id)
+            content = anchor.content if anchor else ""
+
+            # Decrypt if needed
+            if anchor and fiber.metadata.get("encrypted"):
+                try:
+                    from pathlib import Path
+
+                    from neural_memory.safety.encryption import MemoryEncryptor
+
+                    keys_dir_str = getattr(self.config.encryption, "keys_dir", "")
+                    keys_dir = (
+                        Path(keys_dir_str) if keys_dir_str else (self.config.data_dir / "keys")
+                    )
+                    encryptor = MemoryEncryptor(keys_dir=keys_dir)
+                    bid = storage.brain_id or ""
+                    content = encryptor.decrypt(content, bid)
+                except Exception:
+                    logger.debug("Decryption failed in show", exc_info=True)
+
+            # Get connected synapses
+            synapses_out = await storage.get_synapses(source_id=fiber.anchor_neuron_id)
+            synapses_in = await storage.get_synapses(target_id=fiber.anchor_neuron_id)
+            synapse_list = [
+                {
+                    "type": s.type.value if hasattr(s.type, "value") else str(s.type),
+                    "target_id": s.target_id,
+                    "source_id": s.source_id,
+                    "weight": s.weight,
+                }
+                for s in [*synapses_out, *synapses_in]
+            ]
+
+            return {
+                "memory_id": memory_id,
+                "content": content,
+                "memory_type": typed_mem.memory_type.value,
+                "priority": typed_mem.priority.value,
+                "tags": list(typed_mem.tags) if typed_mem.tags else [],
+                "created_at": fiber.created_at.isoformat() if fiber.created_at else None,
+                "anchor_neuron_id": fiber.anchor_neuron_id,
+                "neuron_count": fiber.neuron_count,
+                "summary": fiber.summary,
+                "metadata": fiber.metadata,
+                "synapses": synapse_list,
+                "trust_score": typed_mem.trust_score,
+                "expires_at": typed_mem.expires_at.isoformat() if typed_mem.expires_at else None,
+            }
+
+        # Try as direct neuron_id
+        neuron = await storage.get_neuron(memory_id)
+        if neuron:
+            synapses_out = await storage.get_synapses(source_id=memory_id)
+            synapses_in = await storage.get_synapses(target_id=memory_id)
+            synapse_list = [
+                {
+                    "type": s.type.value if hasattr(s.type, "value") else str(s.type),
+                    "target_id": s.target_id,
+                    "source_id": s.source_id,
+                    "weight": s.weight,
+                }
+                for s in [*synapses_out, *synapses_in]
+            ]
+
+            return {
+                "memory_id": memory_id,
+                "content": neuron.content,
+                "neuron_type": neuron.type.value
+                if hasattr(neuron.type, "value")
+                else str(neuron.type),
+                "created_at": neuron.created_at.isoformat() if neuron.created_at else None,
+                "metadata": neuron.metadata,
+                "synapses": synapse_list,
+            }
+
+        return {"error": f"Memory not found: {memory_id}"}
 
     async def _edit(self, args: dict[str, Any]) -> dict[str, Any]:
         """Edit an existing memory's type, content, or priority."""

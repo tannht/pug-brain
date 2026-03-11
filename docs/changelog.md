@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **`nmem_edit`** — Edit memory type, content, or priority by fiber ID. Preserves all neural connections. Supports typed_memory path (type/priority) and anchor neuron path (content update)
-- **`nmem_forget`** — Soft delete (sets expires_at for natural decay) or hard delete (permanent removal with cascade to fiber + typed_memory). Also handles orphan neuron deletion
+- **`pugbrain_edit`** — Edit memory type, content, or priority by fiber ID. Preserves all neural connections. Supports typed_memory path (type/priority) and anchor neuron path (content update)
+- **`pugbrain_forget`** — Soft delete (sets expires_at for natural decay) or hard delete (permanent removal with cascade to fiber + typed_memory). Also handles orphan neuron deletion
 - **Enhanced MCP instructions** — Richer behavioral directives: brain growth tips, rich language patterns (causal/temporal/relational/decisional/comparative), memory correction guidance, all 38 tools listed
 - **Enhanced plugin instructions** — Comprehensive agent guidance in `.claude-plugin/plugin.json` for proactive memory usage
 
@@ -28,14 +28,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Synapse FK error message** — Distinguished FOREIGN KEY violations from UNIQUE violations in `add_synapse()` for clearer error messages
 
 - **Cognitive Reasoning Layer** — 8 new MCP tools for hypothesis-driven reasoning (38 tools total)
-  - `nmem_hypothesize` — Create and manage hypotheses with Bayesian confidence tracking and auto-resolution
-  - `nmem_evidence` — Submit evidence for/against hypotheses, auto-updates confidence via sigmoid-dampened shift
-  - `nmem_predict` — Make falsifiable predictions with deadlines, linked to hypotheses via PREDICTED synapse
-  - `nmem_verify` — Verify predictions as correct/wrong, propagates result to linked hypothesis
-  - `nmem_cognitive` — Hot index: ranked summary of active hypotheses + pending predictions with calibration score
-  - `nmem_gaps` — Knowledge gap metacognition: detect, track, prioritize, and resolve what the brain doesn't know
-  - `nmem_schema` — Schema evolution: evolve hypotheses into new versions via SUPERSEDES synapse chain
-  - `nmem_explain` — (moved to cognitive) Trace shortest path between concepts with evidence
+  - `pugbrain_hypothesize` — Create and manage hypotheses with Bayesian confidence tracking and auto-resolution
+  - `pugbrain_evidence` — Submit evidence for/against hypotheses, auto-updates confidence via sigmoid-dampened shift
+  - `pugbrain_predict` — Make falsifiable predictions with deadlines, linked to hypotheses via PREDICTED synapse
+  - `pugbrain_verify` — Verify predictions as correct/wrong, propagates result to linked hypothesis
+  - `pugbrain_cognitive` — Hot index: ranked summary of active hypotheses + pending predictions with calibration score
+  - `pugbrain_gaps` — Knowledge gap metacognition: detect, track, prioritize, and resolve what the brain doesn't know
+  - `pugbrain_schema` — Schema evolution: evolve hypotheses into new versions via SUPERSEDES synapse chain
+  - `pugbrain_explain` — (moved to cognitive) Trace shortest path between concepts with evidence
 - **Schema v21** — Three new tables: `cognitive_state` (hypothesis/prediction tracking), `hot_index` (ranked cognitive summary), `knowledge_gaps` (metacognition)
 - **Pure cognitive engine** (`engine/cognitive.py`) — Stateless functions: `update_confidence`, `detect_auto_resolution`, `compute_calibration`, `score_hypothesis`, `score_prediction`, `gap_priority`
 - **Bayesian confidence model** — Sigmoid-dampened shift with surprise factor and diminishing returns from total evidence
@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Brain Health Guide** (`docs/guides/brain-health.md`) — comprehensive guide explaining all 7 health metrics, thresholds, improvement roadmap (F through A), common issues, maintenance schedule
-- **Connection Tracing docs** (`nmem_explain`) — added to README, MCP prompt, brain health guide. Previously undocumented feature that traces shortest path between concepts
+- **Connection Tracing docs** (`pugbrain_explain`) — added to README, MCP prompt, brain health guide. Previously undocumented feature that traces shortest path between concepts
 - **Embedding auto-detection** (`provider = "auto"`) — automatically detects best available embedding provider: Ollama → sentence-transformers → Gemini → OpenAI. Lowers barrier for cross-language recall
 - **Consolidation post-run hints** — warns about orphan neurons (>20%) and missing consolidation after running `nmem consolidate`
 - **Pre-ship verification script** (`scripts/pre_ship.py`) — automated quality gate: version consistency, ruff, mypy, import smoke test, fast tests, plugin checks
@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- README: added nmem_explain to tools table, brain health section, connection tracing section, embedding auto-detect
+- README: added pugbrain_explain to tools table, brain health section, connection tracing section, embedding auto-detect
 - OpenClaw npm package renamed to `neuralmemory` (published on npm)
 
 ## [2.25.1] - 2026-03-05
@@ -164,7 +164,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **[MEDIUM] Embedding config** — Graceful fallback instead of crash on invalid provider
 - **[LOW] Type coercion** — max_hops/max_fibers/max_depth safely coerced to int
 - **[LOW] Immutability** — Dict mutations replaced with spread patterns in review_handler and encoder
-- **[LOW] Schema cleanup** — Removed empty `"required": []` from nmem_suggest
+- **[LOW] Schema cleanup** — Removed empty `"required": []` from pugbrain_suggest
 
 ### Tests
 
@@ -175,7 +175,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **nmem_explain — Connection Explainer** — New MCP tool to explain how two entities are related
+- **pugbrain_explain — Connection Explainer** — New MCP tool to explain how two entities are related
   - Finds shortest path through synapse graph via bidirectional BFS
   - Hydrates path with fiber evidence (memory summaries)
   - Returns structured steps + human-readable markdown explanation
@@ -204,7 +204,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **#12 Version Mismatch** — Detect editable installs in update hint, show version in `nmem_stats`
+- **#12 Version Mismatch** — Detect editable installs in update hint, show version in `pugbrain_stats`
 - **#14 Dedup on Remember** — Enable SimHash dedup (Tier 1) by default, surface `dedup_hint` in remember response, skip content < 20 chars
 - **#11 SEMANTIC Stage Blocked** — Rehearse maturation records on retrieval so memories can reach SEMANTIC stage (requires 3+ distinct reinforcement days)
 - **#15 Low Activation Efficiency** — Fix Hebbian learning None activation floor (0.1 instead of None → delta > 0), add dormant neuron reactivation during consolidation
@@ -305,7 +305,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TelegramClient` (aiohttp): `send_message` (auto-split >4096 chars), `send_document`, `backup_brain`
   - `TelegramConfig` frozen dataclass in `unified_config.py` (`[telegram]` TOML section)
   - CLI: `nmem telegram status`, `nmem telegram test`, `nmem telegram backup [--brain NAME]`
-  - MCP tool: `nmem_telegram_backup` (28 total tools)
+  - MCP tool: `pugbrain_telegram_backup` (28 total tools)
   - Dashboard API: `GET /api/dashboard/telegram/status`, `POST .../test`, `POST .../backup`
   - Dashboard Settings page: status indicator, test button, backup button
   - Bot token via `NMEM_TELEGRAM_BOT_TOKEN` env var only (never in config file)
@@ -330,8 +330,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pinned memory indicators and sensitive content exclusion support
   - New module: `cli/markdown_export.py` (~180 LOC)
 
-- **Original Timestamp** — `event_at` parameter on `nmem_remember`
-  - MCP: `nmem_remember(content="Meeting at 8am", event_at="2026-03-02T08:00:00")`
+- **Original Timestamp** — `event_at` parameter on `pugbrain_remember`
+  - MCP: `pugbrain_remember(content="Meeting at 8am", event_at="2026-03-02T08:00:00")`
   - CLI: `nmem remember "Meeting" --timestamp "2026-03-02T08:00:00"`
   - Time neurons and fiber `time_start/time_end` use the original event time
   - Supports ISO format with optional timezone (auto-stripped for UTC storage)
@@ -359,7 +359,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Pinned Memories** — Permanent knowledge that bypasses decay, pruning, and compression
   - `Fiber.pinned: bool` field — pinned fibers skip all lifecycle operations
   - 4 lifecycle bypass points: decay, pruning, compression, maturation
-  - `nmem_pin` MCP tool for manual pin/unpin
+  - `pugbrain_pin` MCP tool for manual pin/unpin
 - **Training File Dedup** — SHA-256 hash tracking prevents re-ingesting same documents
   - `training_files` table with hash, status, progress tracking
   - Resume support for interrupted training sessions
@@ -382,7 +382,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schema version 18 → 20 (tool_events table, pinned column on fibers, training_files table)
 - SynapseType enum: 22 → 24 types (EFFECTIVE_FOR, USED_WITH)
 - MemoryType enum: 10 → 11 types (TOOL)
-- MCP tools: 26 → 27 (added nmem_pin)
+- MCP tools: 26 → 27 (added pugbrain_pin)
 - ROADMAP.md — Complete rewrite as forward-looking 5-phase vision
 - Agent instructions — 7 new sections covering all 28 MCP tools
 - MCP prompt — Added KB training, pin, health, review, import instructions
@@ -532,9 +532,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `GET /hub/status/{brain_id}` — sync status + device count
     - `GET /hub/devices/{brain_id}` — list registered devices
   - **3 new MCP tools** (full tier only):
-    - `nmem_sync` — trigger manual sync (push/pull/full)
-    - `nmem_sync_status` — show pending changes, devices, last sync
-    - `nmem_sync_config` — configure hub URL, auto-sync, conflict strategy
+    - `pugbrain_sync` — trigger manual sync (push/pull/full)
+    - `pugbrain_sync_status` — show pending changes, devices, last sync
+    - `pugbrain_sync_config` — configure hub URL, auto-sync, conflict strategy
   - `SyncConfig` frozen dataclass: enabled (default False), hub_url, auto_sync, sync_interval_seconds, conflict_strategy
   - Device tracking columns on neurons/synapses/fibers: `device_id`, `device_origin`, `updated_at`
   - Schema migrations v15 → v16 (depth_priors, compression_backups, fiber compression_tier) → v17 (change_log, devices, device columns)
@@ -542,7 +542,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **SQLite schema** — Version 15 → 17 (two migrations)
-- **MCP tools** — Expanded from 23 to 26 (`nmem_sync`, `nmem_sync_status`, `nmem_sync_config`)
+- **MCP tools** — Expanded from 23 to 26 (`pugbrain_sync`, `pugbrain_sync_status`, `pugbrain_sync_config`)
 - **MCPServer mixin chain** — Added `SyncToolHandler` mixin
 - **`Fiber` model** — Added `compression_tier: int = 0` field
 - **`BrainConfig`** — Added 4 new fields: `adaptive_depth_enabled`, `adaptive_depth_epsilon`, `compression_enabled`, `compression_tier_thresholds`
@@ -581,7 +581,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Auto-scheduling: fibers with `priority >= 7` are automatically scheduled in `_remember`
   - `SQLiteReviewsMixin`: upsert, get_due, get_stats with `min(limit, 100)` cap
   - `InMemoryReviewsMixin` for testing
-  - `ReviewHandler` MCP mixin: `nmem_review` tool (queue/mark/schedule/stats actions)
+  - `ReviewHandler` MCP mixin: `pugbrain_review` tool (queue/mark/schedule/stats actions)
   - Schema migration v14 → v15 (`review_schedules` table + 2 indexes)
 - **Memory Narratives** — Template-based markdown narrative generation (no LLM)
   - 3 modes: `timeline` (date range), `topic` (spreading activation via `ReflexPipeline`), `causal` (CAUSED_BY chain traversal)
@@ -589,7 +589,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Timeline mode: queries fibers by date range, sorts chronologically, groups by date headers
   - Topic mode: runs SA query, fetches matched fibers, sorts by relevance
   - Causal mode: uses `trace_causal_chain()` to follow CAUSED_BY synapses, builds cause→effect narrative
-  - `NarrativeHandler` MCP mixin: `nmem_narrative` tool (timeline/topic/causal actions)
+  - `NarrativeHandler` MCP mixin: `pugbrain_narrative` tool (timeline/topic/causal actions)
   - Configurable `max_fibers` with server-side cap of 50
 - **Semantic Synapse Discovery** — Offline consolidation using embeddings to find latent connections
   - Batch embeds CONCEPT + ENTITY neurons, evaluates cosine similarity pairs above threshold
@@ -600,7 +600,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Optional — gracefully skipped if `sentence-transformers` not installed
   - `SemanticDiscoveryResult` dataclass: neurons_embedded, pairs_evaluated, synapses_created, skipped_existing
 - **Cross-Brain Recall** — Parallel spreading activation across multiple brains
-  - Extends `nmem_recall` with optional `brains` array parameter (max 5 brains)
+  - Extends `pugbrain_recall` with optional `brains` array parameter (max 5 brains)
   - Resolves brain names → DB paths via `UnifiedConfig`, opens temporary `SQLiteStorage` per brain
   - Parallel query via `asyncio.gather`, each brain runs independent `ReflexPipeline`
   - SimHash-based deduplication across brain results (keeps higher confidence on collision)
@@ -611,9 +611,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **MCPServer mixin chain** — Added `ReviewHandler` + `NarrativeHandler` mixins (16 → 18 handler mixins)
-- **MCP tools** — Expanded from 21 to 23 (`nmem_review`, `nmem_narrative`)
+- **MCP tools** — Expanded from 21 to 23 (`pugbrain_review`, `pugbrain_narrative`)
 - **SQLite schema** — Version 14 → 15 (`review_schedules` table)
-- **`nmem_recall` schema** — Added `brains` array property for cross-brain queries
+- **`pugbrain_recall` schema** — Added `brains` array property for cross-brain queries
 - **`BrainConfig`** — Added `semantic_discovery_similarity_threshold` and `semantic_discovery_max_pairs` fields
 - **`ConsolidationEngine`** — Added `SEMANTIC_LINK` strategy enum + Tier 5 + `semantic_synapses_created` report field
 - **Consolidation prune** — Unreinforced semantic synapses (`_semantic_discovery` metadata) decay at 2× rate
@@ -623,7 +623,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Smart Context Optimizer** — Composite scoring replaces naive loop in `nmem_context`
+- **Smart Context Optimizer** — Composite scoring replaces naive loop in `pugbrain_context`
   - 5-factor weighted score: activation (0.30) + priority (0.25) + frequency (0.20) + conductivity (0.15) + freshness (0.10)
   - SimHash-based deduplication removes near-duplicate content before token budgeting
   - Proportional token budget allocation: items get budget proportional to their composite score
@@ -632,9 +632,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Proactive Alerts Queue** — Persistent brain health alerts with full lifecycle management
   - `Alert` frozen dataclass with `AlertStatus` (active → seen → acknowledged → resolved) and 7 `AlertType` enum values
   - `SQLiteAlertsMixin` with CRUD operations: `record_alert` (6h dedup cooldown), `get_active_alerts`, `mark_alerts_seen`, `mark_alert_acknowledged`, `resolve_alerts_by_type`
-  - `AlertHandler` MCP mixin: `nmem_alerts` tool (list/acknowledge actions)
+  - `AlertHandler` MCP mixin: `pugbrain_alerts` tool (list/acknowledge actions)
   - Auto-creation from health pulse hints; auto-resolution when conditions clear
-  - Pending alert count surfaced in `nmem_remember`, `nmem_recall`, `nmem_context` responses
+  - Pending alert count surfaced in `pugbrain_remember`, `pugbrain_recall`, `pugbrain_context` responses
   - Schema migration v13 → v14 (alerts table + indexes)
 - **Recall Pattern Learning** — Discover and materialize query topic co-occurrence patterns
   - `extract_topics()` — keyword-based topic extraction from recall queries (min_length=3, cap 10)
@@ -643,15 +643,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `learn_query_patterns()` — materializes patterns as CONCEPT neurons + BEFORE synapses with `{"_query_pattern": True}` metadata
   - `suggest_follow_up_queries()` — follows BEFORE synapses for related topic suggestions
   - Integrated into LEARN_HABITS consolidation strategy
-  - `related_queries` field added to `nmem_recall` response
+  - `related_queries` field added to `pugbrain_recall` response
 
 ### Changed
 
 - **MCPServer mixin chain** — Added `AlertHandler` mixin (15 → 16 handler mixins)
-- **MCP tools** — Expanded from 20 to 21 (`nmem_alerts`)
+- **MCP tools** — Expanded from 20 to 21 (`pugbrain_alerts`)
 - **SQLite schema** — Version 13 → 14 (alerts table)
-- **`nmem_context` response** — Now includes `optimization_stats` when items are dropped
-- **`nmem_recall` response** — Now includes `related_queries` from learned patterns
+- **`pugbrain_context` response** — Now includes `optimization_stats` when items are dropped
+- **`pugbrain_recall` response** — Now includes `related_queries` from learned patterns
 - Tests: 2314 passed (up from 2291)
 
 ## [2.5.0] - 2026-02-18
@@ -662,7 +662,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Background expiry cleanup** — Fire-and-forget task auto-deletes expired `TypedMemory` + underlying fibers on a configurable interval (default 12h, max 100/run). Fires `MEMORY_EXPIRED` hooks. Piggybacks on `_check_maintenance()`.
 - **Scheduled consolidation** — Background `asyncio` loop runs consolidation every 24h (configurable strategies: prune, merge, enrich). Shares `_last_consolidation_at` with `MaintenanceHandler` to prevent overlap. Initial delay of one full interval avoids triggering on restart.
 - **Version check handler** — Background task checks PyPI every 24h for newer versions of `neural-memory`. Caches result and surfaces `update_hint` in `_remember`, `_recall`, `_stats` responses when an update is available. Uses `urllib` (no extra deps), validates HTTPS scheme.
-- **Expiry alerts** — `warn_expiry_days` parameter on `nmem_recall`; expiring-soon count in health pulse thresholds
+- **Expiry alerts** — `warn_expiry_days` parameter on `pugbrain_recall`; expiring-soon count in health pulse thresholds
 - **Evolution dashboard** — `/api/evolution` REST endpoint + dashboard UI tab for brain maturation metrics (stage distribution, plasticity, proficiency)
 
 ### Changed
@@ -742,8 +742,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **CLI `--version` flag** — `nmem --version` / `nmem -V` now prints version and exits (standard CLI convention)
-- **Actionable health scoring** — `nmem_health` now returns `top_penalties`: top 3 ranked penalty factors with estimated gain and suggested action
-- **Semantic stage progress** — `nmem_evolution` now returns `stage_distribution` (fiber counts per maturation stage) and `closest_to_semantic` (top 3 EPISODIC fibers with progress % and next step)
+- **Actionable health scoring** — `pugbrain_health` now returns `top_penalties`: top 3 ranked penalty factors with estimated gain and suggested action
+- **Semantic stage progress** — `pugbrain_evolution` now returns `stage_distribution` (fiber counts per maturation stage) and `closest_to_semantic` (top 3 EPISODIC fibers with progress % and next step)
 - **Composable encoding pipeline** — Refactored monolithic `encode()` into 14 composable async pipeline steps (`PipelineContext` / `PipelineStep` / `Pipeline`)
 
 ### Changed
@@ -772,8 +772,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **PreCompact + Stop auto-flush hooks** — Pre-compaction hook fires before context compression, parallel CI tests support
-- **Emergency flush** (`nmem_auto action="flush"`) — Pre-compaction emergency capture that skips dedup, lowers confidence threshold to 0.5, enables all memory types regardless of config, and boosts priority +2. Tag `emergency_flush` applied to all captured memories. Inspired by OpenClaw Memory's Layer 3 (`memoryFlush`)
-- **Session gap detection** — `nmem_session(action="get")` now returns `gap_detected: true` when content may have been lost between sessions (e.g. user ran `/new` without saving). Uses MD5 fingerprint stored on `session_set`/`session_end` to detect gaps from older code paths missing fingerprints
+- **Emergency flush** (`pugbrain_auto action="flush"`) — Pre-compaction emergency capture that skips dedup, lowers confidence threshold to 0.5, enables all memory types regardless of config, and boosts priority +2. Tag `emergency_flush` applied to all captured memories. Inspired by OpenClaw Memory's Layer 3 (`memoryFlush`)
+- **Session gap detection** — `pugbrain_session(action="get")` now returns `gap_detected: true` when content may have been lost between sessions (e.g. user ran `/new` without saving). Uses MD5 fingerprint stored on `session_set`/`session_end` to detect gaps from older code paths missing fingerprints
 - **Auto-capture preference patterns** — Detects explicit preferences ("I prefer...", "always use..."), corrections ("that's wrong...", "actually, it should be..."), and Vietnamese equivalents. New memory type `preference` with 0.85 confidence
 - **Windows surrogate crash fix** — MCP server now strips lone surrogate characters (U+D800-U+DFFF) from tool arguments before processing, preventing `UnicodeEncodeError` on Windows stdio pipes
 
@@ -791,7 +791,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about NeuralMemory tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
-- **Agent confuses CLI vs MCP tool calls** — `systemPrompt` injection explicitly states "call as tool, NOT CLI command", preventing agents from running `nmem remember` in terminal instead of calling the `nmem_remember` tool
+- **Agent confuses CLI vs MCP tool calls** — `systemPrompt` injection explicitly states "call as tool, NOT CLI command", preventing agents from running `nmem remember` in terminal instead of calling the `pugbrain_remember` tool
 - **`openclaw plugins list` not recognizing plugin on Windows** — Changed `main` and `openclaw.extensions` from TypeScript source (`src/index.ts`) to compiled output (`dist/index.js`). Added `prepublishOnly` and `postinstall` build scripts. Fixed `tsconfig.json` module resolution from `bundler` to `Node16` for broader compatibility
 - **OpenClaw plugin ID mismatch** — Added explicit `"id": "neuralmemory"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "neuralmemory", entry hints "openclaw-plugin")` warning
 - **Content-Length framing bug** — Switched from string-based buffer to raw `Buffer` for byte-accurate MCP message parsing. Fixes silent data corruption with non-ASCII content (Vietnamese, emoji, CJK)
@@ -900,9 +900,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Proactive Brain Intelligence** — 3 features that make the brain self-aware during normal usage
-  - **Related Memories on Write** — `nmem_remember` now discovers and returns up to 3 related existing memories via 2-hop SpreadingActivation from the new anchor neuron. Always-on (~5-10ms overhead), non-intrusive. Response includes `related_memories` list with `fiber_id`, `preview`, and `similarity` score.
+  - **Related Memories on Write** — `pugbrain_remember` now discovers and returns up to 3 related existing memories via 2-hop SpreadingActivation from the new anchor neuron. Always-on (~5-10ms overhead), non-intrusive. Response includes `related_memories` list with `fiber_id`, `preview`, and `similarity` score.
   - **Expired Memory Hint** — Health pulse detects expired memories via cheap COUNT query on `typed_memories` table. Surfaces hint when count exceeds threshold (default: 10): `"N expired memories found. Consider cleanup via nmem list --expired."`
-  - **Stale Fiber Detection** — Health pulse detects fibers with decayed conductivity (last conducted >90 days ago or never). Surfaces hint when stale ratio exceeds threshold (default: 30%): `"N% of fibers are stale. Consider running nmem_health for review."`
+  - **Stale Fiber Detection** — Health pulse detects fibers with decayed conductivity (last conducted >90 days ago or never). Surfaces hint when stale ratio exceeds threshold (default: 30%): `"N% of fibers are stale. Consider running pugbrain_health for review."`
 - **MaintenanceConfig extensions** — 3 new configuration fields:
   - `expired_memory_warn_threshold` (default: 10)
   - `stale_fiber_ratio_threshold` (default: 0.3)
@@ -932,7 +932,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **DB-to-Brain Schema Training (`nmem_train_db`)** — Teach brains to understand database structure
+- **DB-to-Brain Schema Training (`pugbrain_train_db`)** — Teach brains to understand database structure
   - 3-layer pipeline: `SchemaIntrospector` → `KnowledgeExtractor` → `DBTrainer`
   - Extracts **schema knowledge** (table structures, relationships, patterns) — NOT raw data rows
   - SQLite dialect (v1) via `aiosqlite` read-only connections
@@ -948,7 +948,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Training Orchestrator** — `engine/db_trainer.py`
   - Mirrors DocTrainer architecture: batch save, per-table error isolation, shared domain neuron
   - Configurable: `max_tables` (1-500), `salience_ceiling`, `consolidate`, `domain_tag`
-- **MCP Tool: `nmem_train_db`** — `train` and `status` actions
+- **MCP Tool: `pugbrain_train_db`** — `train` and `status` actions
 
 ### Fixed
 
@@ -970,7 +970,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Conflict Management MCP Tool (`nmem_conflicts`)** — List, resolve, and pre-check memory conflicts
+- **Conflict Management MCP Tool (`pugbrain_conflicts`)** — List, resolve, and pre-check memory conflicts
   - `list`, `resolve` (keep_existing/keep_new/keep_both), `check` actions
   - `ConflictHandler` mixin with full input validation
 - **Recall Conflict Surfacing** — `has_conflicts` flag and `conflict_count` in default recall response
@@ -1063,7 +1063,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Version 1.0.0 — Production/Stable, schema v10 → v11
-- MCP tools expanded from 14 to 16 (nmem_version, nmem_transplant)
+- MCP tools expanded from 14 to 16 (pugbrain_version, pugbrain_transplant)
 
 ## [0.20.0] - 2026-02-09
 
@@ -1071,7 +1071,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Habitual Recall** — ENRICH, DREAM, LEARN_HABITS consolidation strategies
   - Action event log (hippocampal buffer), sequence mining, workflow suggestions
-  - `nmem_habits` MCP tool, `nmem habits` CLI, `nmem update` CLI
+  - `pugbrain_habits` MCP tool, `nmem habits` CLI, `nmem update` CLI
   - Prune enhancements: dream synapse 10x decay, high-salience resistance
 - Schema v10: `action_events` table
 - 6 new BrainConfig fields for habit/dream configuration
@@ -1102,7 +1102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Brain Diagnostics** — `BrainHealthReport` with 7 component scores and composite purity (0-100)
   - Grade A/B/C/D/F, 7 warning codes, automatic recommendations
   - Tag drift detection via `TagNormalizer.detect_drift()`
-- **MCP tool: `nmem_health`** — Brain health diagnostics
+- **MCP tool: `pugbrain_health`** — Brain health diagnostics
 - **CLI command: `nmem health`** — Terminal health report with ASCII progress bars
 
 ## [0.16.0] - 2026-02-08
@@ -1280,9 +1280,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Type-aware decay rates**: Different memory types now decay at biologically-inspired rates (facts: 0.02/day, todos: 0.15/day). `DEFAULT_DECAY_RATES` dict and `get_decay_rate()` helper in `memory_types.py`
-- **Retrieval score breakdown**: `ScoreBreakdown` dataclass exposes confidence components (base_activation, intersection_boost, freshness_boost, frequency_boost) in `RetrievalResult` and MCP `nmem_recall` response
+- **Retrieval score breakdown**: `ScoreBreakdown` dataclass exposes confidence components (base_activation, intersection_boost, freshness_boost, frequency_boost) in `RetrievalResult` and MCP `pugbrain_recall` response
 - **SimHash near-duplicate detection**: 64-bit locality-sensitive hashing via `utils/simhash.py`. New `content_hash` field on `Neuron` model. Encoder and auto-capture use SimHash to catch paraphrased duplicates
-- **Point-in-time temporal queries**: `valid_at` parameter on `nmem_recall` filters fibers by temporal validity window (`time_start <= valid_at <= time_end`)
+- **Point-in-time temporal queries**: `valid_at` parameter on `pugbrain_recall` filters fibers by temporal validity window (`time_start <= valid_at <= time_end`)
 - Schema migration v4→v5: `content_hash INTEGER` column on neurons table
 
 ### Changed
@@ -1308,10 +1308,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Codebase indexing** (`nmem_index`): Index Python files into neural graph for code-aware recall
+- **Codebase indexing** (`pugbrain_index`): Index Python files into neural graph for code-aware recall
 - **Python AST extractor**: Parse functions, classes, methods, imports, constants via stdlib `ast`
 - **Codebase encoder**: Map code symbols to neurons (SPATIAL/ACTION/CONCEPT/ENTITY) and synapses (CONTAINS/IS_A/RELATED_TO/CO_OCCURS)
-- **Branch-aware sessions**: `nmem_session` auto-detects git branch/commit/repo and stores in metadata + tags
+- **Branch-aware sessions**: `pugbrain_session` auto-detects git branch/commit/repo and stores in metadata + tags
 - **Git context utility**: Detect branch, commit SHA, repo root via subprocess (zero deps)
 - **CLI `nmem index` command**: Index codebase from command line with `--ext`, `--status`, `--json` options
 - 16 new tests for extraction, encoding, and git context

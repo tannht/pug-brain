@@ -214,8 +214,11 @@ class MCPServer(
             "pugbrain_cognitive": self._cognitive,
             "pugbrain_gaps": self._gaps,
             "pugbrain_schema": self._schema,
+            "pugbrain_show": self._show,
+            "pugbrain_source": self._source,
             "pugbrain_edit": self._edit,
             "pugbrain_forget": self._forget,
+            "pugbrain_consolidate": self._consolidate,
         }
         handler = dispatch.get(name)
         if handler:

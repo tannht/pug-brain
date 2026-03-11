@@ -65,7 +65,7 @@ Add to `~/.openclaw/openclaw.json`:
 ```
 
 **Plugin features:**
-- 6 tools registered automatically (nmem_remember, nmem_recall, nmem_context, nmem_todo, nmem_stats, nmem_health)
+- 6 tools registered automatically (pugbrain_remember, pugbrain_recall, pugbrain_context, pugbrain_todo, pugbrain_stats, pugbrain_health)
 - `before_agent_start` hook: injects tool instructions + relevant memories as context (persists across `/new`)
 - `agent_end` hook: auto-extracts facts, decisions, and TODOs from the conversation
 - Configurable: `contextDepth` (0-3), `maxContextTokens` (100-10000)
@@ -148,49 +148,49 @@ You should see brain statistics (neurons, synapses, fibers).
 
 | Tool | Purpose | When to Use |
 |------|---------|-------------|
-| `nmem_remember` | Store a memory | After decisions, errors, facts, insights, user preferences |
-| `nmem_recall` | Query memories | Before tasks, when user references past context, "do you remember..." |
-| `nmem_context` | Get recent memories | At session start, inject fresh context |
-| `nmem_todo` | Quick TODO with 30-day expiry | Task tracking |
+| `pugbrain_remember` | Store a memory | After decisions, errors, facts, insights, user preferences |
+| `pugbrain_recall` | Query memories | Before tasks, when user references past context, "do you remember..." |
+| `pugbrain_context` | Get recent memories | At session start, inject fresh context |
+| `pugbrain_todo` | Quick TODO with 30-day expiry | Task tracking |
 
 ### Intelligence Tools
 
 | Tool | Purpose | When to Use |
 |------|---------|-------------|
-| `nmem_auto` | Auto-extract memories from text | After important conversations — captures decisions, errors, TODOs automatically |
-| `nmem_recall` (depth=3) | Deep associative recall | Complex questions requiring cross-domain connections |
-| `nmem_habits` | Workflow pattern suggestions | When user repeats similar action sequences |
+| `pugbrain_auto` | Auto-extract memories from text | After important conversations — captures decisions, errors, TODOs automatically |
+| `pugbrain_recall` (depth=3) | Deep associative recall | Complex questions requiring cross-domain connections |
+| `pugbrain_habits` | Workflow pattern suggestions | When user repeats similar action sequences |
 
 ### Management Tools
 
 | Tool | Purpose | When to Use |
 |------|---------|-------------|
-| `nmem_health` | Brain health diagnostics | Periodic checkup, before sharing brain |
-| `nmem_stats` | Brain statistics | Quick overview of memory counts |
-| `nmem_version` | Brain snapshots and rollback | Before risky operations, version checkpoints |
-| `nmem_transplant` | Transfer memories between brains | Cross-project knowledge sharing |
+| `pugbrain_health` | Brain health diagnostics | Periodic checkup, before sharing brain |
+| `pugbrain_stats` | Brain statistics | Quick overview of memory counts |
+| `pugbrain_version` | Brain snapshots and rollback | Before risky operations, version checkpoints |
+| `pugbrain_transplant` | Transfer memories between brains | Cross-project knowledge sharing |
 
 ## Workflow
 
 ### At Session Start
-1. Call `nmem_context` to inject recent memories into your awareness
-2. If user mentions a specific topic, call `nmem_recall` with that topic
+1. Call `pugbrain_context` to inject recent memories into your awareness
+2. If user mentions a specific topic, call `pugbrain_recall` with that topic
 
 ### During Conversation
-3. When a decision is made: `nmem_remember` with type="decision"
-4. When an error occurs: `nmem_remember` with type="error"
-5. When user states a preference: `nmem_remember` with type="preference"
-6. When asked about past events: `nmem_recall` with appropriate depth
+3. When a decision is made: `pugbrain_remember` with type="decision"
+4. When an error occurs: `pugbrain_remember` with type="error"
+5. When user states a preference: `pugbrain_remember` with type="preference"
+6. When asked about past events: `pugbrain_recall` with appropriate depth
 
 ### At Session End
-7. Call `nmem_auto` with action="process" on important conversation segments
+7. Call `pugbrain_auto` with action="process" on important conversation segments
 8. This auto-extracts facts, decisions, errors, and TODOs
 
 ## Examples
 
 ### Remember a decision
 ```
-nmem_remember(
+pugbrain_remember(
   content="Use PostgreSQL for production, SQLite for development",
   type="decision",
   tags=["database", "infrastructure"],
@@ -200,7 +200,7 @@ nmem_remember(
 
 ### Recall with spreading activation
 ```
-nmem_recall(
+pugbrain_recall(
   query="database configuration for production",
   depth=1,
   max_tokens=500
@@ -210,7 +210,7 @@ Returns memories found via graph traversal, not keyword matching. Related memori
 
 ### Trace causal chains
 ```
-nmem_recall(
+pugbrain_recall(
   query="why did the deployment fail last week?",
   depth=2
 )
@@ -219,7 +219,7 @@ Follows CAUSED_BY and LEADS_TO synapses to trace cause-and-effect chains.
 
 ### Auto-capture from conversation
 ```
-nmem_auto(
+pugbrain_auto(
   action="process",
   text="We decided to switch from REST to GraphQL because the frontend needs flexible queries. The migration will take 2 sprints. TODO: update API docs."
 )
@@ -253,6 +253,6 @@ Automatically extracts: 1 decision, 1 fact, 1 TODO.
 - Memories are stored locally in SQLite at `~/.neuralmemory/brains/<brain>.db`
 - No data is sent to external services (unless optional embedding provider is configured)
 - Brain isolation: each brain is independent, no cross-contamination
-- `nmem_remember` returns fiber_id for reference tracking
+- `pugbrain_remember` returns fiber_id for reference tracking
 - Priority scale: 0 (trivial) to 10 (critical), default 5
 - Memory types: fact, decision, preference, todo, insight, context, instruction, error, workflow, reference

@@ -241,7 +241,7 @@ nmem cleanup --expired
 
 ### ~~No Contradiction Detection~~
 
-**Resolved in v1.5.0:** The `nmem_conflicts` tool detects factual contradictions and decision reversals at encode time, with manual resolution via `keep_existing`, `keep_new`, `keep_both` strategies.
+**Resolved in v1.5.0:** The `pugbrain_conflicts` tool detects factual contradictions and decision reversals at encode time, with manual resolution via `keep_existing`, `keep_new`, `keep_both` strategies.
 
 ## Incident Response
 

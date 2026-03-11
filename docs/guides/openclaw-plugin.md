@@ -133,8 +133,8 @@ There should be no errors about `neuralmemory`. Then ask your agent:
 What memory tools do you have?
 ```
 
-The agent should list `nmem_remember`, `nmem_recall`, `nmem_context`, `nmem_todo`,
-`nmem_stats`, and `nmem_health`. If it lists `memory_search` or `memory_get`
+The agent should list `pugbrain_remember`, `pugbrain_recall`, `pugbrain_context`, `pugbrain_todo`,
+`pugbrain_stats`, and `pugbrain_health`. If it lists `memory_search` or `memory_get`
 instead, the slot config is not applied — recheck Step 3.
 
 
@@ -143,7 +143,7 @@ instead, the slot config is not applied — recheck Step 3.
 ```
 OpenClaw Agent
     │
-    ▼ (tool call: nmem_recall)
+    ▼ (tool call: pugbrain_recall)
 OpenClaw Plugin (TypeScript, in-process)
     │
     ▼ JSON-RPC over stdio
@@ -219,14 +219,14 @@ Once configured, the agent has access to these tools:
 
 | Tool | Description |
 |------|-------------|
-| `nmem_remember` | Store a memory (fact, decision, error, preference, etc.) |
-| `nmem_recall` | Query memories via spreading activation |
-| `nmem_context` | Get recent memories for context |
-| `nmem_todo` | Quick TODO with 30-day expiry |
-| `nmem_stats` | Brain statistics |
-| `nmem_health` | Brain health diagnostics |
+| `pugbrain_remember` | Store a memory (fact, decision, error, preference, etc.) |
+| `pugbrain_recall` | Query memories via spreading activation |
+| `pugbrain_context` | Get recent memories for context |
+| `pugbrain_todo` | Quick TODO with 30-day expiry |
+| `pugbrain_stats` | Brain statistics |
+| `pugbrain_health` | Brain health diagnostics |
 
-The plugin also injects a system prompt telling the agent to use `nmem_*` tools
+The plugin also injects a system prompt telling the agent to use `pugbrain_*` tools
 exclusively and **not** use `memory_search` or `memory_get` from the disabled
 `memory-core` plugin.
 
@@ -239,7 +239,7 @@ exclusively and **not** use `memory_search` or `memory_get` from the disabled
 | `ENOENT: python not found` | Wrong Python path | Set `pythonPath` in plugin config to your Python binary |
 | `MCP process exited with code 1` | `neural-memory` not installed | Run `pip install neural-memory` |
 | Agent still uses `memory_search` | Slot not configured | Set `plugins.slots.memory = "neuralmemory"` in `openclaw.json` |
-| Agent uses both `nmem_*` and `memory_*` | `memory-core` still active | Check slot config — only one memory plugin can be active |
+| Agent uses both `pugbrain_*` and `memory_*` | `memory-core` still active | Check slot config — only one memory plugin can be active |
 | `MCP timeout` | Slow machine or large brain | Increase `timeout` in plugin config (default: 30000ms) |
 | Plugin not found | Not installed globally | Run `npm install -g neuralmemory` |
 
@@ -318,7 +318,7 @@ the NeuralMemory Python process over stdio.
 
 ```markdown
 # WRONG — AGENTS.MD rules can't disable registered tools
-Do NOT use memory_search. Use nmem_recall instead.
+Do NOT use memory_search. Use pugbrain_recall instead.
 ```
 
 AGENTS.MD is an instruction to the model, not a tool access control. The model

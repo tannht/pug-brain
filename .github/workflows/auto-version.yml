@@ -2,7 +2,7 @@ name: Auto Version
 
 on:
   push:
-    branches: [main, master, pug-master]
+    branches: [pug-master]
     paths-ignore:
       - '**.md'
       - 'docs/**'

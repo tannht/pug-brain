@@ -123,7 +123,7 @@ export class NeuralMemoryClient {
     _request: ImportRequest,
   ): Promise<ImportResponse> {
     throw new Error(
-      "Import is available via MCP (nmem_import) or CLI (nmem import). REST endpoint not yet implemented.",
+      "Import is available via MCP (pugbrain_import) or CLI (nmem import). REST endpoint not yet implemented.",
     );
   }
 
@@ -132,7 +132,7 @@ export class NeuralMemoryClient {
     _request: EternalRequest,
   ): Promise<EternalResponse> {
     throw new Error(
-      "Eternal context is available via MCP (nmem_eternal). REST endpoint not yet implemented.",
+      "Eternal context is available via MCP (pugbrain_eternal). REST endpoint not yet implemented.",
     );
   }
 
@@ -141,7 +141,7 @@ export class NeuralMemoryClient {
     _request: RecapRequest,
   ): Promise<RecapResponse> {
     throw new Error(
-      "Recap is available via MCP (nmem_recap). REST endpoint not yet implemented.",
+      "Recap is available via MCP (pugbrain_recap). REST endpoint not yet implemented.",
     );
   }
 

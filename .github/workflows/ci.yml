@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, master, pug-master]
+    branches: [pug-master]
   pull_request:
-    branches: [main, master, pug-master]
+    branches: [pug-master]
 
 jobs:
   lint:

@@ -167,6 +167,139 @@ async def get_fiber(
 
 
 @router.get(
+    "/show/{memory_id}",
+    summary="Get full memory detail",
+    description="Get verbatim content, metadata, and synapses for a memory by fiber_id or neuron_id.",
+    responses={404: {"model": ErrorResponse}},
+)
+async def show_memory(
+    memory_id: str,
+    brain: Annotated[Brain, Depends(get_brain)],
+    storage: Annotated[NeuralStorage, Depends(get_storage)],
+) -> dict[str, Any]:
+    """Get full memory detail by ID (fiber_id or neuron_id)."""
+    # Try as fiber_id first
+    typed_mem = await storage.get_typed_memory(memory_id)
+    fiber = await storage.get_fiber(memory_id) if typed_mem else None
+
+    if typed_mem and fiber:
+        anchor = await storage.get_neuron(fiber.anchor_neuron_id)
+        content = anchor.content if anchor else ""
+
+        synapses_out = await storage.get_synapses(source_id=fiber.anchor_neuron_id)
+        synapses_in = await storage.get_synapses(target_id=fiber.anchor_neuron_id)
+        synapse_list = [
+            {
+                "type": s.type.value if hasattr(s.type, "value") else str(s.type),
+                "target_id": s.target_id,
+                "source_id": s.source_id,
+                "weight": s.weight,
+            }
+            for s in [*synapses_out, *synapses_in]
+        ]
+
+        return {
+            "memory_id": memory_id,
+            "content": content,
+            "memory_type": typed_mem.memory_type.value,
+            "priority": typed_mem.priority.value,
+            "tags": list(typed_mem.tags) if typed_mem.tags else [],
+            "created_at": fiber.created_at.isoformat() if fiber.created_at else None,
+            "anchor_neuron_id": fiber.anchor_neuron_id,
+            "neuron_count": fiber.neuron_count,
+            "summary": fiber.summary,
+            "metadata": fiber.metadata,
+            "synapses": synapse_list,
+            "trust_score": typed_mem.trust_score,
+            "expires_at": typed_mem.expires_at.isoformat() if typed_mem.expires_at else None,
+        }
+
+    # Try as neuron_id
+    neuron = await storage.get_neuron(memory_id)
+    if neuron:
+        synapses_out = await storage.get_synapses(source_id=memory_id)
+        synapses_in = await storage.get_synapses(target_id=memory_id)
+        synapse_list = [
+            {
+                "type": s.type.value if hasattr(s.type, "value") else str(s.type),
+                "target_id": s.target_id,
+                "source_id": s.source_id,
+                "weight": s.weight,
+            }
+            for s in [*synapses_out, *synapses_in]
+        ]
+        return {
+            "memory_id": memory_id,
+            "content": neuron.content,
+            "neuron_type": neuron.type.value if hasattr(neuron.type, "value") else str(neuron.type),
+            "created_at": neuron.created_at.isoformat() if neuron.created_at else None,
+            "metadata": neuron.metadata,
+            "synapses": synapse_list,
+        }
+
+    raise HTTPException(status_code=404, detail=f"Memory not found: {memory_id}")
+
+
+@router.get(
+    "/sources",
+    summary="List sources",
+    description="List registered sources for the brain.",
+)
+async def list_sources(
+    brain: Annotated[Brain, Depends(get_brain)],
+    storage: Annotated[NeuralStorage, Depends(get_storage)],
+    source_type: str | None = None,
+    status: str | None = None,
+    limit: int = Query(default=50, ge=1, le=1000),
+) -> dict[str, Any]:
+    """List sources with optional filters."""
+    sources = await storage.list_sources(source_type=source_type, status=status, limit=limit)
+    return {
+        "sources": [
+            {
+                "source_id": s.id,
+                "name": s.name,
+                "source_type": s.source_type.value,
+                "version": s.version,
+                "status": s.status.value,
+                "created_at": s.created_at.isoformat(),
+            }
+            for s in sources
+        ],
+        "count": len(sources),
+    }
+
+
+@router.get(
+    "/sources/{source_id}",
+    summary="Get source detail",
+    responses={404: {"model": ErrorResponse}},
+)
+async def get_source(
+    source_id: str,
+    brain: Annotated[Brain, Depends(get_brain)],
+    storage: Annotated[NeuralStorage, Depends(get_storage)],
+) -> dict[str, Any]:
+    """Get detailed source info including linked neuron count."""
+    source = await storage.get_source(source_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail=f"Source not found: {source_id}")
+    neuron_count = await storage.count_neurons_for_source(source_id)
+    return {
+        "source_id": source.id,
+        "name": source.name,
+        "source_type": source.source_type.value,
+        "version": source.version,
+        "status": source.status.value,
+        "file_hash": source.file_hash,
+        "metadata": source.metadata,
+        "linked_neuron_count": neuron_count,
+        "created_at": source.created_at.isoformat(),
+        "updated_at": source.updated_at.isoformat(),
+    }
+
+
+@router.get(
     "/neurons",
     summary="List neurons",
     description="List neurons in the brain with optional filters.",

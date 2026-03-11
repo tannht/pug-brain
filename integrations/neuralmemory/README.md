@@ -58,14 +58,14 @@ With `neural-memory>=2.28.0`, this includes **39 tools**:
 
 | Category | Tools |
 |----------|-------|
-| **Core** | `nmem_remember`, `nmem_remember_batch`, `nmem_recall`, `nmem_context`, `nmem_todo`, `nmem_stats` |
-| **Management** | `nmem_edit`, `nmem_forget`, `nmem_pin`, `nmem_health`, `nmem_evolution`, `nmem_alerts` |
-| **Recall** | `nmem_suggest`, `nmem_narrative`, `nmem_explain`, `nmem_recap` |
-| **Workflow** | `nmem_session`, `nmem_eternal`, `nmem_auto`, `nmem_habits`, `nmem_review` |
-| **Cognitive** | `nmem_hypothesize`, `nmem_evidence`, `nmem_predict`, `nmem_verify`, `nmem_cognitive`, `nmem_gaps`, `nmem_schema` |
-| **Training** | `nmem_train`, `nmem_train_db`, `nmem_index`, `nmem_import` |
-| **Sync** | `nmem_sync`, `nmem_sync_status`, `nmem_sync_config`, `nmem_telegram_backup` |
-| **Infra** | `nmem_version`, `nmem_transplant`, `nmem_conflicts` |
+| **Core** | `pugbrain_remember`, `pugbrain_remember_batch`, `pugbrain_recall`, `pugbrain_context`, `pugbrain_todo`, `pugbrain_stats` |
+| **Management** | `pugbrain_edit`, `pugbrain_forget`, `pugbrain_pin`, `pugbrain_health`, `pugbrain_evolution`, `pugbrain_alerts` |
+| **Recall** | `pugbrain_suggest`, `pugbrain_narrative`, `pugbrain_explain`, `pugbrain_recap` |
+| **Workflow** | `pugbrain_session`, `pugbrain_eternal`, `pugbrain_auto`, `pugbrain_habits`, `pugbrain_review` |
+| **Cognitive** | `pugbrain_hypothesize`, `pugbrain_evidence`, `pugbrain_predict`, `pugbrain_verify`, `pugbrain_cognitive`, `pugbrain_gaps`, `pugbrain_schema` |
+| **Training** | `pugbrain_train`, `pugbrain_train_db`, `pugbrain_index`, `pugbrain_import` |
+| **Sync** | `pugbrain_sync`, `pugbrain_sync_status`, `pugbrain_sync_config`, `pugbrain_telegram_backup` |
+| **Infra** | `pugbrain_version`, `pugbrain_transplant`, `pugbrain_conflicts` |
 
 If the MCP server is unreachable at startup, the plugin falls back to 5 core tools (remember, recall, context, stats, health) that auto-reconnect on first use.
 

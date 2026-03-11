@@ -200,7 +200,7 @@ export function createFallbackTools(
 
   return [
     {
-      name: "nmem_remember",
+      name: "pugbrain_remember",
       description:
         "Store a memory in NeuralMemory. Use this to remember facts, decisions, " +
         "insights, todos, errors, and other information that should persist across sessions.",
@@ -226,10 +226,10 @@ export function createFallbackTools(
         required: ["content"],
         additionalProperties: false,
       },
-      execute: (_id, args) => call("nmem_remember", args),
+      execute: (_id, args) => call("pugbrain_remember", args),
     },
     {
-      name: "nmem_recall",
+      name: "pugbrain_recall",
       description:
         "Query memories from NeuralMemory. Use this to recall past information, " +
         "decisions, patterns, or context relevant to the current task.",
@@ -243,10 +243,10 @@ export function createFallbackTools(
         required: ["query"],
         additionalProperties: false,
       },
-      execute: (_id, args) => call("nmem_recall", args),
+      execute: (_id, args) => call("pugbrain_recall", args),
     },
     {
-      name: "nmem_context",
+      name: "pugbrain_context",
       description: "Get recent context from NeuralMemory.",
       parameters: {
         type: "object",
@@ -255,19 +255,19 @@ export function createFallbackTools(
         },
         additionalProperties: false,
       },
-      execute: (_id, args) => call("nmem_context", args),
+      execute: (_id, args) => call("pugbrain_context", args),
     },
     {
-      name: "nmem_stats",
+      name: "pugbrain_stats",
       description: "Get brain statistics including memory counts and freshness.",
       parameters: { type: "object", properties: {}, additionalProperties: false },
-      execute: (_id, args) => call("nmem_stats", args),
+      execute: (_id, args) => call("pugbrain_stats", args),
     },
     {
-      name: "nmem_health",
+      name: "pugbrain_health",
       description: "Get brain health diagnostics including grade and recommendations.",
       parameters: { type: "object", properties: {}, additionalProperties: false },
-      execute: (_id, args) => call("nmem_health", args),
+      execute: (_id, args) => call("pugbrain_health", args),
     },
   ];
 }

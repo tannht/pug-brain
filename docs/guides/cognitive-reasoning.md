@@ -5,9 +5,9 @@ Neural Memory's Cognitive Reasoning Layer lets agents form hypotheses, gather ev
 ## Quick Start
 
 ```
-nmem_hypothesize → nmem_evidence → nmem_predict → nmem_verify
+pugbrain_hypothesize → pugbrain_evidence → pugbrain_predict → pugbrain_verify
        ↑                                              |
-       └──────── nmem_schema (evolve) ←───────────────┘
+       └──────── pugbrain_schema (evolve) ←───────────────┘
 ```
 
 The core loop:
@@ -20,15 +20,15 @@ The core loop:
 
 Supporting tools:
 
-- **nmem_cognitive** — Dashboard: hot index + calibration score
-- **nmem_gaps** — Track what you *don't* know
-- **nmem_explain** — Trace connections between concepts
+- **pugbrain_cognitive** — Dashboard: hot index + calibration score
+- **pugbrain_gaps** — Track what you *don't* know
+- **pugbrain_explain** — Trace connections between concepts
 
 ---
 
 ## Tool Reference
 
-### nmem_hypothesize
+### pugbrain_hypothesize
 
 Create, list, or inspect hypotheses.
 
@@ -42,7 +42,7 @@ Create, list, or inspect hypotheses.
 
 **Example:**
 ```
-nmem_hypothesize(
+pugbrain_hypothesize(
   action="create",
   content="Redis session store is causing the 500ms latency spike on /api/users",
   confidence=0.6,
@@ -51,7 +51,7 @@ nmem_hypothesize(
 # Returns: { hypothesis_id: "abc123", fiber_id: "...", neurons_created: 5 }
 ```
 
-### nmem_evidence
+### pugbrain_evidence
 
 Add evidence for or against a hypothesis. Each piece of evidence is a real memory neuron linked via synapse.
 
@@ -67,7 +67,7 @@ Add evidence for or against a hypothesis. Each piece of evidence is a real memor
 
 **Example:**
 ```
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="abc123",
   content="Redis SLOWLOG shows 450ms KEYS command during spike window",
   type="for",
@@ -76,7 +76,7 @@ nmem_evidence(
 # Returns: { confidence_before: 0.6, confidence_after: 0.69, confidence_delta: +0.09, ... }
 ```
 
-### nmem_predict
+### pugbrain_predict
 
 Make a falsifiable prediction, optionally linked to a hypothesis.
 
@@ -88,7 +88,7 @@ Make a falsifiable prediction, optionally linked to a hypothesis.
 
 **Example:**
 ```
-nmem_predict(
+pugbrain_predict(
   action="create",
   content="Replacing KEYS with SCAN will reduce p99 latency below 100ms",
   confidence=0.8,
@@ -97,7 +97,7 @@ nmem_predict(
 )
 ```
 
-### nmem_verify
+### pugbrain_verify
 
 Verify a prediction outcome. Automatically propagates to linked hypothesis.
 
@@ -113,7 +113,7 @@ Verify a prediction outcome. Automatically propagates to linked hypothesis.
 
 **Example:**
 ```
-nmem_verify(
+pugbrain_verify(
   prediction_id="pred456",
   outcome="correct",
   content="After SCAN migration, p99 dropped to 45ms. Confirmed via Grafana dashboard."
@@ -121,7 +121,7 @@ nmem_verify(
 # Returns: { calibration_score: 0.75, propagated_to_hypothesis: { id: "abc123", new_confidence: 0.78 } }
 ```
 
-### nmem_schema
+### pugbrain_schema
 
 Evolve hypotheses when your understanding changes.
 
@@ -133,7 +133,7 @@ Evolve hypotheses when your understanding changes.
 
 **Example:**
 ```
-nmem_schema(
+pugbrain_schema(
   action="evolve",
   hypothesis_id="abc123",
   content="Latency spike is caused by KEYS + connection pool exhaustion together, not KEYS alone",
@@ -142,7 +142,7 @@ nmem_schema(
 # Returns: { new_hypothesis_id: "def789", schema_version: 2, old_status: "superseded" }
 ```
 
-### nmem_cognitive
+### pugbrain_cognitive
 
 Dashboard view of your cognitive state.
 
@@ -151,7 +151,7 @@ Dashboard view of your cognitive state.
 | `summary` | Hot index (top 20 items by urgency) + calibration + top gaps |
 | `refresh` | Recompute hot index from scratch (O(n), use sparingly) |
 
-### nmem_gaps
+### pugbrain_gaps
 
 Track knowledge gaps — things you *don't* know.
 
@@ -266,7 +266,7 @@ Requiring both prevents false positives from a single high-weight evidence.
 
 ## Hot Index Scoring
 
-The hot index ranks items by urgency. `nmem_cognitive(action="summary")` returns the top 20.
+The hot index ranks items by urgency. `pugbrain_cognitive(action="summary")` returns the top 20.
 
 **Hypothesis score:**
 ```
@@ -294,7 +294,7 @@ else:          score = 10.0 / (1.0 + days_until_deadline / 3.0)
 
 ```python
 # 1. Form hypothesis
-nmem_hypothesize(
+pugbrain_hypothesize(
   action="create",
   content="The /api/orders endpoint is slow because of N+1 queries in the OrderSerializer",
   confidence=0.6,
@@ -303,7 +303,7 @@ nmem_hypothesize(
 # → hypothesis_id: "h1"
 
 # 2. Add evidence supporting it
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="h1",
   content="Django Debug Toolbar shows 47 SQL queries for a single /api/orders?limit=10 request",
   type="for",
@@ -312,7 +312,7 @@ nmem_evidence(
 # → confidence: 0.6 → 0.69
 
 # 3. Add evidence against it
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="h1",
   content="Adding select_related('customer') reduced queries to 12 but response time only improved by 15%",
   type="against",
@@ -321,7 +321,7 @@ nmem_evidence(
 # → confidence: 0.69 → 0.60
 
 # 4. Make a testable prediction
-nmem_predict(
+pugbrain_predict(
   action="create",
   content="If I add prefetch_related for order_items and apply pagination, response time will drop below 200ms",
   confidence=0.7,
@@ -331,7 +331,7 @@ nmem_predict(
 # → prediction_id: "p1"
 
 # 5. Implement the fix, then verify
-nmem_verify(
+pugbrain_verify(
   prediction_id="p1",
   outcome="wrong",
   content="prefetch_related helped (350ms→180ms for small pages) but large pages still 800ms — the real bottleneck is JSON serialization of nested objects, not DB queries"
@@ -339,7 +339,7 @@ nmem_verify(
 # → prediction refuted, hypothesis h1 gets evidence_against, confidence drops
 
 # 6. Evolve the hypothesis with new understanding
-nmem_schema(
+pugbrain_schema(
   action="evolve",
   hypothesis_id="h1",
   content="The /api/orders slowness is primarily caused by deep JSON serialization of nested OrderItem objects, with N+1 queries as a secondary factor",
@@ -348,7 +348,7 @@ nmem_schema(
 # → h1 superseded, new hypothesis h2 (version 2) created
 
 # 7. Track what we still don't know
-nmem_gaps(
+pugbrain_gaps(
   action="detect",
   topic="Best serialization strategy for deeply nested order data",
   source="low_confidence_hypothesis"
@@ -359,7 +359,7 @@ nmem_gaps(
 
 ```python
 # 1. Hypothesis about tech choice
-nmem_hypothesize(
+pugbrain_hypothesize(
   action="create",
   content="Moving from REST to GraphQL will reduce mobile app data fetching by 60% because clients can request exactly the fields they need",
   confidence=0.5,
@@ -368,30 +368,30 @@ nmem_hypothesize(
 # → hypothesis_id: "h_gql"
 
 # 2. Research evidence
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="h_gql",
   content="Analyzed 50 mobile API calls — 38 of them fetch >5 unused fields, averaging 40% payload waste",
   type="for", weight=0.7
 )
 
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="h_gql",
   content="GraphQL introduces N+1 at resolver level — DataLoader needed, adds complexity",
   type="against", weight=0.5
 )
 
-nmem_evidence(
+pugbrain_evidence(
   hypothesis_id="h_gql",
   content="Team has zero GraphQL experience — estimated 3-week learning curve from senior dev",
   type="against", weight=0.6
 )
 
 # 3. Check cognitive dashboard
-nmem_cognitive(action="summary")
+pugbrain_cognitive(action="summary")
 # → Shows h_gql with mid-confidence (still uncertain), 3 evidence pieces
 
 # 4. Make prediction before committing
-nmem_predict(
+pugbrain_predict(
   action="create",
   content="A proof-of-concept GraphQL endpoint for /orders will show >=40% payload reduction in 2 days of work",
   confidence=0.7,
@@ -400,7 +400,7 @@ nmem_predict(
 )
 
 # 5. After PoC...
-nmem_verify(
+pugbrain_verify(
   prediction_id="...",
   outcome="correct",
   content="PoC showed 52% payload reduction. But took 4 days not 2 (DataLoader complexity)."
@@ -408,7 +408,7 @@ nmem_verify(
 # → h_gql confidence increases, but we note the timeline was off
 
 # 6. Evolve with nuance
-nmem_schema(
+pugbrain_schema(
   action="evolve",
   hypothesis_id="h_gql",
   content="GraphQL reduces payload by ~50% but implementation cost is 2x estimated due to DataLoader complexity — worth it only for high-traffic endpoints",
@@ -420,7 +420,7 @@ nmem_schema(
 
 ```python
 # After multiple predict/verify cycles, check calibration
-nmem_predict(action="list")
+pugbrain_predict(action="list")
 # Returns:
 # {
 #   calibration: {
@@ -434,7 +434,7 @@ nmem_predict(action="list")
 # }
 
 # If calibration is low, register a gap
-nmem_gaps(
+pugbrain_gaps(
   action="detect",
   topic="Improving prediction accuracy for performance estimates",
   source="user_flagged",
@@ -442,8 +442,8 @@ nmem_gaps(
 )
 
 # Review all active cognitive items
-nmem_cognitive(action="refresh")  # Recompute rankings
-nmem_cognitive(action="summary")  # View dashboard
+pugbrain_cognitive(action="refresh")  # Recompute rankings
+pugbrain_cognitive(action="summary")  # View dashboard
 ```
 
 ---
@@ -454,14 +454,14 @@ The cognitive layer creates these synapse types automatically:
 
 | Synapse Type | Direction | Created by |
 |-------------|-----------|------------|
-| `EVIDENCE_FOR` | evidence → hypothesis | `nmem_evidence(type="for")` |
-| `EVIDENCE_AGAINST` | evidence → hypothesis | `nmem_evidence(type="against")` |
-| `PREDICTED` | prediction → hypothesis | `nmem_predict(hypothesis_id=...)` |
-| `VERIFIED_BY` | prediction → observation | `nmem_verify(outcome="correct")` |
-| `FALSIFIED_BY` | prediction → observation | `nmem_verify(outcome="wrong")` |
-| `SUPERSEDES` | new hypothesis → old | `nmem_schema(action="evolve")` |
+| `EVIDENCE_FOR` | evidence → hypothesis | `pugbrain_evidence(type="for")` |
+| `EVIDENCE_AGAINST` | evidence → hypothesis | `pugbrain_evidence(type="against")` |
+| `PREDICTED` | prediction → hypothesis | `pugbrain_predict(hypothesis_id=...)` |
+| `VERIFIED_BY` | prediction → observation | `pugbrain_verify(outcome="correct")` |
+| `FALSIFIED_BY` | prediction → observation | `pugbrain_verify(outcome="wrong")` |
+| `SUPERSEDES` | new hypothesis → old | `pugbrain_schema(action="evolve")` |
 
-These synapses are traversable via `nmem_explain` — you can trace the full reasoning chain from evidence through hypothesis to prediction to verification.
+These synapses are traversable via `pugbrain_explain` — you can trace the full reasoning chain from evidence through hypothesis to prediction to verification.
 
 ---
 
@@ -475,9 +475,9 @@ These synapses are traversable via `nmem_explain` — you can trace the full rea
 
 4. **Set deadlines on predictions.** This creates urgency in the hot index and prevents forgotten predictions.
 
-5. **Evolve, don't delete.** When a hypothesis is partially wrong, use `nmem_schema(evolve)` instead of creating a new one. This preserves the reasoning chain.
+5. **Evolve, don't delete.** When a hypothesis is partially wrong, use `pugbrain_schema(evolve)` instead of creating a new one. This preserves the reasoning chain.
 
-6. **Use `nmem_gaps` proactively.** When you notice uncertainty, register it. Gaps surface in `nmem_cognitive(summary)` so they don't get forgotten.
+6. **Use `pugbrain_gaps` proactively.** When you notice uncertainty, register it. Gaps surface in `pugbrain_cognitive(summary)` so they don't get forgotten.
 
 7. **Check calibration regularly.** If your prediction accuracy is below 50%, you may be overconfident — lower your default confidence.
 

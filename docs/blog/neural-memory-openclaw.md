@@ -117,10 +117,10 @@ OpenClaw MEMORY.md giữ mọi thứ mãi mãi. Neural Memory tự quên cái t�
 
 ```python
 # Tuần 1
-nmem_remember("Chúng ta dùng PostgreSQL cho database", type="decision")
+pugbrain_remember("Chúng ta dùng PostgreSQL cho database", type="decision")
 
 # Tuần 4
-nmem_remember("Chuyển sang MySQL cho database", type="decision")
+pugbrain_remember("Chuyển sang MySQL cho database", type="decision")
 
 # Neural Memory tự động:
 # ✓ Detect: "PostgreSQL" vs "MySQL" — FACTUAL_CONTRADICTION
@@ -293,9 +293,9 @@ mcp:
 # Neural Memory Skill
 
 Persistent memory system using neural graph + spreading activation.
-16 MCP tools: nmem_remember, nmem_recall, nmem_context, nmem_todo,
-nmem_auto, nmem_temporal, nmem_habits, nmem_stats, nmem_health,
-nmem_version, nmem_transplant, nmem_consolidate, nmem_update, ...
+16 MCP tools: pugbrain_remember, pugbrain_recall, pugbrain_context, pugbrain_todo,
+pugbrain_auto, pugbrain_temporal, pugbrain_habits, pugbrain_stats, pugbrain_health,
+pugbrain_version, pugbrain_transplant, pugbrain_consolidate, pugbrain_update, ...
 ```
 
 ### Claude Code / Cursor
@@ -350,26 +350,26 @@ Dưới đây là timeline thực tế khi dùng OpenClaw agent quản lý dự 
 ### Tuần 1-2: Project Setup
 
 ```
-Agent: nmem_recap()
+Agent: pugbrain_recap()
 → "Không có context trước đó. Session mới."
 
-Agent: nmem_remember("Tech stack: Next.js 14 + Prisma + PostgreSQL",
+Agent: pugbrain_remember("Tech stack: Next.js 14 + Prisma + PostgreSQL",
                       type="decision", priority=8)
-Agent: nmem_remember("Alice là tech lead backend", type="fact", priority=6)
-Agent: nmem_index(action="scan", path="./src")
+Agent: pugbrain_remember("Alice là tech lead backend", type="fact", priority=6)
+Agent: pugbrain_index(action="scan", path="./src")
 → 247 neurons created (functions, classes, imports)
 ```
 
 ### Tuần 3-4: Development
 
 ```
-Agent: nmem_recap()
+Agent: pugbrain_recap()
 → "Project: Next.js 14 + Prisma + PostgreSQL. Alice leads backend.
    247 code symbols indexed."
 
 User: "Auth module bị crash"
-Agent: nmem_remember("Auth crash: null token in JWT verify", type="error", priority=7)
-Agent: nmem_remember("Fix: add null check before jwt.verify()", type="error", priority=7)
+Agent: pugbrain_remember("Auth crash: null token in JWT verify", type="error", priority=7)
+Agent: pugbrain_remember("Fix: add null check before jwt.verify()", type="error", priority=7)
 ```
 
 **OpenClaw compaction xảy ra ở đây.** Không sao — Neural Memory giữ tất cả.
@@ -378,7 +378,7 @@ Agent: nmem_remember("Fix: add null check before jwt.verify()", type="error", pr
 
 ```
 User: "Chuyển từ REST sang GraphQL"
-Agent: nmem_remember("Switch REST → GraphQL for API", type="decision", priority=8)
+Agent: pugbrain_remember("Switch REST → GraphQL for API", type="decision", priority=8)
 
 → Neural Memory auto-detect: không mâu thuẫn (REST chưa được ghi là decision)
 → Tạo synapse: GraphQL ←RELATED_TO→ API ←RELATED_TO→ Next.js
@@ -388,7 +388,7 @@ Agent: nmem_remember("Switch REST → GraphQL for API", type="decision", priorit
 
 ```
 User: "Chuyển database sang MySQL"
-Agent: nmem_remember("Switch to MySQL", type="decision", priority=8)
+Agent: pugbrain_remember("Switch to MySQL", type="decision", priority=8)
 
 → Neural Memory auto-detect:
   ⚠ FACTUAL_CONTRADICTION: "PostgreSQL" (tuần 1) vs "MySQL" (tuần 8)
@@ -400,7 +400,7 @@ Agent: nmem_remember("Switch to MySQL", type="decision", priority=8)
 ### Tuần 12: Pattern emergence
 
 ```
-Agent: nmem_recall("ai thường handle database issues?")
+Agent: pugbrain_recall("ai thường handle database issues?")
 
 → Spreading activation:
   Alice → auth fix (tuần 3) → database scaling (tuần 9) → migration (tuần 11)
