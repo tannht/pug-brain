@@ -7,7 +7,7 @@ PugBrain is a hybrid neural-vector memory system for long-term agent continuity.
 **45 MCP tools** · **14 memory types** · **24 synapse types** · **Schema v22** · **3,700+ tests** · **Cognitive reasoning layer**
 
 ```bash
-pip install neural-memory
+pip install pug-brain
 ```
 
 ## Setup
@@ -15,14 +15,14 @@ pip install neural-memory
 ### Claude Code (Plugin)
 
 ```bash
-/plugin marketplace add nhadaututtheky/neural-memory
-/plugin install neural-memory@neural-memory-marketplace
+/plugin marketplace add tannht/pug-brain
+/plugin install pug-brain@pug-brain-marketplace
 ```
 
 ### Cursor / Windsurf / Other MCP Clients
 
 ```bash
-pip install neural-memory
+pip install pug-brain
 ```
 
 Add to your editor's MCP config:
@@ -42,7 +42,7 @@ Auto-initializes on first use — no `pugbrain init` needed.
 ### OpenClaw
 
 ```bash
-pip install neural-memory && npm install -g pugbrain
+pip install pug-brain && npm install -g pugbrain
 ```
 
 ```json
@@ -54,16 +54,16 @@ See the [full setup guide](docs/guides/openclaw-plugin.md).
 ## Installation Options
 
 ```bash
-pip install neural-memory[server]           # FastAPI server + dashboard
-pip install neural-memory[extract]          # PDF/DOCX/PPTX/HTML/XLSX/CSV extraction
-pip install neural-memory[embeddings]       # Local embedding (cross-language recall)
-pip install neural-memory[embeddings-openai] # OpenAI embeddings
-pip install neural-memory[embeddings-gemini] # Google Gemini embeddings
-pip install neural-memory[nlp-vi]           # Vietnamese NLP
-pip install neural-memory[neo4j]            # Neo4j backend
-pip install neural-memory[falkordb]         # FalkorDB backend
-pip install neural-memory[encryption]       # Encrypted storage
-pip install neural-memory[all]              # All features
+pip install pug-brain[server]           # FastAPI server + dashboard
+pip install pug-brain[extract]          # PDF/DOCX/PPTX/HTML/XLSX/CSV extraction
+pip install pug-brain[embeddings]       # Local embedding (cross-language recall)
+pip install pug-brain[embeddings-openai] # OpenAI embeddings
+pip install pug-brain[embeddings-gemini] # Google Gemini embeddings
+pip install pug-brain[nlp-vi]           # Vietnamese NLP
+pip install pug-brain[neo4j]            # Neo4j backend
+pip install pug-brain[falkordb]         # FalkorDB backend
+pip install pug-brain[encryption]       # Encrypted storage
+pip install pug-brain[all]              # All features
 ```
 
 ### Cross-Language Recall (Optional)
@@ -280,7 +280,7 @@ Reports include **`top_penalties`** with exact fix actions. See the [Brain Healt
 ## Server API
 
 ```bash
-pip install neural-memory[server]
+pip install pug-brain[server]
 pugbrain serve                    # localhost:8000
 ```
 
@@ -315,8 +315,8 @@ Memory tree view, interactive graph explorer, CodeLens memory counts, encode fro
 ## Development
 
 ```bash
-git clone https://github.com/nhadaututtheky/neural-memory
-cd neural-memory
+git clone https://github.com/tannht/pug-brain
+cd pug-brain
 pip install -e ".[dev]"
 pytest tests/ -v              # 3,700+ tests
 ruff check src/ tests/        # Lint
