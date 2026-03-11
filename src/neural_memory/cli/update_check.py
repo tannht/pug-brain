@@ -25,7 +25,11 @@ REQUEST_TIMEOUT_SECONDS = 3
 
 def _get_cache_path() -> Path:
     """Get path to update check cache file."""
-    data_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR") or str(Path.home() / ".pugbrain")
+    data_dir = (
+        os.environ.get("PUGBRAIN_DIR")
+        or os.environ.get("NEURALMEMORY_DIR")
+        or str(Path.home() / ".pugbrain")
+    )
     return Path(data_dir) / ".update_check"
 
 

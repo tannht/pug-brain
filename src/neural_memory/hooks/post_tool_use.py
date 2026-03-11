@@ -43,7 +43,9 @@ def _read_stdin() -> dict[str, Any]:
 
 def _get_buffer_path() -> Path:
     """Get the JSONL buffer file path."""
-    data_dir = Path(os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")) or (Path.home() / ".pugbrain")
+    data_dir = Path(
+        os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")
+    ) or (Path.home() / ".pugbrain")
     return data_dir / "tool_events.jsonl"
 
 
@@ -53,7 +55,9 @@ def _is_enabled() -> bool:
     Reads only the [tool_memory] section from config.toml.
     Falls back to False if config is missing or malformed.
     """
-    data_dir = Path(os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")) or (Path.home() / ".pugbrain")
+    data_dir = Path(
+        os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")
+    ) or (Path.home() / ".pugbrain")
     config_path = data_dir / "config.toml"
     if not config_path.exists():
         return False
@@ -70,7 +74,9 @@ def _is_enabled() -> bool:
 
 def _get_blacklist() -> list[str]:
     """Read blacklist from config.toml."""
-    data_dir = Path(os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")) or (Path.home() / ".pugbrain")
+    data_dir = Path(
+        os.environ.get("PUGBRAIN_DIR", "") or os.environ.get("NEURALMEMORY_DIR", "")
+    ) or (Path.home() / ".pugbrain")
     config_path = data_dir / "config.toml"
     if not config_path.exists():
         return []

@@ -43,7 +43,9 @@ def get_bot_token() -> str | None:
 
     Priority: PUGBRAIN_TELEGRAM_BOT_TOKEN > NMEM_TELEGRAM_BOT_TOKEN (legacy)
     """
-    return os.environ.get("PUGBRAIN_TELEGRAM_BOT_TOKEN") or os.environ.get("NMEM_TELEGRAM_BOT_TOKEN")
+    return os.environ.get("PUGBRAIN_TELEGRAM_BOT_TOKEN") or os.environ.get(
+        "NMEM_TELEGRAM_BOT_TOKEN"
+    )
 
 
 class TelegramClient:
