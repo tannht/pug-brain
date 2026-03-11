@@ -216,6 +216,7 @@ class MCPServer(
             "pugbrain_schema": self._schema,
             "pugbrain_show": self._show,
             "pugbrain_source": self._source,
+            "pugbrain_provenance": self._provenance,
             "pugbrain_edit": self._edit,
             "pugbrain_forget": self._forget,
             "pugbrain_consolidate": self._consolidate,
