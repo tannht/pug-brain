@@ -1,9 +1,8 @@
 name: Auto Version
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
+  pull_request:
+    types: [closed]
     branches: [pug-master]
 
 permissions:
@@ -11,20 +10,34 @@ permissions:
   id-token: write
 
 jobs:
+  # Gate: wait for CI to pass on the merge commit
+  ci-check:
+    name: Verify CI Status
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.pull_request.merged == true &&
+      !startsWith(github.event.pull_request.title, 'chore: release')
+    steps:
+      - name: Wait for CI to complete on merge commit
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          running-workflow-name: "Verify CI Status"
+          check-name: "Test"
+          wait-interval: 15
+          allowed-conclusions: success
+
   auto-version:
     name: Auto Version Bump & Release
     runs-on: ubuntu-latest
-    # Only run if CI passed AND it was a push event (not PR)
-    if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      !startsWith(github.event.workflow_run.head_commit.message, 'chore: release')
+    needs: ci-check
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: pug-master
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
@@ -90,7 +103,7 @@ jobs:
           print(f"Bump type: {bump_type}")
           PY
         env:
-          COMMIT_MSG: ${{ github.event.workflow_run.head_commit.message }}
+          COMMIT_MSG: ${{ github.event.pull_request.title }}
 
       - name: Calculate new version
         id: new_version
@@ -157,7 +170,7 @@ jobs:
           NEW_VERSION="${{ steps.new_version.outputs.version }}"
           TAG="${{ steps.new_version.outputs.tag }}"
           DATE=$(date +%Y-%m-%d)
-          COMMIT_MSG="${{ github.event.workflow_run.head_commit.message }}"
+          COMMIT_MSG="${{ github.event.pull_request.title }}"
 
           # Create changelog entry
           TEMP_FILE=$(mktemp)
@@ -196,8 +209,10 @@ jobs:
           body: |
             Automated Release for ${{ steps.new_version.outputs.tag }}
 
+            PR: #${{ github.event.pull_request.number }} — ${{ github.event.pull_request.title }}
+
             Changes in this version:
-            ${{ github.event.workflow_run.head_commit.message }}
+            ${{ github.event.pull_request.body }}
           draft: false
           prerelease: false
           generate_release_notes: true
