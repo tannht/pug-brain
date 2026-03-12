@@ -1,6 +1,6 @@
 """Non-blocking update checker for the CLI.
 
-Checks PyPI for newer versions of neural-memory, cached for 24 hours.
+Checks PyPI for newer versions of pug-brain, cached for 24 hours.
 Runs in background thread to avoid slowing down CLI commands.
 
 Cache location: ~/.pugbrain/.update_check
@@ -18,7 +18,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-PYPI_URL = "https://pypi.org/pypi/neural-memory/json"
+PYPI_URL = "https://pypi.org/pypi/pug-brain/json"
 CHECK_INTERVAL_SECONDS = 24 * 60 * 60  # 24 hours
 REQUEST_TIMEOUT_SECONDS = 3
 
@@ -83,7 +83,7 @@ def _fetch_latest_version() -> str | None:
 
         req = Request(
             PYPI_URL,
-            headers={"Accept": "application/json", "User-Agent": "neural-memory-cli"},
+            headers={"Accept": "application/json", "User-Agent": "pug-brain-cli"},
         )
         with urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
             if resp.status != 200:
@@ -135,11 +135,11 @@ def _check_and_notify() -> None:
 
 
 def _is_editable_install() -> bool:
-    """Detect if neural-memory is installed in editable/development mode."""
+    """Detect if pug-brain is installed in editable/development mode."""
     try:
         from importlib.metadata import distribution
 
-        dist = distribution("neural-memory")
+        dist = distribution("pug-brain")
         direct_url = dist.read_text("direct_url.json")
         if direct_url and '"editable"' in direct_url:
             return True
@@ -172,8 +172,8 @@ def _print_update_notice(current: str, latest: str) -> None:
         )
     else:
         notice = (
-            f"\n  Update available: neural-memory {current} → {latest}\n"
-            f"  Run: pip install -U neural-memory\n"
+            f"\n  Update available: pug-brain {current} → {latest}\n"
+            f"  Run: pip install -U pug-brain\n"
         )
     # Use stderr so it doesn't break piped output (e.g. pug recall ... | jq)
     print(notice, file=sys.stderr, flush=True)
