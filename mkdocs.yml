@@ -81,7 +81,8 @@ nav:
   - Getting Started:
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quickstart.md
-    - CLI Reference: getting-started/cli.md
+    - CLI Guide: getting-started/cli.md
+    - CLI Reference: getting-started/cli-reference.md
   - Concepts:
     - How It Works: concepts/how-it-works.md
     - Neurons & Synapses: concepts/neurons-synapses.md
@@ -91,12 +92,15 @@ nav:
     - Integration: guides/integration.md
     - MCP Server: guides/mcp-server.md
     - Embedding Setup: guides/embedding-setup.md
+    - Cloud Sync: guides/cloud-sync.md
     - Brain Sharing: guides/brain-sharing.md
     - Multi-Brain Setup: guides/multi-brain-setup.md
     - Brain Health Guide: guides/brain-health.md
     - OpenClaw Plugin: guides/openclaw-plugin.md
     - Safety & Security: guides/safety.md
+    - Companion Setup: guides/companion-setup.md
   - API Reference:
+    - MCP Tools: api/mcp-tools.md
     - Python API: api/python.md
     - Server API: api/server.md
   - Architecture:
@@ -104,6 +108,7 @@ nav:
     - Scalability: architecture/scalability.md
   - Benchmarks: benchmarks.md
   - FAQ: FAQ.md
+  - Lessons Learned: lessons-learned.md
   - Contributing: contributing.md
   - Changelog: changelog.md
   - Blog:

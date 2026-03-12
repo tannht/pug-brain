@@ -4,7 +4,32 @@
 
 PugBrain is a hybrid neural-vector memory system for long-term agent continuity. It combines graph relationships with vector embeddings for reflexive recall.
 
-**45 MCP tools** · **14 memory types** · **24 synapse types** · **Schema v22** · **3,700+ tests** · **Cognitive reasoning layer**
+PugBrain stores experiences as interconnected neurons and recalls them through spreading activation, mimicking how the human brain works. Instead of searching a database, memories surface through associative recall — activating related concepts until the relevant memory emerges.
+
+**45 MCP tools** · **14 memory types** · **24 synapse types** · **Schema v26** · **3778+ tests** · **Cognitive reasoning layer**
+
+## Why Not RAG / Vector Search?
+
+| Aspect | RAG / Vector Search | PugBrain |
+|--------|---------------------|----------|
+| **Model** | Search engine | Human brain |
+| **LLM/Embedding** | Required (embedding API calls) | **Optional** — core recall is pure algorithmic graph traversal |
+| **Query** | "Find similar text" | "Recall through association" |
+| **Structure** | Flat chunks + embeddings | Neural graph + synapses |
+| **Relationships** | None (just similarity) | Explicit: `CAUSED_BY`, `LEADS_TO`, `RESOLVED_BY`, etc. |
+| **Temporal** | Timestamp filter | Time as first-class neurons |
+| **Multi-hop** | Multiple queries needed | Natural graph traversal |
+| **Lifecycle** | Static | Decay, reinforcement, consolidation |
+| **API Cost** | ~$0.02/1K queries | **$0.00** — fully offline (optional embeddings available) |
+
+**Example: "Why did Tuesday's outage happen?"**
+
+- **RAG**: Returns "JWT caused outage" (missing *why* we used JWT)
+- **PugBrain**: Traces `outage ← CAUSED_BY ← JWT ← SUGGESTED_BY ← Alice` → full causal chain
+
+---
+
+## Installation
 
 ```bash
 pip install pug-brain
@@ -153,7 +178,9 @@ asyncio.run(main())
 
 ## MCP Tools (45)
 
-### Core Memory (8)
+Once configured, these 45 tools are available to your AI assistant:
+
+**Core Memory:**
 
 | Tool | Description |
 |------|-------------|
@@ -284,13 +311,172 @@ pip install pug-brain[server]
 pugbrain serve                    # localhost:8000
 ```
 
+Returns the path with evidence: `Redis → USED_BY → session-store → CAUSED_BY → auth outage`. Use this to debug recall, verify brain connections, or discover unexpected relationships between concepts.
+
+### Cognitive Reasoning
+
+Hypothesize, predict, verify, and evolve beliefs — the brain reasons about what it knows:
+
+```bash
+# Create a hypothesis with initial confidence
+pugbrain_hypothesize(action="create", content="Redis is causing the latency spike", confidence=0.6)
+
+# Submit evidence
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="for", content="Redis latency at 200ms")
+pugbrain_evidence(hypothesis_id="h-1", evidence_type="against", content="Network latency was 500ms")
+
+# Make a falsifiable prediction
+pugbrain_predict(action="create", content="Switching to Valkey will fix latency",
+             hypothesis_id="h-1", deadline="2026-04-01")
+
+# Verify prediction outcome — propagates to linked hypothesis
+pugbrain_verify(prediction_id="p-1", outcome="correct")
+
+# Evolve hypothesis when understanding changes (creates SUPERSEDES chain)
+pugbrain_schema(action="evolve", hypothesis_id="h-1",
+            content="Network config was root cause, not Redis",
+            reason="New evidence from network team")
+
+# Track what the brain doesn't know
+pugbrain_gaps(action="detect", topic="Why does latency spike at 3am?", source="recall_miss")
+
+# View cognitive dashboard
+pugbrain_cognitive(action="summary")    # Hot index of active hypotheses + predictions
+pugbrain_schema(action="history", hypothesis_id="h-2")  # Version evolution chain
+```
+
+Auto-resolution: hypotheses with confidence ≥0.9 + 3 supporting evidence → auto-confirmed. Confidence ≤0.1 + 3 against → auto-refuted. Calibration score tracks prediction accuracy.
+
+### Brain Versioning
+
+```bash
+pugbrain_version(action="create", name="v1-stable")  # Snapshot
+pugbrain_version(action="list")                       # List versions
+pugbrain_version(action="rollback", version_id="...")  # Restore
+pugbrain_version(action="diff", from_version="...", to_version="...")
+```
+
+### Web Dashboard
+
+```bash
+pugbrain serve                         # Start server on localhost:8000
+# Open http://localhost:8000/dashboard  # React dashboard (7 pages)
+# Open http://localhost:8000/docs       # API docs (Swagger)
+```
+
+Pages:
+- **Overview** — KPI cards (neurons, synapses, fibers, brains) + brain table with click-to-switch and delete
+- **Health** — Radar chart + health warnings + recommendations
+- **Graph** — Sigma.js WebGL neural graph with ForceAtlas2 layout, color-coded by type, node inspector
+- **Timeline** — Chronological memory feed with type badges
+- **Evolution** — Brain maturity, plasticity, stage distribution charts
+- **Mindmap** — ReactFlow interactive fiber mindmap (dagre tree, zoom/pan, MiniMap)
+- **Settings** — Brain files, Telegram backup config
+
+Light/Dark/System theme toggle with warm cream light mode.
+
+### Telegram Backup
+
+Send brain `.db` files to Telegram for offsite backup:
+
+```bash
+# Setup: set env var + config
+export PUGBRAIN_TELEGRAM_BOT_TOKEN="your-bot-token"
+# Add to config.toml:
+# [telegram]
+# enabled = true
+# chat_ids = ["123456789"]
+
+# CLI
+pugbrain telegram status              # Check config
+pugbrain telegram test                # Send test message
+pugbrain telegram backup              # Send brain backup
+pugbrain telegram backup --brain work # Specific brain
+
+# MCP tool
+pugbrain_telegram_backup(brain_name="work")
+```
+
+### Cloud Sync (Multi-Device)
+
+Sync memories across all your devices with one command:
+
+```python
+# 1. Get your API key (one-time)
+pugbrain_sync_config(action="setup")       # Shows registration steps
+
+# 2. Connect
+pugbrain_sync_config(action="set",
+    hub_url="https://pug-brain-sync-hub.vietnam11399.workers.dev",
+    api_key="nmk_YOUR_KEY")
+
+# 3. Sync
+pugbrain_sync(action="seed")              # Prepare existing memories
+pugbrain_sync(action="push")              # Push to cloud
+pugbrain_sync(action="pull")              # Pull on another device
+pugbrain_sync(action="full")              # Bidirectional sync
+pugbrain_sync_status()                    # Check sync status & devices
+```
+
+See the full [Cloud Sync Guide](https://nhadaututtheky.github.io/pug-brain/guides/cloud-sync/) for key management, conflict resolution, and troubleshooting.
+
+### External Memory Import
+
+Import from existing memory systems:
+
+```bash
+# ChromaDB
+pugbrain import backup.json --source chromadb
+
+# Via MCP tool
+pugbrain_import(source="mem0")           # Uses MEM0_API_KEY env var
+pugbrain_import(source="chromadb", connection="/path/to/chroma")
+pugbrain_import(source="cognee")         # Uses COGNEE_API_KEY env var
+pugbrain_import(source="graphiti", connection="bolt://localhost:7687")
+pugbrain_import(source="llamaindex", connection="/path/to/index")
+```
+
+### Safety & Security
+
+```bash
+# Sensitive content detection
+pugbrain check "API_KEY=sk-xxx"
+
+# Auto-redact before storing
+pugbrain remember "Config: API_KEY=sk-xxx" --redact
+
+# Safe export (exclude sensitive neurons)
+pugbrain brain export --exclude-sensitive -o safe.json
+
+# Health check (freshness + sensitive scan)
+pugbrain brain health
+```
+
+- Content length validation (100KB limit)
+- ReDoS protection (text truncation before regex)
+- Spreading activation queue cap (prevents memory exhaustion)
+- API keys read from environment variables, never from tool parameters
+- `max_tokens` clamped to 10,000
+
+### Server Mode
+
+```bash
+pip install pug-brain[server]
+pugbrain serve                    # localhost:8000
+pugbrain serve -p 9000            # Custom port
+pugbrain serve --host 0.0.0.0    # Expose to network
+```
+
+API endpoints:
 ```
 POST /memory/encode     - Store memory
 POST /memory/query      - Query memories
 POST /brain/create      - Create brain
 GET  /brain/{id}/export - Export brain
-WS   /sync/ws           - Real-time sync
-POST /hub/sync          - Multi-device sync
+WS   /sync/ws           - Real-time sync (local server)
+POST /v1/hub/sync       - Cloud sync (push/pull/full)
+POST /v1/hub/register   - Register device for sync
+GET  /v1/hub/status     - Hub sync status
 GET  /dashboard         - Web dashboard
 GET  /docs              - Swagger API docs
 ```

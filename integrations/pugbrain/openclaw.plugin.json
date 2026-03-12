@@ -3,7 +3,7 @@
   "kind": "memory",
   "name": "PugBrain",
   "description": "Brain-inspired persistent memory for AI agents — neurons, synapses, and fibers. REQUIRED: set plugins.slots.memory = \"pugbrain\" in openclaw.json to disable the default memory-core plugin and activate PugBrain as the exclusive memory provider.",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "configSchema": {
     "jsonSchema": {
       "type": "object",
@@ -11,7 +11,7 @@
       "properties": {
         "pythonPath": {
           "type": "string",
-          "description": "Path to Python executable with neural-memory installed",
+          "description": "Path to Python executable with pug-brain installed",
           "default": "python"
         },
         "brain": {
@@ -61,7 +61,7 @@
       "pythonPath": {
         "label": "Python Path",
         "placeholder": "python",
-        "help": "Path to Python executable that has neural-memory installed (pip install neural-memory)"
+        "help": "Path to Python executable that has pug-brain installed (pip install pug-brain)"
       },
       "brain": {
         "label": "Brain Name",

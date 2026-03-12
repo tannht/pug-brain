@@ -1,7 +1,7 @@
-"""Interactive first-run wizard for NeuralMemory.
+"""Interactive first-run wizard for PugBrain.
 
 Guides new users through brain setup, embedding provider selection,
-and a test encode/recall cycle. Called by `nmem init --wizard`.
+and a test encode/recall cycle. Called by `pugbrain init --wizard`.
 """
 
 from __future__ import annotations
@@ -26,25 +26,25 @@ _PROVIDERS: list[dict[str, str]] = [
     {
         "key": "sentence_transformer",
         "name": "Sentence Transformers (local)",
-        "install": "pip install neural-memory[embeddings]",
+        "install": "pip install pug-brain[embeddings]",
         "note": "~440MB disk, runs locally, no API key",
     },
     {
         "key": "gemini",
         "name": "Google Gemini (cloud)",
-        "install": "pip install neural-memory[embeddings-gemini]",
+        "install": "pip install pug-brain[embeddings-gemini]",
         "note": "Free tier available, needs GEMINI_API_KEY",
     },
     {
         "key": "ollama",
         "name": "Ollama (local)",
-        "install": "pip install neural-memory[embeddings]",
+        "install": "pip install pug-brain[embeddings]",
         "note": "Requires Ollama running locally",
     },
     {
         "key": "openai",
         "name": "OpenAI (cloud)",
-        "install": "pip install neural-memory[embeddings-openai]",
+        "install": "pip install pug-brain[embeddings-openai]",
         "note": "Paid, needs OPENAI_API_KEY",
     },
 ]
@@ -53,7 +53,7 @@ _PROVIDERS: list[dict[str, str]] = [
 def run_wizard(*, force: bool = False) -> None:
     """Run the interactive first-run wizard."""
     typer.echo()
-    typer.secho("  NeuralMemory Setup Wizard", bold=True)
+    typer.secho("  PugBrain Setup Wizard", bold=True)
     typer.secho("  ─────────────────────────", dim=True)
     typer.echo()
 
@@ -76,7 +76,7 @@ def run_wizard(*, force: bool = False) -> None:
         _save_embedding_config(data_dir, provider)
         results["Embedding"] = f"{provider} (configured)"
     else:
-        results["Embedding"] = "skipped (can set up later with: nmem setup embeddings)"
+        results["Embedding"] = "skipped (can set up later with: pugbrain setup embeddings)"
 
     # Step 4: MCP auto-config
     claude_status = setup_mcp_claude()
@@ -172,7 +172,7 @@ def _step_test_memory(brain_name: str) -> None:
     typer.echo()
     content = typer.prompt(
         "  Memory content",
-        default="NeuralMemory was set up successfully!",
+        default="PugBrain was set up successfully!",
     ).strip()
 
     if not content:
@@ -187,6 +187,7 @@ def _step_test_memory(brain_name: str) -> None:
             cli_config = CLIConfig.load()
             storage = await get_storage(cli_config)
             try:
+                from neural_memory.core.brain import BrainConfig
                 from neural_memory.engine.encoder import MemoryEncoder
 
                 encoder = MemoryEncoder(storage, BrainConfig())
@@ -225,8 +226,10 @@ def _setup_brain_with_name(data_dir: Path, name: str) -> None:
 
         config = get_config(reload=True)
         if config.current_brain != name:
-            config.current_brain = name
-            config.save()
+            from dataclasses import replace as dc_replace
+
+            updated = dc_replace(config, current_brain=name)
+            updated.save()
 
 
 def _save_embedding_config(data_dir: Path, provider: str) -> None:
@@ -236,8 +239,8 @@ def _save_embedding_config(data_dir: Path, provider: str) -> None:
     config = get_config(reload=True)
     from dataclasses import replace
 
-    config.embedding = replace(config.embedding, enabled=True, provider=provider)
-    config.save()
+    updated = replace(config, embedding=replace(config.embedding, enabled=True, provider=provider))
+    updated.save()
 
 
 def _format_mcp_result(results: dict[str, str], label: str, status: str) -> None:
