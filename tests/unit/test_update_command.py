@@ -118,7 +118,7 @@ class TestUpdateCLI:
             assert result.exit_code == 0
             assert "Updated successfully" in result.output
             cmd = mock_run.call_args[0][0]
-            assert "neural-memory" in cmd
+            assert "pug-brain" in cmd
 
     def test_update_from_source(self) -> None:
         """Source update runs git pull + pip install -e ."""
@@ -273,5 +273,5 @@ class TestUpdateCLI:
         ):
             result = runner.invoke(app, ["update", "--check"])
             assert "Update available" in result.output
-            assert "To update, run: pug update" in result.output
+            assert "To update, run: pugbrain update" in result.output
             assert result.exit_code == 0

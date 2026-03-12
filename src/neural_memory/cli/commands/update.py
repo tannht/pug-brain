@@ -1,4 +1,4 @@
-"""Self-update command for neural-memory CLI."""
+"""Self-update command for pug-brain CLI."""
 
 from __future__ import annotations
 
@@ -15,14 +15,14 @@ logger = logging.getLogger(__name__)
 
 
 def _detect_install_mode() -> str:
-    """Detect how neural-memory was installed.
+    """Detect how pug-brain was installed.
 
     Returns one of: 'editable', 'pip', 'unknown'.
     """
     try:
         from importlib.metadata import distribution
 
-        dist = distribution("neural-memory")
+        dist = distribution("pug-brain")
         # Editable installs have a direct_url.json with "editable" key
         direct_url = dist.read_text("direct_url.json")
         if direct_url and '"editable"' in direct_url:
@@ -49,7 +49,7 @@ def _detect_install_mode() -> str:
     try:
         from importlib.metadata import distribution
 
-        distribution("neural-memory")
+        distribution("pug-brain")
         return "pip"
     except Exception:
         logger.debug("Failed to detect pip install", exc_info=True)
@@ -96,14 +96,14 @@ def update(
         False, "--check", "-c", help="Only check for updates, don't install"
     ),
 ) -> None:
-    """Update neural-memory to the latest version.
+    """Update pug-brain to the latest version.
 
     Automatically detects install method (pip or git source) and updates accordingly.
 
     Examples:
-        pug update              # Update to latest
-        pug update --check      # Just check for updates
-        pug update --force      # Force reinstall
+        pugbrain update              # Update to latest
+        pugbrain update --check      # Just check for updates
+        pugbrain update --force      # Force reinstall
     """
     from neural_memory import __version__
 
@@ -131,7 +131,7 @@ def update(
 
     if check_only:
         if _is_newer(latest, current):
-            typer.echo("\nTo update, run: pug update")
+            typer.echo("\nTo update, run: pugbrain update")
         return
 
     # Detect install mode
@@ -145,7 +145,7 @@ def update(
     else:
         typer.secho(
             "Could not detect install method. Try one of:\n"
-            "  pip install -U neural-memory\n"
+            "  pip install -U pug-brain\n"
             "  cd <source-dir> && git pull && pip install -e .",
             fg=typer.colors.RED,
         )
@@ -155,7 +155,7 @@ def update(
 def _update_from_pip(force: bool) -> None:
     """Update via pip install -U."""
     typer.echo("\nUpdating via pip...")
-    cmd = [sys.executable, "-m", "pip", "install", "-U", "neural-memory"]
+    cmd = [sys.executable, "-m", "pip", "install", "-U", "pug-brain"]
     if force:
         cmd.insert(-1, "--force-reinstall")
 
@@ -216,7 +216,7 @@ def _show_new_version() -> None:
         [sys.executable, "-c", "from neural_memory import __version__; print(__version__)"]
     )
     if returncode == 0 and output:
-        typer.secho(f"Now running: neural-memory {output}", fg=typer.colors.GREEN)
+        typer.secho(f"Now running: pug-brain {output}", fg=typer.colors.GREEN)
 
 
 def register(app: typer.Typer) -> None:
