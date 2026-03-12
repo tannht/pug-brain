@@ -1,75 +1,72 @@
 # MCP Tools Reference
 
-Complete reference for all NeuralMemory MCP tools.
+Complete reference for all PugBrain MCP tools.
 **44 tools** available via MCP stdio transport.
 
 !!! tip
-    Tools are called as MCP tool calls, not CLI commands. In Claude Code, call `nmem_recall` directly — do not run `nmem recall` in terminal.
-
-!!! info "See also"
-    For CLI terminal usage, see the [CLI Guide](../getting-started/cli.md) and [CLI Reference](../getting-started/cli-reference.md).
+    Tools are called as MCP tool calls, not CLI commands. In Claude Code, call `pugbrain_recall` directly — do not run `pugbrain recall` in terminal.
 
 ## Table of Contents
 
 - [Core Memory](#core)
-  - [`nmem_remember`](#nmem_remember)
-  - [`nmem_remember_batch`](#nmem_remember_batch)
-  - [`nmem_recall`](#nmem_recall)
-  - [`nmem_show`](#nmem_show)
-  - [`nmem_context`](#nmem_context)
-  - [`nmem_todo`](#nmem_todo)
-  - [`nmem_auto`](#nmem_auto)
-  - [`nmem_suggest`](#nmem_suggest)
+  - [`pugbrain_remember`](#pugbrain_remember)
+  - [`pugbrain_remember_batch`](#pugbrain_remember_batch)
+  - [`pugbrain_recall`](#pugbrain_recall)
+  - [`pugbrain_show`](#pugbrain_show)
+  - [`pugbrain_context`](#pugbrain_context)
+  - [`pugbrain_todo`](#pugbrain_todo)
+  - [`pugbrain_auto`](#pugbrain_auto)
+  - [`pugbrain_suggest`](#pugbrain_suggest)
 - [Session & Context](#session)
-  - [`nmem_session`](#nmem_session)
-  - [`nmem_eternal`](#nmem_eternal)
-  - [`nmem_recap`](#nmem_recap)
+  - [`pugbrain_session`](#pugbrain_session)
+  - [`pugbrain_eternal`](#pugbrain_eternal)
+  - [`pugbrain_recap`](#pugbrain_recap)
 - [Provenance & Sources](#provenance)
-  - [`nmem_provenance`](#nmem_provenance)
-  - [`nmem_source`](#nmem_source)
+  - [`pugbrain_provenance`](#pugbrain_provenance)
+  - [`pugbrain_source`](#pugbrain_source)
 - [Analytics & Health](#analytics)
-  - [`nmem_stats`](#nmem_stats)
-  - [`nmem_health`](#nmem_health)
-  - [`nmem_evolution`](#nmem_evolution)
-  - [`nmem_habits`](#nmem_habits)
-  - [`nmem_narrative`](#nmem_narrative)
+  - [`pugbrain_stats`](#pugbrain_stats)
+  - [`pugbrain_health`](#pugbrain_health)
+  - [`pugbrain_evolution`](#pugbrain_evolution)
+  - [`pugbrain_habits`](#pugbrain_habits)
+  - [`pugbrain_narrative`](#pugbrain_narrative)
 - [Cognitive Reasoning](#cognitive)
-  - [`nmem_hypothesize`](#nmem_hypothesize)
-  - [`nmem_evidence`](#nmem_evidence)
-  - [`nmem_predict`](#nmem_predict)
-  - [`nmem_verify`](#nmem_verify)
-  - [`nmem_cognitive`](#nmem_cognitive)
-  - [`nmem_gaps`](#nmem_gaps)
-  - [`nmem_schema`](#nmem_schema)
-  - [`nmem_explain`](#nmem_explain)
+  - [`pugbrain_hypothesize`](#pugbrain_hypothesize)
+  - [`pugbrain_evidence`](#pugbrain_evidence)
+  - [`pugbrain_predict`](#pugbrain_predict)
+  - [`pugbrain_verify`](#pugbrain_verify)
+  - [`pugbrain_cognitive`](#pugbrain_cognitive)
+  - [`pugbrain_gaps`](#pugbrain_gaps)
+  - [`pugbrain_schema`](#pugbrain_schema)
+  - [`pugbrain_explain`](#pugbrain_explain)
 - [Training & Import](#training)
-  - [`nmem_train`](#nmem_train)
-  - [`nmem_train_db`](#nmem_train_db)
-  - [`nmem_index`](#nmem_index)
-  - [`nmem_import`](#nmem_import)
+  - [`pugbrain_train`](#pugbrain_train)
+  - [`pugbrain_train_db`](#pugbrain_train_db)
+  - [`pugbrain_index`](#pugbrain_index)
+  - [`pugbrain_import`](#pugbrain_import)
 - [Memory Management](#management)
-  - [`nmem_edit`](#nmem_edit)
-  - [`nmem_forget`](#nmem_forget)
-  - [`nmem_pin`](#nmem_pin)
-  - [`nmem_consolidate`](#nmem_consolidate)
-  - [`nmem_drift`](#nmem_drift)
-  - [`nmem_review`](#nmem_review)
-  - [`nmem_alerts`](#nmem_alerts)
+  - [`pugbrain_edit`](#pugbrain_edit)
+  - [`pugbrain_forget`](#pugbrain_forget)
+  - [`pugbrain_pin`](#pugbrain_pin)
+  - [`pugbrain_consolidate`](#pugbrain_consolidate)
+  - [`pugbrain_drift`](#pugbrain_drift)
+  - [`pugbrain_review`](#pugbrain_review)
+  - [`pugbrain_alerts`](#pugbrain_alerts)
 - [Cloud Sync & Backup](#sync)
-  - [`nmem_sync`](#nmem_sync)
-  - [`nmem_sync_status`](#nmem_sync_status)
-  - [`nmem_sync_config`](#nmem_sync_config)
-  - [`nmem_telegram_backup`](#nmem_telegram_backup)
+  - [`pugbrain_sync`](#pugbrain_sync)
+  - [`pugbrain_sync_status`](#pugbrain_sync_status)
+  - [`pugbrain_sync_config`](#pugbrain_sync_config)
+  - [`pugbrain_telegram_backup`](#pugbrain_telegram_backup)
 - [Versioning & Transfer](#meta)
-  - [`nmem_version`](#nmem_version)
-  - [`nmem_transplant`](#nmem_transplant)
-  - [`nmem_conflicts`](#nmem_conflicts)
+  - [`pugbrain_version`](#pugbrain_version)
+  - [`pugbrain_transplant`](#pugbrain_transplant)
+  - [`pugbrain_conflicts`](#pugbrain_conflicts)
 
 ---
 
 ## Core Memory {#core}
 
-### `nmem_remember`
+### `pugbrain_remember`
 
 Store a memory. Auto-detects type if not specified. Error resolution: when a new memory contradicts a stored error (type='error'), the system automatically creates a RESOLVED_BY synapse and demotes the error's activation by >=50%, so the agent stops repeating outdated errors. Detection is automatic via tag overlap (>50%) and factual contradiction patterns — no manual tagging needed. Sensitive content is auto-encrypted when encryption is enabled, instead of being rejected.
 
@@ -85,15 +82,15 @@ Store a memory. Auto-detects type if not specified. Error resolution: when a new
 | `trust_score` | number | No | — | Trust level 0.0-1.0. Capped by source ceiling (user_input max 0.9, ai_inference max 0.7). NULL = unscored. |
 | `source_id` | string | No | — | Link this memory to a registered source. Creates a SOURCE_OF synapse for provenance tracking. |
 
-### `nmem_remember_batch`
+### `pugbrain_remember_batch`
 
-Store multiple memories in a single call. Max 20 items, 500K total chars. Each item supports the same fields as nmem_remember. Returns per-item results (partial success — one bad item won't block the rest).
+Store multiple memories in a single call. Max 20 items, 500K total chars. Each item supports the same fields as pugbrain_remember. Returns per-item results (partial success — one bad item won't block the rest).
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `memories` | array[object] | Yes | — | Array of memories to store (max 20) |
 
-### `nmem_recall`
+### `pugbrain_recall`
 
 Query memories by semantic search with confidence ranking.
 
@@ -112,7 +109,7 @@ Query memories by semantic search with confidence ranking.
 | `mode` | string (`associative`, `exact`) | No | — | Recall mode: 'associative' (default) returns formatted context, 'exact' returns raw neuron contents verbatim without ... |
 | `include_citations` | boolean | No | default: true | Include citation and audit trail in exact recall results (default: true). |
 
-### `nmem_show`
+### `pugbrain_show`
 
 Get full verbatim content + metadata + synapses for a specific memory by ID. Use this when you need the exact, unmodified content of a stored memory.
 
@@ -120,7 +117,7 @@ Get full verbatim content + metadata + synapses for a specific memory by ID. Use
 |-----------|------|----------|---------|-------------|
 | `memory_id` | string | Yes | — | The fiber_id or neuron_id of the memory to retrieve |
 
-### `nmem_context`
+### `pugbrain_context`
 
 Get recent memories as context.
 
@@ -130,7 +127,7 @@ Get recent memories as context.
 | `fresh_only` | boolean | No | — | Only include memories < 30 days old |
 | `warn_expiry_days` | integer | No | — | If set, warn about memories expiring within this many days. Adds expiry_warnings to response. |
 
-### `nmem_todo`
+### `pugbrain_todo`
 
 Add a TODO memory (30-day expiry).
 
@@ -139,7 +136,7 @@ Add a TODO memory (30-day expiry).
 | `task` | string | Yes | — | The task to remember |
 | `priority` | integer | No | default: 5 | Priority 0-10 (default: 5) |
 
-### `nmem_auto`
+### `pugbrain_auto`
 
 Auto-capture memories from text. 'process' analyzes+saves, 'flush' for emergency capture.
 
@@ -149,7 +146,7 @@ Auto-capture memories from text. 'process' analyzes+saves, 'flush' for emergency
 | `text` | string | No | — | Text to analyze (required for 'analyze' and 'process') |
 | `save` | boolean | No | — | Force save even if auto-capture disabled (for 'analyze') |
 
-### `nmem_suggest`
+### `pugbrain_suggest`
 
 Autocomplete suggestions from brain neurons. When called with no prefix, returns idle neurons that have never been accessed — useful for discovering neglected knowledge that needs reinforcement.
 
@@ -161,7 +158,7 @@ Autocomplete suggestions from brain neurons. When called with no prefix, returns
 
 ## Session & Context {#session}
 
-### `nmem_session`
+### `pugbrain_session`
 
 Track session state: task, feature, progress.
 
@@ -173,7 +170,7 @@ Track session state: task, feature, progress.
 | `progress` | number | No | — | Progress 0.0 to 1.0 |
 | `notes` | string | No | — | Additional context notes |
 
-### `nmem_eternal`
+### `pugbrain_eternal`
 
 Save project context, decisions, instructions for cross-session persistence.
 
@@ -186,7 +183,7 @@ Save project context, decisions, instructions for cross-session persistence.
 | `reason` | string | No | — | Reason for the decision |
 | `instruction` | string | No | — | Add a persistent instruction (saved as INSTRUCTION) |
 
-### `nmem_recap`
+### `pugbrain_recap`
 
 Load saved project context, decisions, and progress.
 
@@ -197,7 +194,7 @@ Load saved project context, decisions, and progress.
 
 ## Provenance & Sources {#provenance}
 
-### `nmem_provenance`
+### `pugbrain_provenance`
 
 Trace provenance, verify, or approve a memory neuron. Use 'trace' to see full provenance chain (source, stored_by, verified, approved). Use 'verify' or 'approve' to add audit trail entries.
 
@@ -207,7 +204,7 @@ Trace provenance, verify, or approve a memory neuron. Use 'trace' to see full pr
 | `neuron_id` | string | Yes | — | Neuron ID to trace/verify/approve. |
 | `actor` | string | No | default: mcp_agent | Who is performing the verification/approval (default: mcp_agent). |
 
-### `nmem_source`
+### `pugbrain_source`
 
 Manage memory sources (provenance). Register external documents, laws, APIs, or other origins so memories can answer 'where did this come from?'.
 
@@ -224,25 +221,25 @@ Manage memory sources (provenance). Register external documents, laws, APIs, or 
 
 ## Analytics & Health {#analytics}
 
-### `nmem_stats`
+### `pugbrain_stats`
 
 Brain stats: memory counts and freshness.
 
 *No parameters.*
 
-### `nmem_health`
+### `pugbrain_health`
 
 Brain health: purity score, grade, warnings.
 
 *No parameters.*
 
-### `nmem_evolution`
+### `pugbrain_evolution`
 
 Brain evolution: maturation, plasticity, coherence.
 
 *No parameters.*
 
-### `nmem_habits`
+### `pugbrain_habits`
 
 Workflow habits: suggest, list, or clear.
 
@@ -251,7 +248,7 @@ Workflow habits: suggest, list, or clear.
 | `action` | string (`suggest`, `list`, `clear`) | Yes | — | suggest=get next action suggestions, list=show learned habits, clear=remove all habits |
 | `current_action` | string | No | — | Current action type for suggestions (required for suggest action) |
 
-### `nmem_narrative`
+### `pugbrain_narrative`
 
 Generate narratives: timeline, topic, or causal chain.
 
@@ -266,9 +263,9 @@ Generate narratives: timeline, topic, or causal chain.
 
 ## Cognitive Reasoning {#cognitive}
 
-### `nmem_hypothesize`
+### `pugbrain_hypothesize`
 
-Create, list, or inspect hypotheses — evolving beliefs with Bayesian confidence tracking. Hypotheses auto-resolve when evidence is strong enough (confirmed at >=0.9 confidence with >=3 evidence-for, refuted at <=0.1 with >=3 evidence-against). Use nmem_evidence to add supporting/opposing evidence.
+Create, list, or inspect hypotheses — evolving beliefs with Bayesian confidence tracking. Hypotheses auto-resolve when evidence is strong enough (confirmed at >=0.9 confidence with >=3 evidence-for, refuted at <=0.1 with >=3 evidence-against). Use pugbrain_evidence to add supporting/opposing evidence.
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
@@ -281,7 +278,7 @@ Create, list, or inspect hypotheses — evolving beliefs with Bayesian confidenc
 | `status` | string (`active`, `confirmed`, `refuted`, `superseded`, `pending`, `expired`) | No | — | Filter by status (for list action) |
 | `limit` | integer | No | default: 20 | Max results for list (default: 20) |
 
-### `nmem_evidence`
+### `pugbrain_evidence`
 
 Add evidence for or against a hypothesis. Updates confidence via Bayesian update with surprise weighting and diminishing returns. Auto-resolves hypothesis when evidence threshold is met.
 
@@ -294,9 +291,9 @@ Add evidence for or against a hypothesis. Updates confidence via Bayesian update
 | `tags` | array[string] | No | — | Tags for the evidence memory |
 | `priority` | integer | No | default: 5 | Priority 0-10 (default: 5) |
 
-### `nmem_predict`
+### `pugbrain_predict`
 
-Create, list, or inspect predictions — falsifiable claims about future observations. Predictions track confidence, optional deadlines, and can link to hypotheses via PREDICTED synapse. Verified predictions propagate evidence back to linked hypotheses. Use nmem_verify to record outcomes.
+Create, list, or inspect predictions — falsifiable claims about future observations. Predictions track confidence, optional deadlines, and can link to hypotheses via PREDICTED synapse. Verified predictions propagate evidence back to linked hypotheses. Use pugbrain_verify to record outcomes.
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
@@ -311,7 +308,7 @@ Create, list, or inspect predictions — falsifiable claims about future observa
 | `status` | string (`active`, `confirmed`, `refuted`, `superseded`, `pending`, `expired`) | No | — | Filter by status (for list action) |
 | `limit` | integer | No | default: 20 | Max results for list (default: 20) |
 
-### `nmem_verify`
+### `pugbrain_verify`
 
 Verify a prediction as correct or wrong. Optionally records an observation, creates VERIFIED_BY or FALSIFIED_BY synapse, and propagates evidence to linked hypotheses. Returns updated calibration score.
 
@@ -323,7 +320,7 @@ Verify a prediction as correct or wrong. Optionally records an observation, crea
 | `tags` | array[string] | No | — | Tags for the observation memory |
 | `priority` | integer | No | default: 5 | Priority 0-10 (default: 5) |
 
-### `nmem_cognitive`
+### `pugbrain_cognitive`
 
 Cognitive overview — O(1) summary of active hypotheses, pending predictions, calibration score, and knowledge gaps. Use 'summary' for instant dashboard, 'refresh' to recompute scores from current state.
 
@@ -332,7 +329,7 @@ Cognitive overview — O(1) summary of active hypotheses, pending predictions, c
 | `action` | string (`summary`, `refresh`) | Yes | — | summary=get current hot index, refresh=recompute scores |
 | `limit` | integer | No | default: 10, for summary | Max hot items to return (default: 10, for summary) |
 
-### `nmem_gaps`
+### `pugbrain_gaps`
 
 Metacognition — track what the brain doesn't know. Detect knowledge gaps from contradictions, low-confidence hypotheses, recall misses, or manual flagging. Resolve gaps when new information fills them.
 
@@ -348,7 +345,7 @@ Metacognition — track what the brain doesn't know. Detect knowledge gaps from 
 | `include_resolved` | boolean | No | default: false | Include resolved gaps in list (default: false) |
 | `limit` | integer | No | default: 20 | Max results for list (default: 20) |
 
-### `nmem_schema`
+### `pugbrain_schema`
 
 Schema evolution — evolve hypotheses into new versions. Creates a version chain via SUPERSEDES synapse so the brain tracks how beliefs changed over time. Use when a hypothesis needs updating with new understanding.
 
@@ -362,7 +359,7 @@ Schema evolution — evolve hypotheses into new versions. Creates a version chai
 | `other_id` | string | No | — | Second hypothesis ID for compare action |
 | `tags` | array[string] | No | — | Tags for the new version |
 
-### `nmem_explain`
+### `pugbrain_explain`
 
 Find and explain the shortest path between two entities in the neural graph. Returns a step-by-step explanation with synapse types, weights, and supporting memory evidence.
 
@@ -374,9 +371,9 @@ Find and explain the shortest path between two entities in the neural graph. Ret
 
 ## Training & Import {#training}
 
-### `nmem_train`
+### `pugbrain_train`
 
-Train brain from documentation files. Supports PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV (requires: pip install neural-memory[extract]). Trained memories are pinned by default (no decay, no compression, permanent KB).
+Train brain from documentation files. Supports PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV (requires: pip install pug-brain[extract]). Trained memories are pinned by default (no decay, no compression, permanent KB).
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
@@ -388,7 +385,7 @@ Train brain from documentation files. Supports PDF, DOCX, PPTX, HTML, JSON, XLSX
 | `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
 | `pinned` | boolean | No | default: true | Pin trained memories as permanent KB — skip decay/prune/compress (default: true) |
 
-### `nmem_train_db`
+### `pugbrain_train_db`
 
 Train brain from database schema.
 
@@ -401,7 +398,7 @@ Train brain from database schema.
 | `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
 | `max_tables` | integer | No | default: 100 | Maximum tables to process (default: 100) |
 
-### `nmem_index`
+### `pugbrain_index`
 
 Index codebase for code-aware recall.
 
@@ -411,7 +408,7 @@ Index codebase for code-aware recall.
 | `path` | string | No | default: current working directory | Directory to index (default: current working directory) |
 | `extensions` | array[string] | No | default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".cpp", ".hpp", ".cc"] | File extensions to index (default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".... |
 
-### `nmem_import`
+### `pugbrain_import`
 
 Import from external systems (ChromaDB, Mem0, Cognee, etc.).
 
@@ -425,7 +422,7 @@ Import from external systems (ChromaDB, Mem0, Cognee, etc.).
 
 ## Memory Management {#management}
 
-### `nmem_edit`
+### `pugbrain_edit`
 
 Edit an existing memory's type, content, or priority. Use when a memory was auto-typed incorrectly or needs content correction. Preserves all connections (synapses) and fiber associations.
 
@@ -436,7 +433,7 @@ Edit an existing memory's type, content, or priority. Use when a memory was auto
 | `content` | string | No | — | New content for the anchor neuron |
 | `priority` | integer | No | — | New priority (0-10) |
 
-### `nmem_forget`
+### `pugbrain_forget`
 
 Explicitly delete or close a specific memory. Soft delete by default (marks as expired). Use hard=true for permanent removal. Use for closing completed TODOs or removing outdated/incorrect memories.
 
@@ -446,16 +443,17 @@ Explicitly delete or close a specific memory. Soft delete by default (marks as e
 | `hard` | boolean | No | default: false = soft delete | Permanent deletion with cascade cleanup (default: false = soft delete) |
 | `reason` | string | No | — | Why this memory is being forgotten (stored in logs) |
 
-### `nmem_pin`
+### `pugbrain_pin`
 
-Pin or unpin memories. Pinned memories skip decay, pruning, and compression — use for permanent knowledge base content.
+Pin, unpin, or list pinned memories. Pinned memories skip decay, pruning, and compression — use for permanent knowledge base content.
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `fiber_ids` | array[string] | Yes | — | Fiber IDs to pin or unpin |
-| `pinned` | boolean | No | default: true | true to pin, false to unpin (default: true) |
+| `action` | string (`pin`, `unpin`, `list`) | No | — | Action: pin (default), unpin, or list pinned memories |
+| `fiber_ids` | array[string] | No | — | Fiber IDs to pin or unpin (required for pin/unpin, ignored for list) |
+| `limit` | integer | No | default: 50, max: 200 | Max results for list action (default: 50, max: 200) |
 
-### `nmem_consolidate`
+### `pugbrain_consolidate`
 
 Run memory consolidation on the current brain. Strategies: prune (remove weak synapses/orphans), merge (combine overlapping fibers), summarize (cluster topic neurons), mature (episodic→semantic), infer (co-activation synapses), enrich (metadata extraction), dream (synthetic bridges), learn_habits (workflow patterns), dedup (merge near-duplicates), semantic_link (cross-domain connections), compress (old fibers), process_tool_events, detect_drift (find tag synonyms/aliases), all (run all in dependency order). Use dry_run=true to preview without applying changes.
 
@@ -467,7 +465,7 @@ Run memory consolidation on the current brain. Strategies: prune (remove weak sy
 | `merge_overlap_threshold` | number | No | default: 0.5 | Jaccard overlap threshold for merging fibers (default: 0.5) |
 | `prune_min_inactive_days` | number | No | default: 7.0 | Grace period in days before pruning inactive synapses (default: 7.0) |
 
-### `nmem_drift`
+### `pugbrain_drift`
 
 Semantic drift detection — find tag clusters that should be merged or aliased. Detects when different tags refer to the same concept using Jaccard similarity. Actions: detect (run analysis), list (show clusters), merge (apply canonical tag), alias (mark as related), dismiss (ignore cluster).
 
@@ -477,7 +475,7 @@ Semantic drift detection — find tag clusters that should be merged or aliased.
 | `cluster_id` | string | No | — | Cluster ID to resolve (required for merge/alias/dismiss) |
 | `status` | string (`detected`, `merged`, `aliased`, `dismissed`) | No | — | Filter clusters by status (for list action) |
 
-### `nmem_review`
+### `pugbrain_review`
 
 Spaced repetition reviews (Leitner box system).
 
@@ -488,7 +486,7 @@ Spaced repetition reviews (Leitner box system).
 | `success` | boolean | No | — | Whether recall was successful (for mark action, default: true) |
 | `limit` | integer | No | default: 20 | Max items in queue (default: 20) |
 
-### `nmem_alerts`
+### `pugbrain_alerts`
 
 Brain health alerts: list or acknowledge.
 
@@ -500,7 +498,7 @@ Brain health alerts: list or acknowledge.
 
 ## Cloud Sync & Backup {#sync}
 
-### `nmem_sync`
+### `pugbrain_sync`
 
 Trigger manual sync with hub server.
 
@@ -511,13 +509,13 @@ Trigger manual sync with hub server.
 | `strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | default: from config | Conflict resolution strategy (default: from config) |
 | `api_key` | string | No | default: from config | API key override (default: from config) |
 
-### `nmem_sync_status`
+### `pugbrain_sync_status`
 
 Show sync status: pending changes, devices, last sync.
 
 *No parameters.*
 
-### `nmem_sync_config`
+### `pugbrain_sync_config`
 
 View or update sync configuration. Use action='setup' for guided onboarding.
 
@@ -531,7 +529,7 @@ View or update sync configuration. Use action='setup' for guided onboarding.
 | `sync_interval_seconds` | integer | No | — | Sync interval in seconds |
 | `conflict_strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | — | Default conflict strategy |
 
-### `nmem_telegram_backup`
+### `pugbrain_telegram_backup`
 
 Send brain database file as backup to Telegram.
 
@@ -541,7 +539,7 @@ Send brain database file as backup to Telegram.
 
 ## Versioning & Transfer {#meta}
 
-### `nmem_version`
+### `pugbrain_version`
 
 Brain version control: snapshot, list, rollback, diff.
 
@@ -555,7 +553,7 @@ Brain version control: snapshot, list, rollback, diff.
 | `to_version` | string | No | — | Target version ID (required for diff) |
 | `limit` | integer | No | default: 20 | Max versions to list (default: 20) |
 
-### `nmem_transplant`
+### `pugbrain_transplant`
 
 Transplant memories between brains by tags/types.
 
@@ -566,7 +564,7 @@ Transplant memories between brains by tags/types.
 | `memory_types` | array[string] | No | — | Memory types to filter (fact, decision, etc.) |
 | `strategy` | string (`prefer_local`, `prefer_remote`, `prefer_recent`, `prefer_stronger`) | No | default: prefer_local | Conflict resolution strategy (default: prefer_local) |
 
-### `nmem_conflicts`
+### `pugbrain_conflicts`
 
 Memory conflicts: list, resolve, or pre-check.
 
