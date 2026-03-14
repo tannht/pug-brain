@@ -181,7 +181,6 @@ def _step_test_memory(brain_name: str) -> None:
     try:
         from neural_memory.cli._helpers import get_storage, run_async
         from neural_memory.cli.config import CLIConfig
-        from neural_memory.core.brain import BrainConfig
 
         async def _test() -> dict[str, Any]:
             cli_config = CLIConfig.load()

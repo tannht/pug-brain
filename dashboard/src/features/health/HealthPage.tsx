@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useHealth, useVectorStatus } from "@/api/hooks/useDashboard"
+import { useHealth } from "@/api/hooks/useDashboard"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -11,7 +11,6 @@ import {
   Lightbulb,
   Zap,
   BookOpen,
-  Database,
   AlertTriangle,
   TrendingUp,
   ArrowRight,
@@ -46,7 +45,6 @@ function getGradeConfig(grade: string) {
 
 export default function HealthPage() {
   const { data: health, isLoading } = useHealth()
-  const { data: vectorStatus } = useVectorStatus()
   const { t } = useTranslation()
 
   const gradeConfig = health ? getGradeConfig(health.grade) : GRADE_CONFIG.F
@@ -182,43 +180,6 @@ export default function HealthPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* PugBrain Vector Store Status 🐶 */}
-      {vectorStatus && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Database className="size-5 text-primary" />
-              Vector Store (RuVector)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2">
-                <Badge variant={vectorStatus.available ? "success" : "secondary"}>
-                  {vectorStatus.available ? "Active" : "Inactive"}
-                </Badge>
-                <span className="text-sm text-muted-foreground">
-                  Backend: <span className="font-mono">{vectorStatus.backend}</span>
-                </span>
-              </div>
-              {vectorStatus.available && (
-                <>
-                  <span className="text-sm text-muted-foreground">
-                    Vectors: <span className="font-mono font-bold">{vectorStatus.vector_count.toLocaleString()}</span>
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    Dimension: <span className="font-mono">{vectorStatus.dimension}</span>
-                  </span>
-                </>
-              )}
-              <span className="text-sm text-muted-foreground">
-                Available: {vectorStatus.available_backends.join(", ")}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Memory Enrichment Guide */}
       <MemoryEnrichmentGuide />
