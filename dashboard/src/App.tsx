@@ -14,6 +14,7 @@ const DiagramsPage = lazy(() => import("@/features/diagrams/DiagramsPage"))
 const SettingsPage = lazy(() => import("@/features/settings/SettingsPage"))
 const SyncPage = lazy(() => import("@/features/sync/SyncPage"))
 const OraclePage = lazy(() => import("@/features/oracle/OraclePage"))
+const ToolStatsPage = lazy(() => import("@/features/tool-stats/ToolStatsPage"))
 
 /**
  * PugBrain Dashboard — Auto-detects the 'default' brain on first load.
@@ -111,6 +112,14 @@ export default function App() {
           element={
             <Suspense fallback={<PageSkeleton />}>
               <OraclePage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="tool-stats"
+          element={
+            <Suspense fallback={<PageSkeleton />}>
+              <ToolStatsPage />
             </Suspense>
           }
         />

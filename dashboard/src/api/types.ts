@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  PugBrain Dashboard API response types 🐶                           */
+/*  Dashboard API response types                                       */
 /*  Matches backend Pydantic models in dashboard_api.py + models.py    */
 /* ------------------------------------------------------------------ */
 
@@ -282,11 +282,44 @@ export interface TelegramBackupResponse {
   errors?: string[]
 }
 
-// GET /api/dashboard/vector/status
-export interface VectorStoreStatus {
-  available: boolean
-  backend: string
-  vector_count: number
-  dimension: number
-  available_backends: string[]
+// GET /api/dashboard/tool-stats
+export interface ToolStatsSummary {
+  total_events: number
+  success_rate: number
+  top_tools: ToolMetric[]
+}
+
+export interface ToolMetric {
+  tool_name: string
+  server_name: string
+  count: number
+  success_rate: number
+  avg_duration_ms: number
+}
+
+export interface ToolDailyEntry {
+  date: string
+  tool_name: string
+  count: number
+  success_rate: number
+  avg_duration_ms: number
+}
+
+export interface ToolStatsResponse {
+  summary: ToolStatsSummary
+  daily: ToolDailyEntry[]
+}
+
+// GET /api/dashboard/config-status
+export interface ConfigStatusItem {
+  key: string
+  label: string
+  status: "configured" | "not_configured" | "warning" | "info"
+  description: string
+  command: string
+  value: string
+}
+
+export interface ConfigStatusResponse {
+  items: ConfigStatusItem[]
 }

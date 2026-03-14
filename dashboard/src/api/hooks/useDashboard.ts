@@ -13,7 +13,8 @@ import type {
   FiberDiagramResponse,
   GraphResponse,
   BrainFilesResponse,
-  VectorStoreStatus,
+  ToolStatsResponse,
+  ConfigStatusResponse,
 } from "@/api/types"
 
 // Keys
@@ -22,6 +23,7 @@ const keys = {
   brains: ["dashboard", "brains"] as const,
   health: ["dashboard", "health"] as const,
   healthCheck: ["health"] as const,
+  toolStats: (days: number) => ["dashboard", "tool-stats", days] as const,
   timeline: (limit: number, offset: number) =>
     ["dashboard", "timeline", limit, offset] as const,
   dailyStats: (days: number) => ["dashboard", "timeline", "daily-stats", days] as const,
@@ -30,7 +32,7 @@ const keys = {
   fiberDiagram: (id: string) => ["dashboard", "fiber", id, "diagram"] as const,
   graph: (limit: number) => ["graph", limit] as const,
   brainFiles: ["dashboard", "brain-files"] as const,
-  vectorStatus: ["dashboard", "vector-status"] as const,
+  configStatus: ["dashboard", "config-status"] as const,
 }
 
 // Stats
@@ -150,6 +152,17 @@ export function useDeleteBrain() {
   })
 }
 
+// Tool stats
+export function useToolStats(days = 30) {
+  return useQuery({
+    queryKey: keys.toolStats(days),
+    queryFn: () =>
+      api.get<ToolStatsResponse>(
+        `/api/dashboard/tool-stats?days=${days}`,
+      ),
+  })
+}
+
 // Brain files
 export function useBrainFiles() {
   return useQuery({
@@ -158,11 +171,11 @@ export function useBrainFiles() {
   })
 }
 
-// PugBrain Vector Store Status 🐶
-export function useVectorStatus() {
+// Config status
+export function useConfigStatus() {
   return useQuery({
-    queryKey: keys.vectorStatus,
-    queryFn: () => api.get<VectorStoreStatus>("/api/dashboard/vector/status"),
+    queryKey: keys.configStatus,
+    queryFn: () => api.get<ConfigStatusResponse>("/api/dashboard/config-status"),
     staleTime: 60_000,
   })
 }
