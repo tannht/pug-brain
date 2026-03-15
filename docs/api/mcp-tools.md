@@ -1,36 +1,55 @@
 # MCP Tools Reference
 
 Complete reference for all PugBrain MCP tools.
-**44 tools** available via MCP stdio transport.
+**45 tools** available via MCP stdio transport.
 
 !!! tip
-    Tools are called as MCP tool calls, not CLI commands. In Claude Code, call `pugbrain_recall` directly — do not run `pugbrain recall` in terminal.
+    Tools are called as MCP tool calls, not CLI commands. In Claude Code, call `nmem_recall` directly — do not run `nmem recall` in terminal.
 
 ## Table of Contents
 
 - [Core Memory](#core)
+- [Session & Context](#session)
+- [Provenance & Sources](#provenance)
+- [Analytics & Health](#analytics)
+- [Cognitive Reasoning](#cognitive)
+- [Training & Import](#training)
+- [Memory Management](#management)
+- [Cloud Sync & Backup](#sync)
+- [Versioning & Transfer](#meta)
+- [Other](#other)
   - [`pugbrain_remember`](#pugbrain_remember)
   - [`pugbrain_remember_batch`](#pugbrain_remember_batch)
   - [`pugbrain_recall`](#pugbrain_recall)
   - [`pugbrain_show`](#pugbrain_show)
-  - [`pugbrain_context`](#pugbrain_context)
-  - [`pugbrain_todo`](#pugbrain_todo)
-  - [`pugbrain_auto`](#pugbrain_auto)
-  - [`pugbrain_suggest`](#pugbrain_suggest)
-- [Session & Context](#session)
-  - [`pugbrain_session`](#pugbrain_session)
-  - [`pugbrain_eternal`](#pugbrain_eternal)
-  - [`pugbrain_recap`](#pugbrain_recap)
-- [Provenance & Sources](#provenance)
   - [`pugbrain_provenance`](#pugbrain_provenance)
   - [`pugbrain_source`](#pugbrain_source)
-- [Analytics & Health](#analytics)
+  - [`pugbrain_context`](#pugbrain_context)
+  - [`pugbrain_todo`](#pugbrain_todo)
   - [`pugbrain_stats`](#pugbrain_stats)
+  - [`pugbrain_auto`](#pugbrain_auto)
+  - [`pugbrain_suggest`](#pugbrain_suggest)
+  - [`pugbrain_session`](#pugbrain_session)
+  - [`pugbrain_index`](#pugbrain_index)
+  - [`pugbrain_import`](#pugbrain_import)
+  - [`pugbrain_eternal`](#pugbrain_eternal)
+  - [`pugbrain_recap`](#pugbrain_recap)
   - [`pugbrain_health`](#pugbrain_health)
   - [`pugbrain_evolution`](#pugbrain_evolution)
   - [`pugbrain_habits`](#pugbrain_habits)
+  - [`pugbrain_version`](#pugbrain_version)
+  - [`pugbrain_transplant`](#pugbrain_transplant)
+  - [`pugbrain_conflicts`](#pugbrain_conflicts)
+  - [`pugbrain_train`](#pugbrain_train)
+  - [`pugbrain_pin`](#pugbrain_pin)
+  - [`pugbrain_train_db`](#pugbrain_train_db)
+  - [`pugbrain_alerts`](#pugbrain_alerts)
   - [`pugbrain_narrative`](#pugbrain_narrative)
-- [Cognitive Reasoning](#cognitive)
+  - [`pugbrain_review`](#pugbrain_review)
+  - [`pugbrain_sync`](#pugbrain_sync)
+  - [`pugbrain_sync_status`](#pugbrain_sync_status)
+  - [`pugbrain_sync_config`](#pugbrain_sync_config)
+  - [`pugbrain_telegram_backup`](#pugbrain_telegram_backup)
   - [`pugbrain_hypothesize`](#pugbrain_hypothesize)
   - [`pugbrain_evidence`](#pugbrain_evidence)
   - [`pugbrain_predict`](#pugbrain_predict)
@@ -39,32 +58,33 @@ Complete reference for all PugBrain MCP tools.
   - [`pugbrain_gaps`](#pugbrain_gaps)
   - [`pugbrain_schema`](#pugbrain_schema)
   - [`pugbrain_explain`](#pugbrain_explain)
-- [Training & Import](#training)
-  - [`pugbrain_train`](#pugbrain_train)
-  - [`pugbrain_train_db`](#pugbrain_train_db)
-  - [`pugbrain_index`](#pugbrain_index)
-  - [`pugbrain_import`](#pugbrain_import)
-- [Memory Management](#management)
   - [`pugbrain_edit`](#pugbrain_edit)
   - [`pugbrain_forget`](#pugbrain_forget)
-  - [`pugbrain_pin`](#pugbrain_pin)
   - [`pugbrain_consolidate`](#pugbrain_consolidate)
   - [`pugbrain_drift`](#pugbrain_drift)
-  - [`pugbrain_review`](#pugbrain_review)
-  - [`pugbrain_alerts`](#pugbrain_alerts)
-- [Cloud Sync & Backup](#sync)
-  - [`pugbrain_sync`](#pugbrain_sync)
-  - [`pugbrain_sync_status`](#pugbrain_sync_status)
-  - [`pugbrain_sync_config`](#pugbrain_sync_config)
-  - [`pugbrain_telegram_backup`](#pugbrain_telegram_backup)
-- [Versioning & Transfer](#meta)
-  - [`pugbrain_version`](#pugbrain_version)
-  - [`pugbrain_transplant`](#pugbrain_transplant)
-  - [`pugbrain_conflicts`](#pugbrain_conflicts)
+  - [`pugbrain_tool_stats`](#pugbrain_tool_stats)
 
 ---
 
 ## Core Memory {#core}
+
+## Session & Context {#session}
+
+## Provenance & Sources {#provenance}
+
+## Analytics & Health {#analytics}
+
+## Cognitive Reasoning {#cognitive}
+
+## Training & Import {#training}
+
+## Memory Management {#management}
+
+## Cloud Sync & Backup {#sync}
+
+## Versioning & Transfer {#meta}
+
+## Other {#other}
 
 ### `pugbrain_remember`
 
@@ -118,83 +138,6 @@ Get full verbatim content + metadata + synapses for a specific memory by ID. Use
 |-----------|------|----------|---------|-------------|
 | `memory_id` | string | Yes | — | The fiber_id or neuron_id of the memory to retrieve |
 
-### `pugbrain_context`
-
-Get recent memories as context.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `limit` | integer | No | default: 10 | Number of recent memories (default: 10) |
-| `fresh_only` | boolean | No | — | Only include memories < 30 days old |
-| `warn_expiry_days` | integer | No | — | If set, warn about memories expiring within this many days. Adds expiry_warnings to response. |
-
-### `pugbrain_todo`
-
-Add a TODO memory (30-day expiry).
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `task` | string | Yes | — | The task to remember |
-| `priority` | integer | No | default: 5 | Priority 0-10 (default: 5) |
-
-### `pugbrain_auto`
-
-Auto-capture memories from text. 'process' analyzes+saves, 'flush' for emergency capture.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`status`, `enable`, `disable`, `analyze`, `process`, `flush`) | Yes | — | Action: 'process' analyzes and saves, 'analyze' only detects, 'flush' emergency capture before compaction (skips dedu... |
-| `text` | string | No | — | Text to analyze (required for 'analyze' and 'process') |
-| `save` | boolean | No | — | Force save even if auto-capture disabled (for 'analyze') |
-
-### `pugbrain_suggest`
-
-Autocomplete suggestions from brain neurons. When called with no prefix, returns idle neurons that have never been accessed — useful for discovering neglected knowledge that needs reinforcement.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `prefix` | string | No | — | The prefix text to autocomplete |
-| `limit` | integer | No | default: 5 | Max suggestions (default: 5) |
-| `type_filter` | string (`time`, `spatial`, `entity`, `action`, `state`, `concept`, `sensory`, `intent`) | No | — | Filter by neuron type |
-
-## Session & Context {#session}
-
-### `pugbrain_session`
-
-Track session state: task, feature, progress.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`get`, `set`, `end`) | Yes | — | get=load current session, set=update session state, end=close session |
-| `feature` | string | No | — | Current feature being worked on |
-| `task` | string | No | — | Current specific task |
-| `progress` | number | No | — | Progress 0.0 to 1.0 |
-| `notes` | string | No | — | Additional context notes |
-
-### `pugbrain_eternal`
-
-Save project context, decisions, instructions for cross-session persistence.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`status`, `save`) | Yes | — | status=view memory counts and session state, save=store project context/decisions/instructions |
-| `project_name` | string | No | — | Set project name (saved as FACT) |
-| `tech_stack` | array[string] | No | — | Set tech stack (saved as FACT) |
-| `decision` | string | No | — | Add a key decision (saved as DECISION) |
-| `reason` | string | No | — | Reason for the decision |
-| `instruction` | string | No | — | Add a persistent instruction (saved as INSTRUCTION) |
-
-### `pugbrain_recap`
-
-Load saved project context, decisions, and progress.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `level` | integer | No | — | Detail level: 1=quick (~500 tokens), 2=detailed (~1300 tokens), 3=full (~3300 tokens). Default: 1 |
-| `topic` | string | No | — | Search for a specific topic in context (e.g., 'auth', 'database') |
-
-## Provenance & Sources {#provenance}
-
 ### `pugbrain_provenance`
 
 Trace provenance, verify, or approve a memory neuron. Use 'trace' to see full provenance chain (source, stored_by, verified, approved). Use 'verify' or 'approve' to add audit trail entries.
@@ -220,13 +163,106 @@ Manage memory sources (provenance). Register external documents, laws, APIs, or 
 | `file_hash` | string | No | — | File hash for integrity checking. |
 | `metadata` | object | No | — | Additional metadata. |
 
-## Analytics & Health {#analytics}
+### `pugbrain_context`
+
+Get recent memories as context.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `limit` | integer | No | default: 10 | Number of recent memories (default: 10) |
+| `fresh_only` | boolean | No | — | Only include memories < 30 days old |
+| `warn_expiry_days` | integer | No | — | If set, warn about memories expiring within this many days. Adds expiry_warnings to response. |
+
+### `pugbrain_todo`
+
+Add a TODO memory (30-day expiry).
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `task` | string | Yes | — | The task to remember |
+| `priority` | integer | No | default: 5 | Priority 0-10 (default: 5) |
 
 ### `pugbrain_stats`
 
 Brain stats: memory counts and freshness.
 
 *No parameters.*
+
+### `pugbrain_auto`
+
+Auto-capture memories from text. 'process' analyzes+saves, 'flush' for emergency capture.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`status`, `enable`, `disable`, `analyze`, `process`, `flush`) | Yes | — | Action: 'process' analyzes and saves, 'analyze' only detects, 'flush' emergency capture before compaction (skips dedu... |
+| `text` | string | No | — | Text to analyze (required for 'analyze' and 'process') |
+| `save` | boolean | No | — | Force save even if auto-capture disabled (for 'analyze') |
+
+### `pugbrain_suggest`
+
+Autocomplete suggestions from brain neurons. When called with no prefix, returns idle neurons that have never been accessed — useful for discovering neglected knowledge that needs reinforcement.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `prefix` | string | No | — | The prefix text to autocomplete |
+| `limit` | integer | No | default: 5 | Max suggestions (default: 5) |
+| `type_filter` | string (`time`, `spatial`, `entity`, `action`, `state`, `concept`, `sensory`, `intent`) | No | — | Filter by neuron type |
+
+### `pugbrain_session`
+
+Track session state: task, feature, progress.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`get`, `set`, `end`) | Yes | — | get=load current session, set=update session state, end=close session |
+| `feature` | string | No | — | Current feature being worked on |
+| `task` | string | No | — | Current specific task |
+| `progress` | number | No | — | Progress 0.0 to 1.0 |
+| `notes` | string | No | — | Additional context notes |
+
+### `pugbrain_index`
+
+Index codebase for code-aware recall.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`scan`, `status`) | Yes | — | scan=index codebase, status=show what's indexed |
+| `path` | string | No | default: current working directory | Directory to index (default: current working directory) |
+| `extensions` | array[string] | No | default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".cpp", ".hpp", ".cc"] | File extensions to index (default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".... |
+
+### `pugbrain_import`
+
+Import from external systems (ChromaDB, Mem0, Cognee, etc.).
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `source` | string (`chromadb`, `mem0`, `awf`, `cognee`, `graphiti`, `llamaindex`) | Yes | — | Source system to import from |
+| `connection` | string | No | — | Connection string/path (e.g., '/path/to/chroma', graph URI, or index dir path). For API keys, prefer env vars: MEM0_A... |
+| `collection` | string | No | — | Collection/namespace to import from |
+| `limit` | integer | No | — | Maximum records to import |
+| `user_id` | string | No | — | User ID filter (for Mem0) |
+
+### `pugbrain_eternal`
+
+Save project context, decisions, instructions for cross-session persistence.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`status`, `save`) | Yes | — | status=view memory counts and session state, save=store project context/decisions/instructions |
+| `project_name` | string | No | — | Set project name (saved as FACT) |
+| `tech_stack` | array[string] | No | — | Set tech stack (saved as FACT) |
+| `decision` | string | No | — | Add a key decision (saved as DECISION) |
+| `reason` | string | No | — | Reason for the decision |
+| `instruction` | string | No | — | Add a persistent instruction (saved as INSTRUCTION) |
+
+### `pugbrain_recap`
+
+Load saved project context, decisions, and progress.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `level` | integer | No | — | Detail level: 1=quick (~500 tokens), 2=detailed (~1300 tokens), 3=full (~3300 tokens). Default: 1 |
+| `topic` | string | No | — | Search for a specific topic in context (e.g., 'auth', 'database') |
 
 ### `pugbrain_health`
 
@@ -249,6 +285,91 @@ Workflow habits: suggest, list, or clear.
 | `action` | string (`suggest`, `list`, `clear`) | Yes | — | suggest=get next action suggestions, list=show learned habits, clear=remove all habits |
 | `current_action` | string | No | — | Current action type for suggestions (required for suggest action) |
 
+### `pugbrain_version`
+
+Brain version control: snapshot, list, rollback, diff.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`create`, `list`, `rollback`, `diff`) | Yes | — | create=snapshot current state, list=show versions, rollback=restore version, diff=compare versions |
+| `name` | string | No | — | Version name (required for create) |
+| `description` | string | No | — | Version description (optional for create) |
+| `version_id` | string | No | — | Version ID (required for rollback) |
+| `from_version` | string | No | — | Source version ID (required for diff) |
+| `to_version` | string | No | — | Target version ID (required for diff) |
+| `limit` | integer | No | default: 20 | Max versions to list (default: 20) |
+
+### `pugbrain_transplant`
+
+Transplant memories between brains by tags/types.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `source_brain` | string | Yes | — | Name of the source brain to extract from |
+| `tags` | array[string] | No | — | Tags to filter — fibers matching ANY tag will be included |
+| `memory_types` | array[string] | No | — | Memory types to filter (fact, decision, etc.) |
+| `strategy` | string (`prefer_local`, `prefer_remote`, `prefer_recent`, `prefer_stronger`) | No | default: prefer_local | Conflict resolution strategy (default: prefer_local) |
+
+### `pugbrain_conflicts`
+
+Memory conflicts: list, resolve, or pre-check.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`list`, `resolve`, `check`) | Yes | — | list=view active conflicts, resolve=manually resolve a conflict, check=pre-check content for conflicts |
+| `neuron_id` | string | No | — | Neuron ID of the disputed memory (required for resolve) |
+| `resolution` | string (`keep_existing`, `keep_new`, `keep_both`) | No | — | How to resolve: keep_existing=undo dispute, keep_new=supersede old, keep_both=accept both |
+| `content` | string | No | — | Content to pre-check for conflicts (required for check) |
+| `tags` | array[string] | No | — | Optional tags for more accurate conflict checking |
+| `limit` | integer | No | default: 50 | Max conflicts to list (default: 50) |
+
+### `pugbrain_train`
+
+Train brain from documentation files. Supports PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV (requires: pip install pug-brain[extract]). Trained memories are pinned by default (no decay, no compression, permanent KB).
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`train`, `status`) | Yes | — | train=process docs into brain, status=show training stats |
+| `path` | string | No | default: current directory | Directory or file path to train from (default: current directory) |
+| `domain_tag` | string | No | — | Domain tag for all chunks (e.g., 'react', 'kubernetes') |
+| `brain_name` | string | No | default: current brain | Target brain name (default: current brain) |
+| `extensions` | array[string] | No | default: ['.md'] | File extensions to include (default: ['.md']). Rich formats (PDF, DOCX, PPTX, HTML, XLSX) require: pip install pug-br... |
+| `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
+| `pinned` | boolean | No | default: true | Pin trained memories as permanent KB — skip decay/prune/compress (default: true) |
+
+### `pugbrain_pin`
+
+Pin, unpin, or list pinned memories. Pinned memories skip decay, pruning, and compression — use for permanent knowledge base content.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`pin`, `unpin`, `list`) | No | — | Action: pin (default), unpin, or list pinned memories |
+| `fiber_ids` | array[string] | No | — | Fiber IDs to pin or unpin (required for pin/unpin, ignored for list) |
+| `limit` | integer | No | default: 50, max: 200 | Max results for list action (default: 50, max: 200) |
+
+### `pugbrain_train_db`
+
+Train brain from database schema.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`train`, `status`) | Yes | — | train=extract schema into brain, status=show training stats |
+| `connection_string` | string | No | — | Database connection string (v1: sqlite:///path/to/db.db) |
+| `domain_tag` | string | No | — | Domain tag for schema knowledge (e.g., 'ecommerce', 'analytics') |
+| `brain_name` | string | No | default: current brain | Target brain name (default: current brain) |
+| `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
+| `max_tables` | integer | No | default: 100 | Maximum tables to process (default: 100) |
+
+### `pugbrain_alerts`
+
+Brain health alerts: list or acknowledge.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`list`, `acknowledge`) | Yes | — | list=view active/seen alerts, acknowledge=mark alert as handled |
+| `alert_id` | string | No | — | Alert ID to acknowledge (required for acknowledge action) |
+| `limit` | integer | No | default: 50 | Max alerts to list (default: 50) |
+
 ### `pugbrain_narrative`
 
 Generate narratives: timeline, topic, or causal chain.
@@ -262,7 +383,55 @@ Generate narratives: timeline, topic, or causal chain.
 | `max_fibers` | integer | No | default: 20 | Max fibers in narrative (default: 20) |
 | `max_depth` | integer | No | default: 5, for causal action only | Max causal chain depth (default: 5, for causal action only) |
 
-## Cognitive Reasoning {#cognitive}
+### `pugbrain_review`
+
+Spaced repetition reviews (Leitner box system).
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`queue`, `mark`, `schedule`, `stats`) | Yes | — | queue=get due reviews, mark=record review result, schedule=manually schedule a fiber, stats=review statistics |
+| `fiber_id` | string | No | — | Fiber ID (required for mark and schedule actions) |
+| `success` | boolean | No | — | Whether recall was successful (for mark action, default: true) |
+| `limit` | integer | No | default: 20 | Max items in queue (default: 20) |
+
+### `pugbrain_sync`
+
+Trigger manual sync with hub server.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`push`, `pull`, `full`, `seed`) | Yes | — | push=send local changes, pull=get remote changes, full=bidirectional sync, seed=populate change log from existing dat... |
+| `hub_url` | string | No | — | Hub server URL (overrides config). Must be http:// or https:// |
+| `strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | default: from config | Conflict resolution strategy (default: from config) |
+| `api_key` | string | No | default: from config | API key override (default: from config) |
+
+### `pugbrain_sync_status`
+
+Show sync status: pending changes, devices, last sync.
+
+*No parameters.*
+
+### `pugbrain_sync_config`
+
+View or update sync configuration. Use action='setup' for guided onboarding.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `action` | string (`get`, `set`, `setup`) | Yes | — | get=view config, set=update config, setup=guided onboarding |
+| `enabled` | boolean | No | — | Enable/disable sync |
+| `hub_url` | string | No | default: cloud hub | Hub server URL (default: cloud hub) |
+| `api_key` | string | No | — | API key for cloud hub (starts with nmk_) |
+| `auto_sync` | boolean | No | — | Enable/disable auto-sync |
+| `sync_interval_seconds` | integer | No | — | Sync interval in seconds |
+| `conflict_strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | — | Default conflict strategy |
+
+### `pugbrain_telegram_backup`
+
+Send brain database file as backup to Telegram.
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `brain_name` | string | No | default: active brain | Brain name to backup (default: active brain) |
 
 ### `pugbrain_hypothesize`
 
@@ -370,59 +539,6 @@ Find and explain the shortest path between two entities in the neural graph. Ret
 | `to_entity` | string | Yes | — | Target entity name to reach (e.g. 'performance', 'JWT') |
 | `max_hops` | integer | No | default: 6 | Maximum path length (default: 6) |
 
-## Training & Import {#training}
-
-### `pugbrain_train`
-
-Train brain from documentation files. Supports PDF, DOCX, PPTX, HTML, JSON, XLSX, CSV (requires: pip install pug-brain[extract]). Trained memories are pinned by default (no decay, no compression, permanent KB).
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`train`, `status`) | Yes | — | train=process docs into brain, status=show training stats |
-| `path` | string | No | default: current directory | Directory or file path to train from (default: current directory) |
-| `domain_tag` | string | No | — | Domain tag for all chunks (e.g., 'react', 'kubernetes') |
-| `brain_name` | string | No | default: current brain | Target brain name (default: current brain) |
-| `extensions` | array[string] | No | default: ['.md'] | File extensions to include (default: ['.md']). Rich formats (PDF, DOCX, PPTX, HTML, XLSX) require: pip install neural... |
-| `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
-| `pinned` | boolean | No | default: true | Pin trained memories as permanent KB — skip decay/prune/compress (default: true) |
-
-### `pugbrain_train_db`
-
-Train brain from database schema.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`train`, `status`) | Yes | — | train=extract schema into brain, status=show training stats |
-| `connection_string` | string | No | — | Database connection string (v1: sqlite:///path/to/db.db) |
-| `domain_tag` | string | No | — | Domain tag for schema knowledge (e.g., 'ecommerce', 'analytics') |
-| `brain_name` | string | No | default: current brain | Target brain name (default: current brain) |
-| `consolidate` | boolean | No | default: true | Run ENRICH consolidation after encoding (default: true) |
-| `max_tables` | integer | No | default: 100 | Maximum tables to process (default: 100) |
-
-### `pugbrain_index`
-
-Index codebase for code-aware recall.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`scan`, `status`) | Yes | — | scan=index codebase, status=show what's indexed |
-| `path` | string | No | default: current working directory | Directory to index (default: current working directory) |
-| `extensions` | array[string] | No | default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".cpp", ".hpp", ".cc"] | File extensions to index (default: [".py", ".js", ".ts", ".jsx", ".tsx", ".go", ".rs", ".java", ".kt", ".c", ".h", ".... |
-
-### `pugbrain_import`
-
-Import from external systems (ChromaDB, Mem0, Cognee, etc.).
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `source` | string (`chromadb`, `mem0`, `awf`, `cognee`, `graphiti`, `llamaindex`) | Yes | — | Source system to import from |
-| `connection` | string | No | — | Connection string/path (e.g., '/path/to/chroma', graph URI, or index dir path). For API keys, prefer env vars: MEM0_A... |
-| `collection` | string | No | — | Collection/namespace to import from |
-| `limit` | integer | No | — | Maximum records to import |
-| `user_id` | string | No | — | User ID filter (for Mem0) |
-
-## Memory Management {#management}
-
 ### `pugbrain_edit`
 
 Edit an existing memory's type, content, or priority. Use when a memory was auto-typed incorrectly or needs content correction. Preserves all connections (synapses) and fiber associations.
@@ -443,16 +559,6 @@ Explicitly delete or close a specific memory. Soft delete by default (marks as e
 | `memory_id` | string | Yes | — | The fiber ID of the memory to forget |
 | `hard` | boolean | No | default: false = soft delete | Permanent deletion with cascade cleanup (default: false = soft delete) |
 | `reason` | string | No | — | Why this memory is being forgotten (stored in logs) |
-
-### `pugbrain_pin`
-
-Pin, unpin, or list pinned memories. Pinned memories skip decay, pruning, and compression — use for permanent knowledge base content.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`pin`, `unpin`, `list`) | No | — | Action: pin (default), unpin, or list pinned memories |
-| `fiber_ids` | array[string] | No | — | Fiber IDs to pin or unpin (required for pin/unpin, ignored for list) |
-| `limit` | integer | No | default: 50, max: 200 | Max results for list action (default: 50, max: 200) |
 
 ### `pugbrain_consolidate`
 
@@ -476,108 +582,16 @@ Semantic drift detection — find tag clusters that should be merged or aliased.
 | `cluster_id` | string | No | — | Cluster ID to resolve (required for merge/alias/dismiss) |
 | `status` | string (`detected`, `merged`, `aliased`, `dismissed`) | No | — | Filter clusters by status (for list action) |
 
-### `pugbrain_review`
+### `pugbrain_tool_stats`
 
-Spaced repetition reviews (Leitner box system).
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`queue`, `mark`, `schedule`, `stats`) | Yes | — | queue=get due reviews, mark=record review result, schedule=manually schedule a fiber, stats=review statistics |
-| `fiber_id` | string | No | — | Fiber ID (required for mark and schedule actions) |
-| `success` | boolean | No | — | Whether recall was successful (for mark action, default: true) |
-| `limit` | integer | No | default: 20 | Max items in queue (default: 20) |
-
-### `pugbrain_alerts`
-
-Brain health alerts: list or acknowledge.
+Tool usage analytics: which tools agents use, frequency, success rates, and daily trends.
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `action` | string (`list`, `acknowledge`) | Yes | — | list=view active/seen alerts, acknowledge=mark alert as handled |
-| `alert_id` | string | No | — | Alert ID to acknowledge (required for acknowledge action) |
-| `limit` | integer | No | default: 50 | Max alerts to list (default: 50) |
-
-## Cloud Sync & Backup {#sync}
-
-### `pugbrain_sync`
-
-Trigger manual sync with hub server.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`push`, `pull`, `full`, `seed`) | Yes | — | push=send local changes, pull=get remote changes, full=bidirectional sync, seed=populate change log from existing dat... |
-| `hub_url` | string | No | — | Hub server URL (overrides config). Must be http:// or https:// |
-| `strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | default: from config | Conflict resolution strategy (default: from config) |
-| `api_key` | string | No | default: from config | API key override (default: from config) |
-
-### `pugbrain_sync_status`
-
-Show sync status: pending changes, devices, last sync.
-
-*No parameters.*
-
-### `pugbrain_sync_config`
-
-View or update sync configuration. Use action='setup' for guided onboarding.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`get`, `set`, `setup`) | Yes | — | get=view config, set=update config, setup=guided onboarding |
-| `enabled` | boolean | No | — | Enable/disable sync |
-| `hub_url` | string | No | default: cloud hub | Hub server URL (default: cloud hub) |
-| `api_key` | string | No | — | API key for cloud hub (starts with nmk_) |
-| `auto_sync` | boolean | No | — | Enable/disable auto-sync |
-| `sync_interval_seconds` | integer | No | — | Sync interval in seconds |
-| `conflict_strategy` | string (`prefer_recent`, `prefer_local`, `prefer_remote`, `prefer_stronger`) | No | — | Default conflict strategy |
-
-### `pugbrain_telegram_backup`
-
-Send brain database file as backup to Telegram.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `brain_name` | string | No | default: active brain | Brain name to backup (default: active brain) |
-
-## Versioning & Transfer {#meta}
-
-### `pugbrain_version`
-
-Brain version control: snapshot, list, rollback, diff.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`create`, `list`, `rollback`, `diff`) | Yes | — | create=snapshot current state, list=show versions, rollback=restore version, diff=compare versions |
-| `name` | string | No | — | Version name (required for create) |
-| `description` | string | No | — | Version description (optional for create) |
-| `version_id` | string | No | — | Version ID (required for rollback) |
-| `from_version` | string | No | — | Source version ID (required for diff) |
-| `to_version` | string | No | — | Target version ID (required for diff) |
-| `limit` | integer | No | default: 20 | Max versions to list (default: 20) |
-
-### `pugbrain_transplant`
-
-Transplant memories between brains by tags/types.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `source_brain` | string | Yes | — | Name of the source brain to extract from |
-| `tags` | array[string] | No | — | Tags to filter — fibers matching ANY tag will be included |
-| `memory_types` | array[string] | No | — | Memory types to filter (fact, decision, etc.) |
-| `strategy` | string (`prefer_local`, `prefer_remote`, `prefer_recent`, `prefer_stronger`) | No | default: prefer_local | Conflict resolution strategy (default: prefer_local) |
-
-### `pugbrain_conflicts`
-
-Memory conflicts: list, resolve, or pre-check.
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| `action` | string (`list`, `resolve`, `check`) | Yes | — | list=view active conflicts, resolve=manually resolve a conflict, check=pre-check content for conflicts |
-| `neuron_id` | string | No | — | Neuron ID of the disputed memory (required for resolve) |
-| `resolution` | string (`keep_existing`, `keep_new`, `keep_both`) | No | — | How to resolve: keep_existing=undo dispute, keep_new=supersede old, keep_both=accept both |
-| `content` | string | No | — | Content to pre-check for conflicts (required for check) |
-| `tags` | array[string] | No | — | Optional tags for more accurate conflict checking |
-| `limit` | integer | No | default: 50 | Max conflicts to list (default: 50) |
+| `action` | string (`summary`, `daily`) | Yes | — | summary=top tools with success rates, daily=usage breakdown by day |
+| `days` | integer | No | default: 30 | Time window in days (default: 30) |
+| `limit` | integer | No | default: 20 | Max tools to return (default: 20) |
 
 ---
 
-*Auto-generated by `scripts/gen_mcp_docs.py` from `tool_schemas.py` — 44 tools.*
+*Auto-generated by `scripts/gen_mcp_docs.py` from `tool_schemas.py` — 45 tools.*

@@ -332,8 +332,7 @@ class TestSuggestMemoryType:
         assert suggest_memory_type("The API endpoint returns JSON") == MemoryType.FACT
         assert suggest_memory_type("Schema version is 21") == MemoryType.FACT
         assert (
-            suggest_memory_type("Config file located at ~/.pugbrain/config.toml")
-            == MemoryType.FACT
+            suggest_memory_type("Config file located at ~/.pugbrain/config.toml") == MemoryType.FACT
         )
 
     def test_insight_not_misclassified_as_decision(self) -> None:
