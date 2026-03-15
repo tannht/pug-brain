@@ -842,6 +842,7 @@ async def get_vector_status() -> VectorStoreStatus:
             available_backends=available_backends,
         )
 
+
 # ---------------------------------------------------------------------------
 # Cloud Sync
 # ---------------------------------------------------------------------------

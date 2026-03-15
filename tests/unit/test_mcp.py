@@ -1148,20 +1148,20 @@ class TestMCPResources:
 
         assert len(resources) == 2
         uris = {r["uri"] for r in resources}
-        assert "neuralmemory://prompt/system" in uris
-        assert "neuralmemory://prompt/compact" in uris
+        assert "pugbrain://prompt/system" in uris
+        assert "pugbrain://prompt/compact" in uris
 
     def test_get_resource_content_system(self, server: MCPServer) -> None:
         """Test getting system prompt content."""
-        content = server.get_resource_content("neuralmemory://prompt/system")
+        content = server.get_resource_content("pugbrain://prompt/system")
 
         assert content is not None
-        assert "NeuralMemory" in content
+        assert "PugBrain" in content
         assert "pugbrain_remember" in content
 
     def test_get_resource_content_compact(self, server: MCPServer) -> None:
         """Test getting compact prompt content."""
-        content = server.get_resource_content("neuralmemory://prompt/compact")
+        content = server.get_resource_content("pugbrain://prompt/compact")
 
         assert content is not None
         assert len(content) < 3000  # Compact should be shorter than full prompt
@@ -1192,7 +1192,7 @@ class TestMCPResources:
             "jsonrpc": "2.0",
             "id": 2,
             "method": "resources/read",
-            "params": {"uri": "neuralmemory://prompt/system"},
+            "params": {"uri": "pugbrain://prompt/system"},
         }
 
         response = await handle_message(server, message)
@@ -1201,8 +1201,8 @@ class TestMCPResources:
         assert response["id"] == 2
         assert "result" in response
         assert "contents" in response["result"]
-        assert response["result"]["contents"][0]["uri"] == "neuralmemory://prompt/system"
-        assert "NeuralMemory" in response["result"]["contents"][0]["text"]
+        assert response["result"]["contents"][0]["uri"] == "pugbrain://prompt/system"
+        assert "PugBrain" in response["result"]["contents"][0]["text"]
 
     @pytest.mark.asyncio
     async def test_resources_read_not_found(self, server: MCPServer) -> None:
