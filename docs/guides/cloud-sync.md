@@ -19,7 +19,7 @@ For sensitive memories, enable encryption before syncing:
 nmem_remember("sensitive content", encrypted=True)
 ```
 
-The Fernet key stays at `~/.neuralmemory/keys/{brain_id}.key` — never uploaded to the cloud.
+The Fernet key stays at `~/.pugbrain/keys/{brain_id}.key` — never uploaded to the cloud.
 
 ---
 

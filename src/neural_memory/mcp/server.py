@@ -348,9 +348,9 @@ def _lazy_init() -> None:
     Safe to call on every MCP start — no-ops if config already exists.
     Only touches config/brain/hooks; never writes to stdout (reserved for JSON-RPC).
     """
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     config_path = data_dir / "config.toml"
     if config_path.exists():
         return  # Already initialized — fast path, no heavy imports

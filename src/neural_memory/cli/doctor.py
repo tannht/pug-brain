@@ -69,9 +69,9 @@ def _check_python_version() -> dict[str, Any]:
 
 def _check_config() -> dict[str, Any]:
     """Check config.toml exists and is valid."""
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     config_path = data_dir / "config.toml"
 
     if not config_path.exists():
@@ -102,9 +102,9 @@ def _check_config() -> dict[str, Any]:
 
 def _check_brain() -> dict[str, Any]:
     """Check default brain DB exists and is accessible."""
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
 
     try:
         from neural_memory.unified_config import get_config
@@ -219,11 +219,11 @@ def _check_embedding_provider() -> dict[str, Any]:
 def _check_schema_version() -> dict[str, Any]:
     """Check database schema version."""
     try:
-        from neural_memory.unified_config import get_config, get_neuralmemory_dir
+        from neural_memory.unified_config import get_config, get_pugbrain_dir
 
         config = get_config(reload=True)
         brain_name = config.current_brain
-        db_path = get_neuralmemory_dir() / "brains" / f"{brain_name}.db"
+        db_path = get_pugbrain_dir() / "brains" / f"{brain_name}.db"
 
         if not db_path.exists() or db_path.stat().st_size == 0:
             return {

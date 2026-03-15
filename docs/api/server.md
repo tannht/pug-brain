@@ -439,11 +439,11 @@ Get brain file paths and disk usage.
 
 ```json
 {
-  "brains_dir": "/home/user/.neuralmemory/brains",
+  "brains_dir": "/home/user/.pugbrain/brains",
   "brains": [
     {
       "name": "default",
-      "path": "/home/user/.neuralmemory/brains/default.db",
+      "path": "/home/user/.pugbrain/brains/default.db",
       "size_bytes": 1048576,
       "is_active": true
     }

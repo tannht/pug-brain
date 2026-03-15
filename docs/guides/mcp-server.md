@@ -207,7 +207,7 @@ Add to VS Code `settings.json`:
 
 ### VS Code Extension (GUI)
 
-For a graphical experience, install the [NeuralMemory VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory) from the marketplace.
+For a graphical experience, install the [NeuralMemory VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain) from the marketplace.
 
 ---
 
@@ -554,7 +554,7 @@ If `nmem-mcp` is not in your PATH, use the Python module:
 ## Alternative: Docker
 
 ```bash
-docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/neural-memory:latest nmem-mcp
+docker run -i --rm -v pugbrain:/root/.pugbrain ghcr.io/nhadaututtheky/neural-memory:latest nmem-mcp
 ```
 
 ```json
@@ -563,7 +563,7 @@ docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/ne
     "command": "docker",
     "args": [
       "run", "-i", "--rm",
-      "-v", "neuralmemory:/root/.neuralmemory",
+      "-v", "pugbrain:/root/.pugbrain",
       "ghcr.io/nhadaututtheky/neural-memory:latest",
       "nmem-mcp"
     ]
@@ -578,7 +578,7 @@ docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/ne
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NEURALMEMORY_BRAIN` | `"default"` | Brain name to use |
-| `NEURALMEMORY_DATA_DIR` | `~/.neuralmemory` | Data directory |
+| `NEURALMEMORY_DATA_DIR` | `~/.pugbrain` | Data directory |
 | `NEURAL_MEMORY_DEBUG` | `0` | Enable debug logging (`1` to enable) |
 | `MEM0_API_KEY` | — | Mem0 API key (for import) |
 | `COGNEE_API_KEY` | — | Cognee API key (for import) |
@@ -694,7 +694,7 @@ Once configured, these 44 tools are available to your AI assistant:
 
 ## Tool Tiers
 
-By default all 44 tools are exposed on every API turn. If you want to reduce token overhead, configure a **tool tier** in `~/.neuralmemory/config.toml`:
+By default all 44 tools are exposed on every API turn. If you want to reduce token overhead, configure a **tool tier** in `~/.pugbrain/config.toml`:
 
 ```toml
 [tool_tier]
@@ -731,8 +731,8 @@ The MCP server provides resources for system prompts:
 
 | Resource URI | Description |
 |-------------|-------------|
-| `neuralmemory://prompt/system` | Full system prompt for AI assistants |
-| `neuralmemory://prompt/compact` | Compact version for token-limited contexts |
+| `pugbrain://prompt/system` | Full system prompt for AI assistants |
+| `pugbrain://prompt/compact` | Compact version for token-limited contexts |
 
 ### Get MCP Config via CLI
 
@@ -865,10 +865,10 @@ NEURAL_MEMORY_DEBUG=1 nmem-mcp
 
 ```bash
 # macOS/Linux
-rm -rf ~/.neuralmemory
+rm -rf ~/.pugbrain
 
 # Windows
-rmdir /s /q %USERPROFILE%\.neuralmemory
+rmdir /s /q %USERPROFILE%\.pugbrain
 ```
 
 ---

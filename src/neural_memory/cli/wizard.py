@@ -19,7 +19,7 @@ from neural_memory.cli.setup import (
     setup_mcp_cursor,
     setup_skills,
 )
-from neural_memory.unified_config import get_neuralmemory_dir
+from neural_memory.unified_config import get_pugbrain_dir
 
 # Provider metadata for display
 _PROVIDERS: list[dict[str, str]] = [
@@ -57,7 +57,7 @@ def run_wizard(*, force: bool = False) -> None:
     typer.secho("  ─────────────────────────", dim=True)
     typer.echo()
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     results: dict[str, str] = {}
 
     # Step 1: Brain name

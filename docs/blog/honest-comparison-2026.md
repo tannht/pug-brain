@@ -56,7 +56,7 @@ NeuralMemory's core path is regex pattern matching + graph traversal + substring
 
 ### 2. Single-File Portability
 
-NeuralMemory stores everything — neurons, synapses, fibers, versions, action logs — in one SQLite file. Your entire brain is `~/.neuralmemory/brains/default.db` (~20MB for a working brain with 5,000+ neurons).
+NeuralMemory stores everything — neurons, synapses, fibers, versions, action logs — in one SQLite file. Your entire brain is `~/.pugbrain/brains/default.db` (~20MB for a working brain with 5,000+ neurons).
 
 What this enables:
 - Copy the file to another machine — done, your memory moved

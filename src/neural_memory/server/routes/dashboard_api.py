@@ -810,11 +810,11 @@ async def get_vector_status() -> VectorStoreStatus:
 
     try:
         from neural_memory.storage.vector import create_vector_store
-        from neural_memory.unified_config import get_config, get_neuralmemory_dir
+        from neural_memory.unified_config import get_config, get_pugbrain_dir
 
         cfg = get_config()
         brain_name = cfg.current_brain
-        persist_dir = str(get_neuralmemory_dir() / "vectors" / brain_name)
+        persist_dir = str(get_pugbrain_dir() / "vectors" / brain_name)
 
         store = create_vector_store(
             backend="auto",

@@ -73,8 +73,8 @@ class TestUrlVersioning:
     """URL versioning for cloud vs local hub."""
 
     def test_cloud_url_gets_v1(self) -> None:
-        url = _build_sync_url("https://sync-hub.neuralmemory.dev")
-        assert url == "https://sync-hub.neuralmemory.dev/v1/hub/sync"
+        url = _build_sync_url("https://sync-hub.pugbrain.dev")
+        assert url == "https://sync-hub.pugbrain.dev/v1/hub/sync"
 
     def test_localhost_no_v1(self) -> None:
         url = _build_sync_url("http://localhost:8000")

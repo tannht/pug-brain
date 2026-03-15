@@ -30,9 +30,9 @@ def _warn_if_not_initialized(ctx: typer.Context) -> None:
     """
     if ctx.invoked_subcommand == "init":
         return
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    config_path = get_neuralmemory_dir() / "config.toml"
+    config_path = get_pugbrain_dir() / "config.toml"
     if not config_path.exists():
         typer.secho(
             "Tip: PugBrain not set up yet. Run 'pug init' to get started.",

@@ -130,13 +130,13 @@ export class MemoryCodeLensProvider implements vscode.CodeLensProvider {
       if (count === 0) {
         codeLens.command = {
           title: "No memories",
-          command: "neuralmemory.encode",
+          command: "pugbrain.encode",
           tooltip: `Encode "${symbolName}" as a memory`,
         };
       } else {
         codeLens.command = {
           title: `${count} memor${count === 1 ? "y" : "ies"}`,
-          command: "neuralmemory.recall",
+          command: "pugbrain.recall",
           tooltip: `Recall memories related to "${symbolName}"`,
         };
       }

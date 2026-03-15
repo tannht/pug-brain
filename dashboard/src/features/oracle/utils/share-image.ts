@@ -159,7 +159,7 @@ export function generateShareImage(reading: DailyReading): Promise<Blob> {
   ctx.fillStyle = "#606060"
   ctx.font = "10px system-ui, sans-serif"
   ctx.textAlign = "center"
-  ctx.fillText("Neural Memory — neuralmemory.dev", WIDTH / 2, HEIGHT - 10)
+  ctx.fillText("Neural Memory — pugbrain.dev", WIDTH / 2, HEIGHT - 10)
 
   return new Promise((resolve) => {
     canvas.toBlob(

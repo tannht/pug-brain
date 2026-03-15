@@ -6,7 +6,7 @@ description: |
   Uses 1-question-at-a-time clarification to avoid cognitive overload.
 metadata:
   stage: workflow
-  tags: [memory, intake, structured, neuralmemory]
+  tags: [memory, intake, structured, pugbrain]
 context:
   - "~/.pugbrain/config.toml"
 agent: Memory Intake Specialist

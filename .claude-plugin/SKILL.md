@@ -71,4 +71,4 @@ Neural Memory works automatically once configured. The agent should:
 
 - [GitHub](https://github.com/nhadaututtheky/neural-memory)
 - [Documentation](https://nhadaututtheky.github.io/neural-memory)
-- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory)
+- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain)

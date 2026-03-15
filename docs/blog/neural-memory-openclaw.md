@@ -92,7 +92,7 @@ OpenClaw:  context window (200K tokens) → đầy → compact → MẤT
 Neural Memory: SQLite graph (không giới hạn) → recall bất kỳ lúc nào → KHÔNG BAO GIỜ MẤT
 ```
 
-Mọi memory được lưu vào SQLite neural graph tại `~/.neuralmemory/brains/`. Agent có thể recall thông tin từ tuần 1 khi đang ở tuần 12. Không phụ thuộc context window.
+Mọi memory được lưu vào SQLite neural graph tại `~/.pugbrain/brains/`. Agent có thể recall thông tin từ tuần 1 khi đang ở tuần 12. Không phụ thuộc context window.
 
 #### 2. Vòng đời bộ nhớ 4 giai đoạn
 
@@ -166,7 +166,7 @@ OpenClaw memory: static. Dòng thứ 1 và dòng thứ 100 trong MEMORY.md có c
 #### 6. Portable brain — 1 bộ não, N agents
 
 ```
-~/.neuralmemory/brains/
+~/.pugbrain/brains/
 ├── crypto-expert.db      ← Brain cho crypto project
 ├── web-app.db            ← Brain cho web development
 └── personal-assistant.db ← Brain cho daily tasks
@@ -240,7 +240,7 @@ v1.3.0 mở rộng Integrations tab: activity log realtime, setup wizards cho Cl
 Cài đặt native plugin thay vì SKILL:
 
 ```bash
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Plugin tự động:
@@ -268,7 +268,7 @@ Neural Memory là **pure algorithmic** — 1,352 tests, Python thuần, SQLite s
 
 ```bash
 pip install neural-memory
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Plugin tự động register 6 tools, inject context trước session, auto-capture sau session. Zero config. Brain auto-init khi dùng lần đầu.
@@ -463,7 +463,7 @@ OpenClaw đã có đôi tay tuyệt vời. Giờ hãy cho nó một bộ não.
 
 *[Neural Memory](https://github.com/nhadaututtheky/neural-memory) — Reflex-based memory system for AI agents. Retrieval through activation, not search. v1.3.0, 1,352 tests, 16 MCP tools.*
 
-*[OpenClaw Plugin](https://www.npmjs.com/package/neuralmemory) — Native OpenClaw integration. `npm install -g neuralmemory`*
+*[OpenClaw Plugin](https://www.npmjs.com/package/pugbrain) — Native OpenClaw integration. `npm install -g pugbrain`*
 
 *[ClawHub Skill](https://clawhub.ai/skills/neural-memory) — Install NeuralMemory as an OpenClaw skill in one click.*
 

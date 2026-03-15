@@ -6,9 +6,9 @@ description: |
   with specific memory references and actionable recommendations.
 metadata:
   stage: review
-  tags: [memory, audit, quality, health, neuralmemory]
+  tags: [memory, audit, quality, health, pugbrain]
 context:
-  - "~/.neuralmemory/config.toml"
+  - "~/.pugbrain/config.toml"
 agent: Memory Quality Auditor
 allowed-tools:
   - pugbrain_recall

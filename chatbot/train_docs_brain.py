@@ -24,7 +24,7 @@ from neural_memory.storage.sqlite_store import SQLiteStorage
 # ── Config ─────────────────────────────────────────────────
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_BRAIN_NAME = "neuralmemory-docs"
+DEFAULT_BRAIN_NAME = "pugbrain-docs"
 DOCS_DIR = ROOT / "docs"
 DB_PATH = ROOT / "chatbot" / "brain" / "docs.db"
 
@@ -64,14 +64,14 @@ async def train_brain(brain_name: str) -> tuple[SQLiteStorage, BrainConfig]:
     brain = Brain.create(
         name=brain_name,
         config=config,
-        metadata={"type": "documentation", "source": "neuralmemory-docs"},
+        metadata={"type": "documentation", "source": "pugbrain-docs"},
     )
     await storage.save_brain(brain)
     storage.set_brain(brain.id)
 
     trainer = DocTrainer(storage, config)
     training_config = TrainingConfig(
-        domain_tag="neuralmemory",
+        domain_tag="pugbrain",
         brain_name=brain_name,
         min_chunk_words=15,
         max_chunk_words=400,

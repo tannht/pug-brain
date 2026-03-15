@@ -109,7 +109,7 @@ pip install neural-memory
 Core recall works without embeddings. Enable for cross-language search:
 
 ```toml
-# ~/.neuralmemory/config.toml
+# ~/.pugbrain/config.toml
 [embedding]
 enabled = true
 provider = "ollama"          # or sentence_transformer, gemini, openai

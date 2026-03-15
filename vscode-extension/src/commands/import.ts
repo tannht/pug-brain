@@ -64,7 +64,7 @@ export function registerImportCommands(
 ): void {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.importMemories",
+      "pugbrain.importMemories",
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(

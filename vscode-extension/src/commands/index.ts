@@ -13,7 +13,7 @@ export function registerIndexCommands(
   // Index codebase
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.indexCodebase",
+      "pugbrain.indexCodebase",
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(

@@ -351,18 +351,18 @@ class TestE2EIsolation:
             "E2E client fixture must use monkeypatch to override NEURALMEMORY_DIR"
         )
 
-    def test_neuralmemory_dir_env_respected(self, tmp_path: object) -> None:
-        """get_neuralmemory_dir() must respect NEURALMEMORY_DIR env var."""
+    def test_pugbrain_dir_env_respected(self, tmp_path: object) -> None:
+        """get_pugbrain_dir() must respect NEURALMEMORY_DIR env var."""
         import os
         from pathlib import Path
 
-        from neural_memory.unified_config import get_neuralmemory_dir
+        from neural_memory.unified_config import get_pugbrain_dir
 
         original = os.environ.get("NEURALMEMORY_DIR")
         try:
             test_dir = str(tmp_path)
             os.environ["NEURALMEMORY_DIR"] = test_dir
-            result = get_neuralmemory_dir()
+            result = get_pugbrain_dir()
             assert result == Path(test_dir).resolve()
         finally:
             if original is None:

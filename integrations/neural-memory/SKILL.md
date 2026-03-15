@@ -27,7 +27,7 @@ A biologically-inspired memory system that uses spreading activation instead of 
 pip install neural-memory
 ```
 
-The brain and config at `~/.neuralmemory/` are auto-created on first use.
+The brain and config at `~/.pugbrain/` are auto-created on first use.
 
 ### 2. Install the OpenClaw Plugin (Recommended)
 
@@ -35,7 +35,7 @@ The plugin occupies the exclusive **memory slot** — auto-injects context befor
 
 ```bash
 # Install from npm
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Add to `~/.openclaw/openclaw.json`:
@@ -47,7 +47,7 @@ Add to `~/.openclaw/openclaw.json`:
       "paths": ["<path-to-installed-plugin>"]
     },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "enabled": true,
         "config": {
           "pythonPath": "python",
@@ -58,7 +58,7 @@ Add to `~/.openclaw/openclaw.json`:
       }
     },
     "slots": {
-      "memory": "neuralmemory"
+      "memory": "pugbrain"
     }
   }
 }
@@ -87,7 +87,7 @@ On Windows, use forward slashes or escaped backslashes in `openclaw.json` paths:
 {
   "plugins": {
     "load": {
-      "paths": ["C:/Users/<you>/AppData/Roaming/npm/node_modules/neuralmemory"]
+      "paths": ["C:/Users/<you>/AppData/Roaming/npm/node_modules/pugbrain"]
     }
   }
 }
@@ -96,7 +96,7 @@ On Windows, use forward slashes or escaped backslashes in `openclaw.json` paths:
 To find the installed path:
 
 ```powershell
-npm list -g neuralmemory --parseable
+npm list -g pugbrain --parseable
 ```
 
 If `openclaw plugins list` doesn't show the plugin:
@@ -250,7 +250,7 @@ Automatically extracts: 1 decision, 1 fact, 1 TODO.
 
 ## Notes
 
-- Memories are stored locally in SQLite at `~/.neuralmemory/brains/<brain>.db`
+- Memories are stored locally in SQLite at `~/.pugbrain/brains/<brain>.db`
 - No data is sent to external services (unless optional embedding provider is configured)
 - Brain isolation: each brain is independent, no cross-contamination
 - `pugbrain_remember` returns fiber_id for reference tracking

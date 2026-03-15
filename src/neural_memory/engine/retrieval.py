@@ -1343,9 +1343,9 @@ class ReflexPipeline:
             brain_id = getattr(self._storage, "_current_brain_id", None) or "default"
             # Resolve persist dir from unified config
             try:
-                from neural_memory.unified_config import get_neuralmemory_dir
+                from neural_memory.unified_config import get_pugbrain_dir
 
-                persist_dir = str(get_neuralmemory_dir() / "vectors" / brain_id)
+                persist_dir = str(get_pugbrain_dir() / "vectors" / brain_id)
             except Exception:
                 persist_dir = None
 

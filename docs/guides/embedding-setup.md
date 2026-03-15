@@ -18,7 +18,7 @@ NeuralMemory works **without embeddings** — its core retrieval uses spreading 
 The easiest way to enable embeddings — let NeuralMemory detect what's available:
 
 ```toml
-# ~/.neuralmemory/config.toml
+# ~/.pugbrain/config.toml
 [embedding]
 enabled = true
 provider = "auto"
@@ -43,7 +43,7 @@ Runs entirely on your machine. No API key, no cost, no data leaves your device.
 pip install neural-memory[embeddings]
 ```
 
-**Config** (`~/.neuralmemory/config.toml`):
+**Config** (`~/.pugbrain/config.toml`):
 
 ```toml
 [embedding]

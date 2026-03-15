@@ -207,9 +207,9 @@ def init(
         setup_mcp_cursor,
         setup_skills,
     )
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     results: dict[str, str] = {}
 
     # 1. Config

@@ -113,7 +113,7 @@ nav:
   - Contributing: contributing.md
   - Changelog: changelog.md
   - Blog:
-    - Why I Built NeuralMemory: blog/why-i-built-neuralmemory.md
+    - Why I Built NeuralMemory: blog/why-i-built-pugbrain.md
     - Honest Comparison 2026: blog/honest-comparison-2026.md
     - OpenClaw Integration: blog/neural-memory-openclaw.md
 

@@ -2,7 +2,7 @@
 
 NeuralMemory includes a self-answering documentation chatbot powered by spreading activation — no LLM required.
 
-**Try it live:** [HuggingFace Space](https://huggingface.co/spaces/nhadaututtheky/neuralmemory-docs)
+**Try it live:** [HuggingFace Space](https://huggingface.co/spaces/nhadaututtheky/pugbrain-docs)
 
 ## How it works
 
@@ -41,7 +41,7 @@ Training options:
 
 | Flag | Description |
 |------|-------------|
-| `--brain NAME` | Custom brain name (default: `neuralmemory-docs`) |
+| `--brain NAME` | Custom brain name (default: `pugbrain-docs`) |
 | `--export DIR` | Copy the trained DB to another directory |
 | `--no-verify` | Skip verification queries |
 

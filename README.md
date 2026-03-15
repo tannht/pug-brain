@@ -494,7 +494,7 @@ GET  /docs              - Swagger API docs
 
 ## VS Code Extension
 
-Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory).
+Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain).
 
 Memory tree view, interactive graph explorer, CodeLens memory counts, encode from selections, real-time WebSocket sync.
 

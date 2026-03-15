@@ -24,7 +24,7 @@ app.use(
   "/v1/*",
   cors({
     origin: [
-      "https://neuralmemory.dev",
+      "https://pugbrain.dev",
       "http://localhost:3000",
       "http://localhost:8000",
     ],

@@ -26,7 +26,7 @@ export class StatusBarManager implements vscode.Disposable {
       vscode.StatusBarAlignment.Left,
       100,
     );
-    this._item.command = "neuralmemory.switchBrain";
+    this._item.command = "pugbrain.switchBrain";
     this._item.name = "NeuralMemory";
   }
 
@@ -93,12 +93,12 @@ export class StatusBarManager implements vscode.Disposable {
     if (this._status === "disconnected") {
       this._item.text = "$(debug-disconnect) NeuralMemory";
       this._item.tooltip = "NeuralMemory: Disconnected. Click to connect.";
-      this._item.command = "neuralmemory.connectServer";
+      this._item.command = "pugbrain.connectServer";
       return;
     }
 
     // Connected
-    this._item.command = "neuralmemory.switchBrain";
+    this._item.command = "pugbrain.switchBrain";
 
     const brainLabel = this._brainId ?? "no brain";
 

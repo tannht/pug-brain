@@ -10,7 +10,7 @@ export interface NeuralMemoryConfig {
 }
 
 export function getConfig(): NeuralMemoryConfig {
-  const cfg = vscode.workspace.getConfiguration("neuralmemory");
+  const cfg = vscode.workspace.getConfiguration("pugbrain");
 
   return {
     pythonPath: cfg.get<string>("pythonPath", "python"),

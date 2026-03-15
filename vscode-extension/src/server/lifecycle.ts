@@ -107,7 +107,7 @@ export class ServerLifecycle implements vscode.Disposable {
     } else if (action === "Configure URL") {
       await vscode.commands.executeCommand(
         "workbench.action.openSettings",
-        "neuralmemory.serverUrl",
+        "pugbrain.serverUrl",
       );
     }
   }
@@ -329,21 +329,21 @@ export class ServerLifecycle implements vscode.Disposable {
       "code" in err && (err as NodeJS.ErrnoException).code === "ENOENT";
 
     const message = isNotFound
-      ? `Python not found at "${getConfig().pythonPath}". Install neural-memory and configure neuralmemory.pythonPath.`
+      ? `Python not found at "${getConfig().pythonPath}". Install neural-memory and configure pugbrain.pythonPath.`
       : `Failed to start NeuralMemory server: ${err.message}`;
 
     vscode.window.showErrorMessage(message, "Open Settings").then((action) => {
       if (action === "Open Settings") {
         vscode.commands.executeCommand(
           "workbench.action.openSettings",
-          "neuralmemory.pythonPath",
+          "pugbrain.pythonPath",
         );
       }
     });
   }
 
   private _getLockFilePath(): string {
-    const nmDir = path.join(os.homedir(), ".neuralmemory");
+    const nmDir = path.join(os.homedir(), ".pugbrain");
     return path.join(nmDir, LOCK_FILE_NAME);
   }
 
@@ -362,7 +362,7 @@ export class ServerLifecycle implements vscode.Disposable {
 
   private _writeLockFile(port: number): void {
     try {
-      const nmDir = path.join(os.homedir(), ".neuralmemory");
+      const nmDir = path.join(os.homedir(), ".pugbrain");
       if (!fs.existsSync(nmDir)) {
         fs.mkdirSync(nmDir, { recursive: true });
       }

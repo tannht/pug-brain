@@ -134,7 +134,7 @@ Then install the generated `.vsix` file via **Extensions > Install from VSIX** o
 
 ### Configuration
 
-In VS Code settings (`neuralmemory.*`):
+In VS Code settings (`pugbrain.*`):
 
 | Setting | Default | Description |
 |---------|---------|-------------|

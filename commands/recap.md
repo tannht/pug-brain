@@ -6,9 +6,9 @@ arguments:
     description: Optional topic to focus recall on
     required: false
 allowed-tools:
-  - mcp__neuralmemory__pugbrain_recap
-  - mcp__neuralmemory__pugbrain_recall
-  - mcp__neuralmemory__pugbrain_session
+  - mcp__pugbrain_recap
+  - mcp__pugbrain_recall
+  - mcp__pugbrain_session
 ---
 
 # /recap — Session Context Loader

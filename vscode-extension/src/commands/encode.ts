@@ -21,7 +21,7 @@ export function registerEncodeCommands(
 ): void {
   // Encode selection (or fall back to input)
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.encode", async () => {
+    vscode.commands.registerCommand("pugbrain.encode", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",
@@ -51,7 +51,7 @@ export function registerEncodeCommands(
   // Encode from input box (always)
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.encodeInput",
+      "pugbrain.encodeInput",
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(

@@ -34,9 +34,9 @@ context window. Memories survive compaction, session restarts, and device change
 ## Setup
 
 > ⚠️ **Order matters strictly.** Steps 1 and 2 must be completed and verified
-> before editing the config in Step 3. Adding `slots.memory = "neuralmemory"`
+> before editing the config in Step 3. Adding `slots.memory = "pugbrain"`
 > before the plugin is loaded causes OpenClaw to refuse to start with
-> `plugin not found: neuralmemory`.
+> `plugin not found: pugbrain`.
 
 
 ### Step 1 — Install packages
@@ -45,7 +45,7 @@ Install the Python backend and the npm plugin package:
 
 ```bash
 pip install neural-memory
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Verify both are working before continuing:
@@ -62,7 +62,7 @@ global npm registry automatically. Copy the plugin into OpenClaw's extensions
 directory:
 
 ```bash
-cp -r $(npm root -g)/neuralmemory ~/.openclaw/extensions/neuralmemory
+cp -r $(npm root -g)/pugbrain ~/.openclaw/extensions/pugbrain
 ```
 
 **Verify before continuing:**
@@ -71,7 +71,7 @@ cp -r $(npm root -g)/neuralmemory ~/.openclaw/extensions/neuralmemory
 openclaw plugins list | grep -i neural
 ```
 
-You must see `neuralmemory` in the output before proceeding to Step 3. If it does
+You must see `pugbrain` in the output before proceeding to Step 3. If it does
 not appear, do **not** continue — adding `slots.memory` without the plugin loaded
 will cause the gateway to fail on every restart.
 
@@ -86,12 +86,12 @@ section:
 ```json
 {
   "plugins": {
-    "allow": ["neuralmemory"],
+    "allow": ["pugbrain"],
     "load": {
-      "paths": ["~/.openclaw/extensions/neuralmemory"]
+      "paths": ["~/.openclaw/extensions/pugbrain"]
     },
     "slots": {
-      "memory": "neuralmemory"
+      "memory": "pugbrain"
     }
   }
 }
@@ -127,7 +127,7 @@ openclaw gateway
 openclaw doctor
 ```
 
-There should be no errors about `neuralmemory`. Then ask your agent:
+There should be no errors about `pugbrain`. Then ask your agent:
 
 ```
 What memory tools do you have?
@@ -150,7 +150,7 @@ OpenClaw Plugin (TypeScript, in-process)
 NeuralMemory MCP Server (Python subprocess)
     │
     ▼
-SQLite Neural Graph (~/.neuralmemory/brains/)
+SQLite Neural Graph (~/.pugbrain/brains/)
 ```
 
 The plugin:
@@ -164,24 +164,24 @@ The plugin:
 
 ## Plugin Configuration
 
-Optional config under `plugins.entries.neuralmemory.config` in `openclaw.json`:
+Optional config under `plugins.entries.pugbrain.config` in `openclaw.json`:
 
-> **Important:** The entry name **must** be `neuralmemory` (no hyphen) — this
+> **Important:** The entry name **must** be `pugbrain` (no hyphen) — this
 > matches the plugin ID. Using any other name (e.g. `neural-memory`, `telegram`)
 > will cause an "Invalid value" error.
 
 ```json
 {
   "plugins": {
-    "allow": ["neuralmemory"],
+    "allow": ["pugbrain"],
     "load": {
-      "paths": ["~/.openclaw/extensions/neuralmemory"]
+      "paths": ["~/.openclaw/extensions/pugbrain"]
     },
     "slots": {
-      "memory": "neuralmemory"
+      "memory": "pugbrain"
     },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "config": {
           "pythonPath": "python",
           "brain": "default",
@@ -234,14 +234,14 @@ exclusively and **not** use `memory_search` or `memory_get` from the disabled
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `Invalid value` in plugin config | Unknown key or wrong entry name | Only use documented config keys. Entry name must be `neuralmemory` (no hyphen) |
+| `Invalid value` in plugin config | Unknown key or wrong entry name | Only use documented config keys. Entry name must be `pugbrain` (no hyphen) |
 | `no MCP Client` | Using SKILL.md with `mcp:` block | Skills don't support MCP. Use the Plugin approach (this guide) |
 | `ENOENT: python not found` | Wrong Python path | Set `pythonPath` in plugin config to your Python binary |
 | `MCP process exited with code 1` | `neural-memory` not installed | Run `pip install neural-memory` |
-| Agent still uses `memory_search` | Slot not configured | Set `plugins.slots.memory = "neuralmemory"` in `openclaw.json` |
+| Agent still uses `memory_search` | Slot not configured | Set `plugins.slots.memory = "pugbrain"` in `openclaw.json` |
 | Agent uses both `pugbrain_*` and `memory_*` | `memory-core` still active | Check slot config — only one memory plugin can be active |
 | `MCP timeout` | Slow machine or large brain | Increase `timeout` in plugin config (default: 30000ms) |
-| Plugin not found | Not installed globally | Run `npm install -g neuralmemory` |
+| Plugin not found | Not installed globally | Run `npm install -g pugbrain` |
 
 ## Common Mistakes
 
@@ -252,9 +252,9 @@ exclusively and **not** use `memory_search` or `memory_get` from the disabled
 {
   "plugins": {
     "enabled": true,
-    "slots": { "memory": "neuralmemory" },
+    "slots": { "memory": "pugbrain" },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "config": { "enabled": true }
       }
     }
@@ -264,9 +264,9 @@ exclusively and **not** use `memory_search` or `memory_get` from the disabled
 // CORRECT — only use documented keys
 {
   "plugins": {
-    "slots": { "memory": "neuralmemory" },
+    "slots": { "memory": "pugbrain" },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "config": { "pythonPath": "python", "brain": "default" }
       }
     }
@@ -281,12 +281,12 @@ keys are accepted: `pythonPath`, `brain`, `autoContext`, `autoCapture`,
 ### Using wrong entry name
 
 ```json
-// WRONG — entry name must be "neuralmemory" (the plugin ID)
+// WRONG — entry name must be "pugbrain" (the plugin ID)
 { "plugins": { "entries": { "neural-memory": { "config": {} } } } }
 { "plugins": { "entries": { "telegram": { "enabled": true } } } }
 
 // CORRECT
-{ "plugins": { "entries": { "neuralmemory": { "config": {} } } } }
+{ "plugins": { "entries": { "pugbrain": { "config": {} } } } }
 ```
 
 ### Using `"memory": "none"`
@@ -296,7 +296,7 @@ keys are accepted: `pythonPath`, `brain`, `autoContext`, `autoCapture`,
 { "plugins": { "slots": { "memory": "none" } } }
 
 // CORRECT — activates NeuralMemory, disables memory-core
-{ "plugins": { "slots": { "memory": "neuralmemory" } } }
+{ "plugins": { "slots": { "memory": "pugbrain" } } }
 ```
 
 ### Using SKILL.md with `mcp:` block

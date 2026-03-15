@@ -46,7 +46,7 @@ export async function activate(
 
   // 4. Memory tree view
   const memoryTree = new MemoryTreeProvider(server);
-  vscode.window.registerTreeDataProvider("neuralmemory.memories", memoryTree);
+  vscode.window.registerTreeDataProvider("pugbrain.memories", memoryTree);
   memoryTree.registerCommands(context);
 
   // 5. Register commands
@@ -132,7 +132,7 @@ function registerLifecycleCommands(
   statusBar: StatusBarManager,
 ): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.startServer", async () => {
+    vscode.commands.registerCommand("pugbrain.startServer", async () => {
       if (server.isRunning()) {
         vscode.window.showInformationMessage(
           `NeuralMemory server already running at ${server.baseUrl}`,
@@ -161,7 +161,7 @@ function registerLifecycleCommands(
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.connectServer",
+      "pugbrain.connectServer",
       async () => {
         const config = getConfig();
         const url = await vscode.window.showInputBox({
@@ -183,7 +183,7 @@ function registerLifecycleCommands(
         }
 
         await vscode.workspace
-          .getConfiguration("neuralmemory")
+          .getConfiguration("pugbrain")
           .update("serverUrl", url, vscode.ConfigurationTarget.Global);
 
         try {
@@ -216,7 +216,7 @@ function registerGraphCommands(
   server: ServerLifecycle,
 ): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.openGraph", () => {
+    vscode.commands.registerCommand("pugbrain.openGraph", () => {
       GraphPanel.createOrShow(server, context.extensionUri);
     }),
   );

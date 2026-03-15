@@ -136,9 +136,9 @@ class OpenClawConfigManager:
 
     def __init__(self, config_dir: Path | None = None) -> None:
         if config_dir is None:
-            from neural_memory.unified_config import get_neuralmemory_dir
+            from neural_memory.unified_config import get_pugbrain_dir
 
-            config_dir = get_neuralmemory_dir()
+            config_dir = get_pugbrain_dir()
         self._path = config_dir / "openclaw.json"
 
     @property

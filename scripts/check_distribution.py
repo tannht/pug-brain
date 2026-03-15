@@ -22,8 +22,8 @@ from typing import Optional
 # ── Constants ───────────────────────────────────────────────────────────────
 
 PACKAGE_NAME = "neural-memory"
-NPM_PACKAGE = "neuralmemory"
-VSCE_ID = "neuralmem.neuralmemory"
+NPM_PACKAGE = "pugbrain"
+VSCE_ID = "neuralmem.pugbrain"
 CLAWHUB_SLUG = "neural-memory"
 GITHUB_REPO = "nhadaututtheky/neural-memory"
 
@@ -322,7 +322,7 @@ def _fix_hints(channel: ChannelResult, local_version: str) -> list[str]:
     if name == "npm":
         return [
             "# Publish to npm:",
-            f"cd integrations/neuralmemory",
+            f"cd integrations/pugbrain",
             f"npm version {local_version} --no-git-tag-version",
             f"npm publish",
         ]

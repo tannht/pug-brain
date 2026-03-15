@@ -81,7 +81,7 @@ Install the VS Code extension:
 The extension defaults to port `8000`. If your server runs on a different port, update the setting:
 
 1. Open VS Code Settings (`Ctrl+,`)
-2. Search `neuralmemory.serverUrl`
+2. Search `pugbrain.serverUrl`
 3. Set it to your server's URL (e.g. `http://127.0.0.1:8080`)
 
 ### Q: Server is running, correct port set, but extension still shows nothing?
@@ -132,7 +132,7 @@ Yes. Drop a `.mcp.json` file in each project root:
 // ~/projects/work-api/.mcp.json
 {
   "mcpServers": {
-    "neuralmemory": {
+    "pugbrain": {
       "command": "python",
       "args": ["-m", "neural_memory.mcp"],
       "env": { "NEURALMEMORY_BRAIN": "work-api" }
@@ -237,7 +237,7 @@ No. Install once globally and it works for the entire machine:
 python -m pip install neural-memory[all]
 ```
 
-Data is stored in `~/.neuralmemory/` — not tied to any specific project. All tools (CLI, AntiGravity, Claude Code, VS Code extension) read from the same location.
+Data is stored in `~/.pugbrain/` — not tied to any specific project. All tools (CLI, AntiGravity, Claude Code, VS Code extension) read from the same location.
 
 To separate data per project, use different brains:
 
@@ -250,8 +250,8 @@ nmem brain switch my-project
 
 They already share the same brain automatically. Both read/write to the same files:
 
-- **Config**: `~/.neuralmemory/config.toml`
-- **Data**: `~/.neuralmemory/brains/<name>.db`
+- **Config**: `~/.pugbrain/config.toml`
+- **Data**: `~/.pugbrain/brains/<name>.db`
 
 As long as both tools point to the same `current_brain`, all memories are synced. Verify with:
 
@@ -266,7 +266,7 @@ Add the NeuralMemory MCP server to `~/.claude.json`:
 ```json
 {
   "mcpServers": {
-    "neuralmemory": {
+    "pugbrain": {
       "command": "python",
       "args": ["-m", "neural_memory.mcp"]
     }
@@ -447,7 +447,7 @@ nmem doctor  # Shows current schema version + any issues
 - Migrations are **forward-only** — downgrading to an older version after migration is not supported
 - Your existing memories, brains, and configurations are preserved
 - If a migration fails mid-way, it halts safely (no partial schema changes)
-- Back up your brain DB before major upgrades: `cp ~/.neuralmemory/brains/default.db ~/.neuralmemory/brains/default.db.bak`
+- Back up your brain DB before major upgrades: `cp ~/.pugbrain/brains/default.db ~/.pugbrain/brains/default.db.bak`
 
 ### Q: Why is my consolidation 0%?
 

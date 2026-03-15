@@ -19,7 +19,7 @@ nmem-mcp --help
 ## Install
 
 ```bash
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Or add to your OpenClaw config directly.
@@ -32,10 +32,10 @@ Add to `~/.openclaw/openclaw.json`:
 {
   "plugins": {
     "slots": {
-      "memory": "neuralmemory"
+      "memory": "pugbrain"
     },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "config": {
           "pythonPath": "python",
           "brain": "default",
@@ -48,7 +48,7 @@ Add to `~/.openclaw/openclaw.json`:
 }
 ```
 
-> **Important**: Setting `slots.memory = "neuralmemory"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of NeuralMemory tools.
+> **Important**: Setting `slots.memory = "pugbrain"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of NeuralMemory tools.
 
 ## Tools
 
@@ -93,7 +93,7 @@ NeuralMemory Plugin (this package)
 nmem-mcp (Python MCP server, stdio transport)
     |
     v
-~/.neuralmemory/brains/<brain>.db (SQLite)
+~/.pugbrain/brains/<brain>.db (SQLite)
 ```
 
 The plugin spawns `nmem-mcp` as a subprocess and communicates via JSON-RPC over stdio. Memories are stored in a local SQLite database.

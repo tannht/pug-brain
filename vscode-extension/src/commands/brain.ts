@@ -6,11 +6,11 @@ import { NeuralMemoryClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { StatusBarManager } from "../views/StatusBarManager";
 
-const BRAINS_DIR = path.join(os.homedir(), ".neuralmemory", "brains");
-const CONFIG_PATH = path.join(os.homedir(), ".neuralmemory", "config.toml");
+const BRAINS_DIR = path.join(os.homedir(), ".pugbrain", "brains");
+const CONFIG_PATH = path.join(os.homedir(), ".pugbrain", "config.toml");
 
 /**
- * Read the current brain name from ~/.neuralmemory/config.toml.
+ * Read the current brain name from ~/.pugbrain/config.toml.
  */
 export function readCurrentBrain(): string {
   try {
@@ -26,7 +26,7 @@ export function readCurrentBrain(): string {
 }
 
 /**
- * List available brain names by scanning ~/.neuralmemory/brains/*.db.
+ * List available brain names by scanning ~/.pugbrain/brains/*.db.
  */
 export function listLocalBrains(): readonly string[] {
   try {
@@ -44,7 +44,7 @@ export function listLocalBrains(): readonly string[] {
 }
 
 /**
- * Write the current brain name to ~/.neuralmemory/config.toml.
+ * Write the current brain name to ~/.pugbrain/config.toml.
  * Only updates the current_brain line, preserving the rest.
  */
 function writeCurrentBrain(brainName: string): void {
@@ -93,7 +93,7 @@ export function registerBrainCommands(
 ): void {
   // Switch Brain
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.switchBrain", async () => {
+    vscode.commands.registerCommand("pugbrain.switchBrain", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",
@@ -128,7 +128,7 @@ export function registerBrainCommands(
       }
 
       if (selected.action === "create") {
-        await vscode.commands.executeCommand("neuralmemory.createBrain");
+        await vscode.commands.executeCommand("pugbrain.createBrain");
         return;
       }
 
@@ -147,7 +147,7 @@ export function registerBrainCommands(
 
   // Create Brain
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.createBrain", async () => {
+    vscode.commands.registerCommand("pugbrain.createBrain", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",

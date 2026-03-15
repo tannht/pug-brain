@@ -14,7 +14,7 @@ import { readCurrentBrain } from "../../commands/brain";
 import { getConfig } from "../../utils/config";
 import { getGraphHtml, getNonce } from "./graphTemplate";
 
-const VIEW_TYPE = "neuralmemory.graphExplorer";
+const VIEW_TYPE = "pugbrain.graphExplorer";
 
 /**
  * Message types sent FROM the webview TO the extension.
@@ -269,7 +269,7 @@ export class GraphPanel {
     );
 
     if (action === "Recall Related") {
-      await vscode.commands.executeCommand("neuralmemory.recall");
+      await vscode.commands.executeCommand("pugbrain.recall");
     } else if (action === "View Neighborhood") {
       await this._fetchSubgraph(nodeId);
     }

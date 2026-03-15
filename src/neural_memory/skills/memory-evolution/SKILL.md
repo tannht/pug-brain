@@ -6,7 +6,7 @@ description: |
   and tracks improvement over time via checkpoint Q&A.
 metadata:
   stage: workflow
-  tags: [memory, evolution, optimization, patterns, neuralmemory]
+  tags: [memory, evolution, optimization, patterns, pugbrain]
 context:
   - "~/.pugbrain/config.toml"
 agent: Memory Evolution Specialist

@@ -15,7 +15,7 @@ services:
       - NEURAL_MEMORY_DATA_DIR=/data
       - NM_HOME=/data
     volumes:
-      - /root/.neuralmemory:/data
+      - /root/.pugbrain:/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:18790/health')"]
       interval: 30s

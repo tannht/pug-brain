@@ -78,7 +78,7 @@ ONBOARDING_STEPS: tuple[OnboardingHint, ...] = (
             "Install embeddings to recall memories across languages "
             "(e.g., search in Vietnamese, find English memories). "
             "Run: pip install neural-memory[embeddings]. "
-            "Then add [embedding] section to ~/.neuralmemory/config.toml with "
+            "Then add [embedding] section to ~/.pugbrain/config.toml with "
             "enabled=true, provider='sentence_transformer', "
             "model='paraphrase-multilingual-MiniLM-L12-v2'. "
             "This is optional — core recall works without embeddings."

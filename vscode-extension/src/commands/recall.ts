@@ -25,7 +25,7 @@ export function registerRecallCommands(
   server: ServerLifecycle,
 ): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recall", async () => {
+    vscode.commands.registerCommand("pugbrain.recall", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",

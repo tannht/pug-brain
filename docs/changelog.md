@@ -272,7 +272,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - README: added pugbrain_explain to tools table, brain health section, connection tracing section, embedding auto-detect
-- OpenClaw npm package renamed to `neuralmemory` (published on npm)
+- OpenClaw npm package renamed to `pugbrain` (published on npm)
 
 ## [2.25.1] - 2026-03-05
 
@@ -291,7 +291,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Plugin ID mismatch warning** — Renamed package from `@neuralmemory/openclaw-plugin` to `neuralmemory` to match manifest `id`. OpenClaw's `deriveIdHint()` extracts the unscoped package name as `idHint`, which previously produced `openclaw-plugin` ≠ `neuralmemory`
+- **Plugin ID mismatch warning** — Renamed package from `@pugbrain/openclaw-plugin` to `pugbrain` to match manifest `id`. OpenClaw's `deriveIdHint()` extracts the unscoped package name as `idHint`, which previously produced `openclaw-plugin` ≠ `pugbrain`
 - **Tool schema provider compatibility** — Replaced `integer` with `number` (Gemini rejects `integer`), added `additionalProperties: false` (OpenAI strict mode), removed constraint keywords (`maxLength`, `maxItems`, `minimum`, `maximum`) that some providers reject. MCP server validates these server-side
 - **Pre-existing test bugs** — Config test missing `initTimeout` in expected defaults; execute tests passing args as `id` parameter
 
@@ -999,7 +999,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about NeuralMemory tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
 - **Agent confuses CLI vs MCP tool calls** — `systemPrompt` injection explicitly states "call as tool, NOT CLI command", preventing agents from running `nmem remember` in terminal instead of calling the `pugbrain_remember` tool
 - **`openclaw plugins list` not recognizing plugin on Windows** — Changed `main` and `openclaw.extensions` from TypeScript source (`src/index.ts`) to compiled output (`dist/index.js`). Added `prepublishOnly` and `postinstall` build scripts. Fixed `tsconfig.json` module resolution from `bundler` to `Node16` for broader compatibility
-- **OpenClaw plugin ID mismatch** — Added explicit `"id": "neuralmemory"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "neuralmemory", entry hints "openclaw-plugin")` warning
+- **OpenClaw plugin ID mismatch** — Added explicit `"id": "pugbrain"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "pugbrain", entry hints "openclaw-plugin")` warning
 - **Content-Length framing bug** — Switched from string-based buffer to raw `Buffer` for byte-accurate MCP message parsing. Fixes silent data corruption with non-ASCII content (Vietnamese, emoji, CJK)
 - **Null dereference after close()** — `writeMessage()` and `notify()` now guard against null process reference
 - **Unhandled tool call errors** — `callTool()` exceptions in tools.ts now caught and returned as structured error responses instead of crashing OpenClaw
@@ -1197,7 +1197,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **OpenClaw Memory Plugin** — `@neuralmemory/openclaw-plugin` npm package
+- **OpenClaw Memory Plugin** — `@pugbrain/openclaw-plugin` npm package
   - MCP stdio client: JSON-RPC 2.0 with Content-Length framing
   - 6 core tools, 2 hooks (before_agent_start, agent_end), 1 service
   - Plugin manifest with `configSchema` + `uiHints`

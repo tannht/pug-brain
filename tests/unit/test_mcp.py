@@ -1168,7 +1168,7 @@ class TestMCPResources:
 
     def test_get_resource_content_unknown(self, server: MCPServer) -> None:
         """Test getting unknown resource returns None."""
-        content = server.get_resource_content("neuralmemory://unknown")
+        content = server.get_resource_content("pugbrain://unknown")
 
         assert content is None
 
@@ -1211,7 +1211,7 @@ class TestMCPResources:
             "jsonrpc": "2.0",
             "id": 3,
             "method": "resources/read",
-            "params": {"uri": "neuralmemory://unknown"},
+            "params": {"uri": "pugbrain://unknown"},
         }
 
         response = await handle_message(server, message)

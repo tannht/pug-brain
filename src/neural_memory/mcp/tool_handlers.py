@@ -247,7 +247,7 @@ class ToolHandler:
                     f"Your query is in {'Vietnamese' if query_lang == 'vi' else 'English'} "
                     f"but most memories are in {'Vietnamese' if majority_lang == 'vi' else 'English'}. "
                     "Enable cross-language recall: add [embedding] section to "
-                    "~/.neuralmemory/config.toml with enabled=true, "
+                    "~/.pugbrain/config.toml with enabled=true, "
                     "provider='sentence_transformer', "
                     "model='paraphrase-multilingual-MiniLM-L12-v2'."
                 )
@@ -257,7 +257,7 @@ class ToolHandler:
                     f"but most memories are in {'Vietnamese' if majority_lang == 'vi' else 'English'}. "
                     "Enable cross-language recall: "
                     "pip install neural-memory[embeddings], then add [embedding] section to "
-                    "~/.neuralmemory/config.toml with enabled=true, "
+                    "~/.pugbrain/config.toml with enabled=true, "
                     "provider='sentence_transformer', "
                     "model='paraphrase-multilingual-MiniLM-L12-v2'."
                 )

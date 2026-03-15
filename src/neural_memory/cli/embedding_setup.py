@@ -88,7 +88,7 @@ def run_embedding_setup() -> None:
         module = p["module"]
         assert module is not None
         installed = _is_installed(module)
-        has_key = _has_env_key(p.get("env_key"))
+        has_key = _has_env_key(p.get("env_key") or "")
 
         status_parts = []
         if installed:

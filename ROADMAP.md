@@ -135,7 +135,7 @@ Cold tier (SQLite read-only)  — archived, compressed, rarely accessed
 
 **Vision**: Self-hostable Brain Hub that multiple agents/devices connect to. Real-time sync with conflict resolution.
 
-- Docker one-liner: `docker run -p 8080:8080 neuralmemory/hub`
+- Docker one-liner: `docker run -p 8080:8080 pugbrain/hub`
 - WebSocket real-time sync (not polling)
 - Auth: API key per device/agent
 - Rate limiting + connection pooling
@@ -174,7 +174,7 @@ Cold tier (SQLite read-only)  — archived, compressed, rarely accessed
 
 **Vision**: Built-in backup with zero configuration.
 
-- Local: automatic daily snapshots in `~/.neuralmemory/backups/` (rolling 7 days)
+- Local: automatic daily snapshots in `~/.pugbrain/backups/` (rolling 7 days)
 - Cloud: optional push to S3/GCS/Backblaze B2 (encrypted at rest)
 - Point-in-time recovery: restore brain to any snapshot
 - Integrity check: SHA-256 verification on restore

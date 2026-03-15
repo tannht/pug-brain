@@ -332,7 +332,7 @@ class TestSuggestMemoryType:
         assert suggest_memory_type("The API endpoint returns JSON") == MemoryType.FACT
         assert suggest_memory_type("Schema version is 21") == MemoryType.FACT
         assert (
-            suggest_memory_type("Config file located at ~/.neuralmemory/config.toml")
+            suggest_memory_type("Config file located at ~/.pugbrain/config.toml")
             == MemoryType.FACT
         )
 

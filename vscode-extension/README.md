@@ -91,18 +91,18 @@ WebSocket connection keeps your tree view, graph, and status bar updated in real
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `neuralmemory.pythonPath` | `"python"` | Python interpreter with neural-memory installed |
-| `neuralmemory.autoStart` | `false` | Auto-start the server on activation |
-| `neuralmemory.serverUrl` | `"http://127.0.0.1:8000"` | NeuralMemory server URL |
-| `neuralmemory.graphNodeLimit` | `1000` | Max nodes in graph explorer (50-10000) |
-| `neuralmemory.codeLensEnabled` | `true` | Show CodeLens hints for functions and comments |
-| `neuralmemory.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns that trigger encode suggestions |
+| `pugbrain.pythonPath` | `"python"` | Python interpreter with neural-memory installed |
+| `pugbrain.autoStart` | `false` | Auto-start the server on activation |
+| `pugbrain.serverUrl` | `"http://127.0.0.1:8000"` | NeuralMemory server URL |
+| `pugbrain.graphNodeLimit` | `1000` | Max nodes in graph explorer (50-10000) |
+| `pugbrain.codeLensEnabled` | `true` | Show CodeLens hints for functions and comments |
+| `pugbrain.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns that trigger encode suggestions |
 
 ## Getting Started
 
 1. Install the extension
 2. Install NeuralMemory: `pip install neural-memory`
-3. Start the server: run **NeuralMemory: Start Server** from the command palette, or enable `neuralmemory.autoStart`
+3. Start the server: run **NeuralMemory: Start Server** from the command palette, or enable `pugbrain.autoStart`
 5. Open the NeuralMemory sidebar (brain icon in the activity bar)
 
 ## Status Bar

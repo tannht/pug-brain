@@ -28,7 +28,7 @@ export function registerEternalCommands(
 ): void {
   // ── Recap command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recap", async () => {
+    vscode.commands.registerCommand("pugbrain.recap", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",
@@ -70,7 +70,7 @@ export function registerEternalCommands(
 
   // ── Recap by topic command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recapTopic", async () => {
+    vscode.commands.registerCommand("pugbrain.recapTopic", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",
@@ -112,7 +112,7 @@ export function registerEternalCommands(
 
   // ── Eternal save command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.eternalSave", async () => {
+    vscode.commands.registerCommand("pugbrain.eternalSave", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",
@@ -146,7 +146,7 @@ export function registerEternalCommands(
 
   // ── Eternal status command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.eternalStatus", async () => {
+    vscode.commands.registerCommand("pugbrain.eternalStatus", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
           "NeuralMemory server is not running.",

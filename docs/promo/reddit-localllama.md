@@ -50,7 +50,7 @@ pip install neural-memory[embeddings]
 
 Config for Ollama embeddings:
 ```toml
-# ~/.neuralmemory/config.toml
+# ~/.pugbrain/config.toml
 [embedding]
 enabled = true
 provider = "ollama"

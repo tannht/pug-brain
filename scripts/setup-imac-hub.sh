@@ -20,7 +20,7 @@ NM_VERSION="2.29.0"
 HUB_PORT=8369
 HUB_HOST="0.0.0.0"
 LAN_CIDR="192.168.0.0/16"  # Adjust if your LAN uses a different range
-LAUNCHD_LABEL="com.neuralmemory.hub"
+LAUNCHD_LABEL="com.pugbrain.hub"
 PLIST_PATH="$HOME/Library/LaunchAgents/${LAUNCHD_LABEL}.plist"
 
 # ── Colors ───────────────────────────────────────────────────────────────────

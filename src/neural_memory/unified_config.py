@@ -42,7 +42,7 @@ _TOML_SAFE_STRING = re.compile(r"^[a-zA-Z0-9_\-\./ ]*$")
 _TOML_STR_MAX_LEN = 128
 
 
-def get_neuralmemory_dir() -> Path:
+def get_pugbrain_dir() -> Path:
     """Get PugBrain data directory.
 
     Priority:
@@ -50,24 +50,24 @@ def get_neuralmemory_dir() -> Path:
     2. NEURALMEMORY_DIR environment variable (legacy, for migration)
     3. ~/.pugbrain/
 
-    Also migrates data from ~/.neuralmemory/ to ~/.pugbrain/ on first use.
+    Also migrates data from ~/.pugbrain/ to ~/.pugbrain/ on first use.
     """
     env_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR")
     if env_dir:
         return Path(env_dir).resolve()
 
     new_dir = Path.home() / ".pugbrain"
-    old_dir = Path.home() / ".neuralmemory"
+    old_dir = Path.home() / ".pugbrain"
 
     # Auto-migrate from old directory if new doesn't exist but old does
     if not new_dir.exists() and old_dir.exists():
-        _migrate_from_neuralmemory(old_dir, new_dir)
+        _migrate_from_pugbrain(old_dir, new_dir)
 
     return new_dir
 
 
-def _migrate_from_neuralmemory(old_dir: Path, new_dir: Path) -> None:
-    """Migrate data from ~/.neuralmemory/ to ~/.pugbrain/."""
+def _migrate_from_pugbrain(old_dir: Path, new_dir: Path) -> None:
+    """Migrate data from ~/.pugbrain/ to ~/.pugbrain/."""
     try:
         new_dir.mkdir(parents=True, exist_ok=True)
 
@@ -804,7 +804,7 @@ class UnifiedConfig:
     """
 
     # Base directory for all PugBrain data
-    data_dir: Path = field(default_factory=get_neuralmemory_dir)
+    data_dir: Path = field(default_factory=get_pugbrain_dir)
 
     # Current active brain
     current_brain: str = field(default_factory=get_default_brain)
@@ -872,7 +872,7 @@ class UnifiedConfig:
     def load(cls, config_path: Path | None = None) -> UnifiedConfig:
         """Load configuration from file, or create default if doesn't exist."""
         if config_path is None:
-            data_dir = get_neuralmemory_dir()
+            data_dir = get_pugbrain_dir()
             config_path = data_dir / "config.toml"
         else:
             data_dir = config_path.parent
@@ -1241,7 +1241,7 @@ def _read_current_brain_from_toml() -> str | None:
         The current_brain string, or ``None`` if the file is missing
         or cannot be parsed.
     """
-    toml_path = get_neuralmemory_dir() / "config.toml"
+    toml_path = get_pugbrain_dir() / "config.toml"
     if not toml_path.exists():
         return None
     try:
