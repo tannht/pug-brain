@@ -145,6 +145,25 @@ Co-Authored-By: claude-flow <ruv@ruv.net>
 fix: trigger auto-version release for pug-master
 
 
+## [4.6.0] - 2026-03-14
+
+### Added
+
+- **`nmem setup rules`** — IDE rules file generator for multi-agent adoption. Generates `.cursorrules`, `.windsurfrules`, `.clinerules`, `GEMINI.md`, and `AGENTS.md` with NM usage instructions. Supports `--all`, `--ide <name>`, `--force`, and interactive selection
+- **17 new tests** for IDE rules generator
+
+## [4.5.0] - 2026-03-14
+
+### Added
+
+- **Context merger (Phase A)** — `nmem_remember` accepts optional `context` dict (e.g. `{reason, alternatives, cause, fix, steps}`) that gets merged into content server-side using type-specific templates. Works with any agent — no need to craft perfect prose
+- **Quality scorer (Phase B)** — Every `nmem_remember` response now includes `quality` ("low"/"medium"/"high"), `score` (0-10), and `hints` (actionable improvement suggestions). Soft gate: always stores, never rejects
+- **36 new tests** for quality scorer (20) and context merger (16)
+
+### Fixed
+
+- **Tool memory config default** — test assertion updated to match `enabled=True` default
+
 ## [4.4.1] - 2026-03-14
 
 ### Improved
