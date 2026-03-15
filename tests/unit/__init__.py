@@ -1,1 +1,1 @@
-"""Unit tests for NeuralMemory."""
+"""Unit tests for PugBrain."""

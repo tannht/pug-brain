@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { StatusBarManager } from "../views/StatusBarManager";
 
@@ -96,7 +96,7 @@ export function registerBrainCommands(
     vscode.commands.registerCommand("pugbrain.switchBrain", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -150,7 +150,7 @@ export function registerBrainCommands(
     vscode.commands.registerCommand("pugbrain.createBrain", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -182,7 +182,7 @@ export function registerBrainCommands(
       }
 
       try {
-        const client = new NeuralMemoryClient(server.baseUrl);
+        const client = new PugBrainClient(server.baseUrl);
         const brain = await client.createBrain({ name });
 
         writeCurrentBrain(name);

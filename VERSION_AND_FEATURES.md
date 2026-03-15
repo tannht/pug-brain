@@ -1,4 +1,4 @@
-# NeuralMemory — Version Bump & Feature Reference
+# PugBrain — Version Bump & Feature Reference
 
 > Complete checklist and feature catalog. Update this file when adding new features.
 
@@ -68,7 +68,7 @@
 | `pug cleanup` | Remove expired memories | --expired, --type, --dry-run, --force, --json |
 | `pug consolidate` | Prune/merge/summarize | --brain, --strategy, --dry-run, --prune-threshold, --merge-overlap, --min-inactive-days |
 | `pug decay` | Run memory decay | --brain |
-| `pug init` | Initialize NeuralMemory | — |
+| `pug init` | Initialize PugBrain | — |
 | `pug serve` | Run FastAPI server | --host, --port |
 | `pug mcp` | Run MCP server | — |
 | `pug mcp-config` | Generate MCP config JSON | --with-prompt, --compact |

@@ -1,6 +1,6 @@
 ---
 name: Question
-about: Ask a question about NeuralMemory
+about: Ask a question about PugBrain
 title: "[QUESTION] "
 labels: question
 assignees: ""

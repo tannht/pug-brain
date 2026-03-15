@@ -65,10 +65,10 @@ End-to-end benchmark: 15 encoded memories, 5 queries, 10 runs each.
 30 curated memories, 25 queries, K=5.
 
 
-### Overall (NeuralMemory vs Naive Baseline)
+### Overall (PugBrain vs Naive Baseline)
 
 
-| Metric | NeuralMemory | Naive Baseline | Winner |
+| Metric | PugBrain | Naive Baseline | Winner |
 | --- | --- | --- | --- |
 | Precision@5 | 0.168 | 0.248 | **Baseline** |
 | Recall@5 | 0.380 | 0.466 | **Baseline** |
@@ -79,7 +79,7 @@ End-to-end benchmark: 15 encoded memories, 5 queries, 10 runs each.
 ### Per-Category Recall
 
 
-| Category | NeuralMemory | Baseline | Count |
+| Category | PugBrain | Baseline | Count |
 | --- | --- | --- | --- |
 | causal | 0.375 | 0.500 | 4 |
 | coherence | 0.244 | 0.378 | 3 |

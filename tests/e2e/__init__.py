@@ -1,1 +1,1 @@
-"""End-to-end tests for NeuralMemory."""
+"""End-to-end tests for PugBrain."""

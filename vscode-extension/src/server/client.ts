@@ -1,5 +1,5 @@
 /**
- * Typed HTTP client for the NeuralMemory REST API.
+ * Typed HTTP client for the PugBrain REST API.
  *
  * All methods correspond 1:1 to server endpoints.
  * Uses native fetch (Node 18+, available in VS Code runtime).
@@ -43,12 +43,12 @@ export class ApiError extends Error {
 }
 
 /**
- * HTTP client for the NeuralMemory server.
+ * HTTP client for the PugBrain server.
  *
  * All methods require a brain ID header (X-Brain-ID) for
  * brain-scoped operations. Pass brainId to those methods.
  */
-export class NeuralMemoryClient {
+export class PugBrainClient {
   constructor(private readonly _baseUrl: string) {}
 
   get baseUrl(): string {

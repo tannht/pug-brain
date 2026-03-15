@@ -165,7 +165,7 @@ def generate() -> str:
     lines = [
         "# MCP Tools Reference",
         "",
-        "Complete reference for all NeuralMemory MCP tools.",
+        "Complete reference for all PugBrain MCP tools.",
         f"**{len(schemas)} tools** available via MCP stdio transport.",
         "",
         "!!! tip",

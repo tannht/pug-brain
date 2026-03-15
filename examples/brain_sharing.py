@@ -1,5 +1,5 @@
 """
-Brain sharing example for NeuralMemory.
+Brain sharing example for PugBrain.
 
 This example demonstrates:
 1. Creating and populating a brain
@@ -105,7 +105,7 @@ async def import_brain(storage: InMemoryStorage, input_path: str) -> str:
 
 async def main() -> None:
     print("=" * 60)
-    print("NeuralMemory Brain Sharing Demo")
+    print("PugBrain Brain Sharing Demo")
     print("=" * 60)
 
     # 1. Create expert brain

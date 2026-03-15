@@ -1,5 +1,5 @@
 """
-Basic usage example for NeuralMemory.
+Basic usage example for PugBrain.
 
 This example demonstrates:
 1. Creating a brain

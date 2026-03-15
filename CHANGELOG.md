@@ -253,7 +253,7 @@ fix: trigger auto-version release for pug-master
 
 - **Auto-generated MCP Tool Reference** — `scripts/gen_mcp_docs.py` introspects all 44 MCP tool schemas and generates `docs/api/mcp-tools.md` with parameter tables, categories, and tier badges
 - **Auto-generated CLI Reference** — `scripts/gen_cli_docs.py` introspects all 66 CLI commands (Typer/Click) and generates `docs/getting-started/cli-reference.md`
-- **Documentation Chatbot** — Gradio UI (`chatbot/app.py`) powered by NeuralMemory's ReflexPipeline, answers docs questions without an LLM using spreading activation retrieval
+- **Documentation Chatbot** — Gradio UI (`chatbot/app.py`) powered by PugBrain's ReflexPipeline, answers docs questions without an LLM using spreading activation retrieval
 - **Docs Brain Trainer** — `chatbot/train_docs_brain.py` trains a brain from project docs (40 files → 1045 chunks → 9175 neurons)
 - **CI Docs Freshness Check** — new `docs` job in GitHub Actions runs `--check` mode on both generators, fails CI when auto-generated docs are stale
 
@@ -1020,7 +1020,7 @@ fix: trigger auto-version release for pug-master
 
 ### Fixed
 
-- **OpenClaw plugin: lazy auto-connect** — Fixed tools returning "NeuralMemory service not running" when OpenClaw calls `register()` multiple times across subsystems (gateway, agent worker, CLI). Agent worker instance now lazily connects on first tool call via `ensureConnected()` with connection mutex to prevent race conditions (#38)
+- **OpenClaw plugin: lazy auto-connect** — Fixed tools returning "PugBrain service not running" when OpenClaw calls `register()` multiple times across subsystems (gateway, agent worker, CLI). Agent worker instance now lazily connects on first tool call via `ensureConnected()` with connection mutex to prevent race conditions (#38)
 
 ## [2.27.1] - 2026-03-06
 ## [v3.1.2] - 2026-03-11
@@ -1932,7 +1932,7 @@ fix: trigger auto-version release for pug-master
 
 ### Added
 
-- **Proactive Memory Auto-Save** — 4-layer system ensures agents use NeuralMemory without explicit instructions
+- **Proactive Memory Auto-Save** — 4-layer system ensures agents use PugBrain without explicit instructions
   - **MCP `instructions`** — Behavioral directives in InitializeResult, auto-injected into agent context
   - **Post-tool passive capture** — Server-side auto-analysis of recall/context/recap/explain results with rate limiting (3/min)
   - **Plugin `instructions` field** — Short nudge for all plugin users
@@ -6355,7 +6355,7 @@ fix: trigger auto-version release for pug-master
 
 ### Fixed
 
-- **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about NeuralMemory tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
+- **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about PugBrain tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
 - **Agent confuses CLI vs MCP tool calls** — `systemPrompt` injection explicitly states "call as tool, NOT CLI command", preventing agents from running `pug remember` in terminal instead of calling the `pugbrain_remember` tool
 - **`openclaw plugins list` not recognizing plugin on Windows** — Changed `main` and `openclaw.extensions` from TypeScript source (`src/index.ts`) to compiled output (`dist/index.js`). Added `prepublishOnly` and `postinstall` build scripts. Fixed `tsconfig.json` module resolution from `bundler` to `Node16` for broader compatibility
 - **OpenClaw plugin ID mismatch** — Added explicit `"id": "pugbrain"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "pugbrain", entry hints "openclaw-plugin")` warning
@@ -9635,18 +9635,18 @@ fix: trigger auto-version release for pug-master
 - **Ground truth evaluation dataset**: 30 curated memories across 5 sessions (Day 1→Day 30) covering project setup, development, integration, sprint review, and production launch
 - **Standard IR metrics**: Precision@K, Recall@K, MRR (Mean Reciprocal Rank), NDCG@K with per-query and per-category aggregation
 - **25 evaluation queries**: 8 factual, 6 temporal, 4 causal, 4 pattern, 3 multi-session coherence queries with expected relevant results
-- **Naive keyword-overlap baseline**: Tokenize-and-rank strawman that NeuralMemory's activation-based recall must beat
+- **Naive keyword-overlap baseline**: Tokenize-and-rank strawman that PugBrain's activation-based recall must beat
 - **Long-horizon coherence test framework**: 5-session simulation across 30 days with recall tracking per session (target: >= 60% at day 30)
 - `benchmarks/ground_truth.py` — ground truth memories, queries, session schedule
 - `benchmarks/metrics.py` — IR metrics: `precision_at_k`, `recall_at_k`, `reciprocal_rank`, `ndcg_at_k`, `evaluate_query`, `BenchmarkReport`
 - `benchmarks/naive_baseline.py` — keyword overlap ranking and baseline evaluation
 - `benchmarks/coherence_test.py` — multi-session coherence test with `CoherenceReport`
-- Ground-truth evaluation section in `run_benchmarks.py` comparing NeuralMemory vs baseline
+- Ground-truth evaluation section in `run_benchmarks.py` comparing PugBrain vs baseline
 - 27 new unit tests: precision (6), recall (4), MRR (5), NDCG (4), query evaluation (1), report aggregation (2), baseline (5)
 
 ### Changed
 
-- `run_benchmarks.py` now includes ground-truth evaluation with NeuralMemory vs naive baseline comparison in generated markdown output
+- `run_benchmarks.py` now includes ground-truth evaluation with PugBrain vs naive baseline comparison in generated markdown output
 
 ## [0.12.0] - 2026-02-07
 ## [v3.1.2] - 2026-03-11

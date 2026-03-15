@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import type { StatsResponse } from "../server/types";
 
@@ -8,7 +8,7 @@ const POLL_INTERVAL_MS = 30_000;
 export type ConnectionStatus = "connected" | "disconnected" | "starting";
 
 /**
- * Manages the NeuralMemory status bar item.
+ * Manages the PugBrain status bar item.
  *
  * Displays: $(brain) <brainName> | N:<count> S:<count> F:<count>
  * Click opens brain switcher quick pick.
@@ -27,7 +27,7 @@ export class StatusBarManager implements vscode.Disposable {
       100,
     );
     this._item.command = "pugbrain.switchBrain";
-    this._item.name = "NeuralMemory";
+    this._item.name = "PugBrain";
   }
 
   get brainId(): string | null {
@@ -85,14 +85,14 @@ export class StatusBarManager implements vscode.Disposable {
 
   private _render(): void {
     if (this._status === "starting") {
-      this._item.text = "$(loading~spin) NeuralMemory";
-      this._item.tooltip = "Connecting to NeuralMemory server...";
+      this._item.text = "$(loading~spin) PugBrain";
+      this._item.tooltip = "Connecting to PugBrain server...";
       return;
     }
 
     if (this._status === "disconnected") {
-      this._item.text = "$(debug-disconnect) NeuralMemory";
-      this._item.tooltip = "NeuralMemory: Disconnected. Click to connect.";
+      this._item.text = "$(debug-disconnect) PugBrain";
+      this._item.tooltip = "PugBrain: Disconnected. Click to connect.";
       this._item.command = "pugbrain.connectServer";
       return;
     }
@@ -125,7 +125,7 @@ export class StatusBarManager implements vscode.Disposable {
     }
 
     try {
-      const client = new NeuralMemoryClient(this._server.baseUrl);
+      const client = new PugBrainClient(this._server.baseUrl);
       this._stats = await client.getBrainStats(this._brainId);
       this._status = "connected";
       this._render();

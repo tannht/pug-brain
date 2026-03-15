@@ -1,4 +1,4 @@
-# NeuralMemory Roadmap
+# PugBrain Roadmap
 
 > Forward-looking vision. What's next, what's possible, where we're going.
 > Every item passes the VISION.md 4-question test + brain test.
@@ -184,11 +184,11 @@ Cold tier (SQLite read-only)  — archived, compressed, rarely accessed
 
 ## Phase 4: Platform & Ecosystem (v3.0+)
 
-> From tool to platform. NeuralMemory as the memory standard for AI.
+> From tool to platform. PugBrain as the memory standard for AI.
 
 ### 4.1 Brain Protocol Specification
 
-**Problem**: NeuralMemory is the only implementation. Need open spec for interoperability.
+**Problem**: PugBrain is the only implementation. Need open spec for interoperability.
 
 **Vision**: Publish "Brain Protocol" — formal spec for how AI memory systems should work. Any vendor can implement it.
 
@@ -245,7 +245,7 @@ Lifecycle hooks:
 
 ## Phase 5: Intelligence Frontier (v4.0+)
 
-> Where NeuralMemory goes beyond current AI memory paradigms.
+> Where PugBrain goes beyond current AI memory paradigms.
 
 ### 5.1 Dream Engine v2 (Insight Generation)
 

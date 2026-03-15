@@ -343,7 +343,7 @@ def _check_cli_tools() -> dict[str, Any]:
 def _render_results(result: dict[str, Any]) -> None:
     """Render diagnostic results to terminal."""
     typer.echo()
-    typer.secho("  NeuralMemory Doctor", bold=True)
+    typer.secho("  PugBrain Doctor", bold=True)
     typer.secho("  ───────────────────", dim=True)
     typer.echo()
 

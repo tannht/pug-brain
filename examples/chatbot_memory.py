@@ -1,7 +1,7 @@
 """
-Chatbot memory example for NeuralMemory.
+Chatbot memory example for PugBrain.
 
-This example demonstrates how to use NeuralMemory
+This example demonstrates how to use PugBrain
 to give a chatbot persistent memory across conversations.
 """
 
@@ -135,7 +135,7 @@ async def simulate_conversation() -> None:
 
 async def main() -> None:
     print("=" * 60)
-    print("NeuralMemory Chatbot Demo")
+    print("PugBrain Chatbot Demo")
     print("=" * 60)
 
     await simulate_conversation()

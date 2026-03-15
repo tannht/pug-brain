@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "../commands/brain";
 import type { NeuronItem, NeuronType } from "../server/types";
@@ -147,7 +147,7 @@ export class MemoryTreeProvider
           }
 
           const brainId = readCurrentBrain();
-          const client = new NeuralMemoryClient(this._server.baseUrl);
+          const client = new PugBrainClient(this._server.baseUrl);
 
           try {
             const result = await vscode.window.withProgress(
@@ -225,7 +225,7 @@ export class MemoryTreeProvider
     }
 
     const brainId = readCurrentBrain();
-    const client = new NeuralMemoryClient(this._server.baseUrl);
+    const client = new PugBrainClient(this._server.baseUrl);
 
     try {
       const result = await client.listNeurons(brainId, { limit: 500 });

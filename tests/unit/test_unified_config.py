@@ -38,7 +38,7 @@ def _create_fake_db(path: Path, *, size: int = 0) -> None:
 
 @pytest.fixture()
 def tmp_data_dir(tmp_path: Path) -> Path:
-    """Return a temporary NeuralMemory data directory."""
+    """Return a temporary PugBrain data directory."""
     return tmp_path / ".pugbrain"
 
 

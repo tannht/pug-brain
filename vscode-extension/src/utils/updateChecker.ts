@@ -55,7 +55,7 @@ export async function checkForUpdates(
     // Show notification
     const releaseName = release.name || `v${remoteVersion}`;
     const action = await vscode.window.showInformationMessage(
-      `NeuralMemory ${releaseName} is available (current: v${currentVersion}).`,
+      `PugBrain ${releaseName} is available (current: v${currentVersion}).`,
       "View Release",
       "Dismiss",
     );

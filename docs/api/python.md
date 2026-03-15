@@ -1,6 +1,6 @@
 # Python API
 
-NeuralMemory provides a comprehensive async Python API.
+PugBrain provides a comprehensive async Python API.
 
 ## Quick Start
 

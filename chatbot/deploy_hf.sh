@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy the NeuralMemory docs chatbot to HuggingFace Spaces.
+# Deploy the PugBrain docs chatbot to HuggingFace Spaces.
 #
 # Prerequisites:
 #   pip install huggingface_hub

@@ -1,6 +1,6 @@
 # Multi-Brain Setup
 
-NeuralMemory stores each brain as a separate SQLite database. This gives you complete data isolation between agents, projects, or workspaces.
+PugBrain stores each brain as a separate SQLite database. This gives you complete data isolation between agents, projects, or workspaces.
 
 ```
 ~/.pugbrain/brains/

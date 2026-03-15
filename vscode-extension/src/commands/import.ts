@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import type { ImportSource } from "../server/types";
 import { readCurrentBrain } from "./brain";
@@ -68,7 +68,7 @@ export function registerImportCommands(
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(
-            "NeuralMemory server is not running.",
+            "PugBrain server is not running.",
           );
           return;
         }
@@ -115,7 +115,7 @@ export function registerImportCommands(
         });
 
         const brainId = readCurrentBrain();
-        const client = new NeuralMemoryClient(server.baseUrl);
+        const client = new PugBrainClient(server.baseUrl);
 
         try {
           const result = await vscode.window.withProgress(

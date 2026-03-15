@@ -207,7 +207,7 @@ Add to VS Code `settings.json`:
 
 ### VS Code Extension (GUI)
 
-For a graphical experience, install the [NeuralMemory VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain) from the marketplace.
+For a graphical experience, install the [PugBrain VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain) from the marketplace.
 
 ---
 
@@ -317,11 +317,11 @@ Google's AI-powered editor with built-in MCP Store.
 2. Browse & install servers directly
 3. Authenticate if prompted
 
-### Option 2: Custom Config (for NeuralMemory)
+### Option 2: Custom Config (for PugBrain)
 
 1. Open MCP Store → click **"Manage MCP Servers"**
 2. Click **"View raw config"**
-3. Add NeuralMemory to `mcp_config.json`:
+3. Add PugBrain to `mcp_config.json`:
 
 ```json
 {
@@ -348,7 +348,7 @@ Google's AI-powered editor with built-in MCP Store.
 
 4. Save and restart the editor.
 
-> **Tip:** Antigravity also supports connecting to NeuralMemory's FastAPI server mode. Run `nmem serve` and connect via HTTP if you prefer server-side integration.
+> **Tip:** Antigravity also supports connecting to PugBrain's FastAPI server mode. Run `nmem serve` and connect via HTTP if you prefer server-side integration.
 
 ---
 
@@ -491,7 +491,7 @@ Add to Warp's MCP config (`~/.warp/mcp.json`):
 
 ## Custom / Other MCP Clients
 
-NeuralMemory uses **stdio transport** (JSON-RPC 2.0 over stdin/stdout). Any MCP-compatible client can connect:
+PugBrain uses **stdio transport** (JSON-RPC 2.0 over stdin/stdout). Any MCP-compatible client can connect:
 
 ```json
 {
@@ -609,7 +609,7 @@ docker run -i --rm -v pugbrain:/root/.pugbrain ghcr.io/nhadaututtheky/neural-mem
 | **Disk** | ~1-50 MB per brain (SQLite) |
 | **Startup time** | < 2 seconds |
 
-NeuralMemory is lightweight — it won't slow down your editor.
+PugBrain is lightweight — it won't slow down your editor.
 
 ---
 
@@ -752,7 +752,7 @@ nmem prompt --json     # As JSON
 
 ## Agent Instructions
 
-Copy these instructions into your project's `CLAUDE.md` (for Claude Code) or `.cursorrules` (for Cursor) to teach your AI assistant how to use NeuralMemory proactively.
+Copy these instructions into your project's `CLAUDE.md` (for Claude Code) or `.cursorrules` (for Cursor) to teach your AI assistant how to use PugBrain proactively.
 
 ### For Claude Code
 
@@ -765,9 +765,9 @@ See [`docs/agent-instructions/.cursorrules`](../agent-instructions/.cursorrules)
 ### Quick Version (any editor)
 
 ```markdown
-## Memory System — NeuralMemory
+## Memory System — PugBrain
 
-This workspace uses NeuralMemory for persistent memory.
+This workspace uses PugBrain for persistent memory.
 Use pugbrain_* MCP tools PROACTIVELY.
 
 ### Session Start (ALWAYS)
@@ -816,7 +816,7 @@ python -m neural_memory.mcp
 ### Python version mismatch
 
 ```bash
-# NeuralMemory requires Python 3.11+
+# PugBrain requires Python 3.11+
 python --version
 
 # If you have multiple Python versions, specify the full path
@@ -824,7 +824,7 @@ python --version
 
 ### Windows: encoding errors
 
-NeuralMemory handles Windows stdio encoding automatically. If you still see encoding issues:
+PugBrain handles Windows stdio encoding automatically. If you still see encoding issues:
 
 ```json
 {

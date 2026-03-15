@@ -1,5 +1,5 @@
 /**
- * Integration tests for the NeuralMemory VS Code extension.
+ * Integration tests for the PugBrain VS Code extension.
  *
  * Runs inside the VS Code Extension Development Host via @vscode/test-electron.
  */

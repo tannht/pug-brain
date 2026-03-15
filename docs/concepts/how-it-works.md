@@ -1,6 +1,6 @@
-# How NeuralMemory Works
+# How PugBrain Works
 
-NeuralMemory uses a fundamentally different approach to memory retrieval than traditional search or RAG systems.
+PugBrain uses a fundamentally different approach to memory retrieval than traditional search or RAG systems.
 
 ## The Core Idea
 
@@ -13,7 +13,7 @@ SELECT * FROM memories WHERE content LIKE '%Alice%' ORDER BY similarity DESC
 
 Instead, thinking of "Alice" *activates* related memories - her face, your last conversation, the project you worked on together. These emerge through **association**, not **search**.
 
-NeuralMemory replicates this process:
+PugBrain replicates this process:
 
 ```
 Query: "What did Alice suggest?"
@@ -88,7 +88,7 @@ When you store a memory:
 nmem remember "Met Alice at coffee shop to discuss API design, she suggested rate limiting"
 ```
 
-NeuralMemory:
+PugBrain:
 
 1. **Extracts entities** - Alice, coffee shop, API design, rate limiting
 2. **Extracts temporal context** - (uses current time if not specified)
@@ -105,7 +105,7 @@ When you query:
 nmem recall "What did Alice suggest last Tuesday?"
 ```
 
-NeuralMemory (reflex mode, default in v0.6.0+):
+PugBrain (reflex mode, default in v0.6.0+):
 
 1. **Parses query** - Identifies "last Tuesday" as time hint, "Alice" as entity, "suggest" as action hint
 2. **Finds anchors (time-first)** - Locates time neurons first (weight 1.0), then entities (0.8), then actions (0.6)
@@ -187,7 +187,7 @@ Compressed: [1 summary neuron: "API design meeting with Alice"]
 
 ## Comparison with RAG
 
-| Aspect | RAG | NeuralMemory |
+| Aspect | RAG | PugBrain |
 |--------|-----|--------------|
 | Data model | Flat chunks | Neural graph |
 | Retrieval | Similarity search | Spreading activation |
@@ -198,7 +198,7 @@ Compressed: [1 summary neuron: "API design meeting with Alice"]
 
 ## Smart Context Optimization (v2.6.0+)
 
-When you request context (`pugbrain_context`), NeuralMemory doesn't just return the most recent memories. It uses a **5-factor composite scoring** system to select the most relevant items:
+When you request context (`pugbrain_context`), PugBrain doesn't just return the most recent memories. It uses a **5-factor composite scoring** system to select the most relevant items:
 
 ```
 Score = 0.30 * activation     # How recently/actively recalled
@@ -219,7 +219,7 @@ This ensures you get the most relevant, diverse context within your token limit.
 
 ## Recall Pattern Learning (v2.6.0+)
 
-NeuralMemory learns from your query patterns. When you repeatedly look up related topics in sequence (e.g., "authentication" followed by "middleware"), the system detects these co-occurrence patterns and materializes them as CONCEPT neurons connected by BEFORE synapses.
+PugBrain learns from your query patterns. When you repeatedly look up related topics in sequence (e.g., "authentication" followed by "middleware"), the system detects these co-occurrence patterns and materializes them as CONCEPT neurons connected by BEFORE synapses.
 
 ```
 Session 1: recall "auth"     → recall "middleware"
@@ -231,11 +231,11 @@ Session 3: recall "tokens"   → recall "middleware setup"
            CONCEPT("auth") ──BEFORE──► CONCEPT("middleware")
 ```
 
-On subsequent recalls, NeuralMemory suggests **related queries** by following these learned patterns, helping you discover information you frequently need together.
+On subsequent recalls, PugBrain suggests **related queries** by following these learned patterns, helping you discover information you frequently need together.
 
 ## Proactive Alerts (v2.6.0+)
 
-NeuralMemory monitors brain health and creates persistent alerts when issues are detected:
+PugBrain monitors brain health and creates persistent alerts when issues are detected:
 
 - **High neuron/fiber/synapse count** — Brain needs consolidation
 - **Low connectivity** — Neurons are isolated, needs enrichment
@@ -246,11 +246,11 @@ Alerts follow a lifecycle: `active → seen → acknowledged → resolved`. They
 
 ## Training from External Sources
 
-Beyond encoding individual memories, NeuralMemory can learn domain knowledge from structured sources.
+Beyond encoding individual memories, PugBrain can learn domain knowledge from structured sources.
 
 ### Database Schema Training (v1.6.0+)
 
-NeuralMemory can learn to understand database structure by training from schema metadata:
+PugBrain can learn to understand database structure by training from schema metadata:
 
 ```
 SQLite Database

@@ -1,5 +1,5 @@
 /**
- * NeuralMemory MCP Client — JSON-RPC 2.0 over stdio.
+ * PugBrain MCP Client — JSON-RPC 2.0 over stdio.
  *
  * Spawns `python -m neural_memory.mcp` and communicates using the
  * MCP protocol (newline-delimited JSON Lines).
@@ -74,7 +74,7 @@ export const ALLOWED_ENV_KEYS: ReadonlySet<string> = new Set([
 
 // ── Client ─────────────────────────────────────────────────
 
-export class NeuralMemoryMcpClient {
+export class PugBrainMcpClient {
   private proc: ChildProcess | null = null;
   private requestId = 0;
   private readonly pending = new Map<number, PendingRequest>();

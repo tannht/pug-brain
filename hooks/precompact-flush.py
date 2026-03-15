@@ -182,7 +182,7 @@ async def _flush_memories(text: str) -> tuple[int, list[str]]:
 
 def _build_additional_context(saved: int, summary_lines: list[str]) -> str:
     """Build additionalContext string for Claude to preserve across compaction."""
-    parts = ["NeuralMemory PreCompact: Session context preserved."]
+    parts = ["PugBrain PreCompact: Session context preserved."]
 
     if saved > 0:
         parts.append(f"Auto-saved {saved} memories before compaction:")

@@ -21,7 +21,7 @@ type ReadyCallback = () => void;
 type ErrorCallback = (err: Error) => void;
 
 /**
- * Manages the NeuralMemory server lifecycle with a detect-first,
+ * Manages the PugBrain server lifecycle with a detect-first,
  * spawn-fallback strategy. Uses a lock file to implement singleton
  * pattern across multiple VS Code windows.
  */
@@ -38,7 +38,7 @@ export class ServerLifecycle implements vscode.Disposable {
   private readonly _outputChannel: vscode.OutputChannel;
 
   constructor(_context: vscode.ExtensionContext) {
-    this._outputChannel = vscode.window.createOutputChannel("NeuralMemory Server");
+    this._outputChannel = vscode.window.createOutputChannel("PugBrain Server");
     this._disposables.push(this._outputChannel);
   }
 
@@ -97,7 +97,7 @@ export class ServerLifecycle implements vscode.Disposable {
     // Step 4: No server found, prompt user
     this._log("No server found. Prompting user...");
     const action = await vscode.window.showWarningMessage(
-      "NeuralMemory server not found. Start it or configure a URL.",
+      "PugBrain server not found. Start it or configure a URL.",
       "Start Server",
       "Configure URL",
     );
@@ -113,7 +113,7 @@ export class ServerLifecycle implements vscode.Disposable {
   }
 
   /**
-   * Spawn a new NeuralMemory server process.
+   * Spawn a new PugBrain server process.
    */
   async start(): Promise<void> {
     if (this._running) {
@@ -130,7 +130,7 @@ export class ServerLifecycle implements vscode.Disposable {
       vscode.StatusBarAlignment.Left,
       0,
     );
-    statusItem.text = "$(loading~spin) NeuralMemory: Starting...";
+    statusItem.text = "$(loading~spin) PugBrain: Starting...";
     statusItem.show();
 
     try {
@@ -179,12 +179,12 @@ export class ServerLifecycle implements vscode.Disposable {
         this._removeLockFile();
 
         if (code !== 0 && code !== null) {
-          const msg = `NeuralMemory server exited with code ${code}`;
+          const msg = `PugBrain server exited with code ${code}`;
           this._log(msg);
           this._notifyError(new Error(msg));
           this._offerRestart();
         } else if (signal) {
-          this._log(`NeuralMemory server killed by signal ${signal}`);
+          this._log(`PugBrain server killed by signal ${signal}`);
         }
       });
 
@@ -312,7 +312,7 @@ export class ServerLifecycle implements vscode.Disposable {
 
   private async _offerRestart(): Promise<void> {
     const action = await vscode.window.showErrorMessage(
-      "NeuralMemory server stopped unexpectedly.",
+      "PugBrain server stopped unexpectedly.",
       "Restart",
       "Show Logs",
     );
@@ -330,7 +330,7 @@ export class ServerLifecycle implements vscode.Disposable {
 
     const message = isNotFound
       ? `Python not found at "${getConfig().pythonPath}". Install neural-memory and configure pugbrain.pythonPath.`
-      : `Failed to start NeuralMemory server: ${err.message}`;
+      : `Failed to start PugBrain server: ${err.message}`;
 
     vscode.window.showErrorMessage(message, "Open Settings").then((action) => {
       if (action === "Open Settings") {

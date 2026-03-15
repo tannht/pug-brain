@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "../commands/brain";
 import { getConfig } from "../utils/config";
@@ -105,7 +105,7 @@ export class MemoryCodeLensProvider implements vscode.CodeLensProvider {
 
     if (!this._server.isRunning()) {
       codeLens.command = {
-        title: "NeuralMemory: disconnected",
+        title: "PugBrain: disconnected",
         command: "",
       };
       return codeLens;
@@ -119,7 +119,7 @@ export class MemoryCodeLensProvider implements vscode.CodeLensProvider {
 
     try {
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(this._server.baseUrl);
+      const client = new PugBrainClient(this._server.baseUrl);
       const result = await client.listNeurons(brainId, {
         contentContains: symbolName,
         limit: 5,
@@ -142,7 +142,7 @@ export class MemoryCodeLensProvider implements vscode.CodeLensProvider {
       }
     } catch {
       codeLens.command = {
-        title: "NeuralMemory",
+        title: "PugBrain",
         command: "",
       };
     }

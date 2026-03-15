@@ -13,15 +13,15 @@ homepage: https://github.com/nhadaututtheky/neural-memory
 metadata: {"openclaw":{"emoji":"brain","primaryEnv":"NEURALMEMORY_BRAIN","requires":{"bins":["python3"],"env":["NEURALMEMORY_BRAIN"]},"os":["darwin","linux","win32"],"install":[{"id":"pip","kind":"node","package":"neural-memory","bins":["nmem"],"label":"pip install neural-memory"}]}}
 ---
 
-# NeuralMemory — Associative Memory for AI Agents
+# PugBrain — Associative Memory for AI Agents
 
 A biologically-inspired memory system that uses spreading activation instead of keyword/vector search. Memories form a neural graph where neurons connect via 20 typed synapses. Frequently co-accessed memories strengthen their connections (Hebbian learning). Stale memories decay naturally. Contradictions are auto-detected.
 
-**Why not just vector search?** Vector search finds documents similar to your query. NeuralMemory finds *conceptually related* memories through graph traversal — even when there's no keyword or embedding overlap. "What decision did we make about auth?" activates time + entity + concept neurons simultaneously and finds the intersection.
+**Why not just vector search?** Vector search finds documents similar to your query. PugBrain finds *conceptually related* memories through graph traversal — even when there's no keyword or embedding overlap. "What decision did we make about auth?" activates time + entity + concept neurons simultaneously and finds the intersection.
 
 ## Setup
 
-### 1. Install NeuralMemory
+### 1. Install PugBrain
 
 ```bash
 pip install neural-memory

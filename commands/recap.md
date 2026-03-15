@@ -72,5 +72,5 @@ Active TODOs:
 - Keep the summary concise — max 15 lines for the default view
 - If topic is provided, dedicate a section to topic-specific memories
 - If no session state exists, say so and suggest `/intake` to start capturing
-- If no memories exist at all, welcome the user and explain NeuralMemory basics
+- If no memories exist at all, welcome the user and explain PugBrain basics
 - Present information in order of relevance, not chronologically

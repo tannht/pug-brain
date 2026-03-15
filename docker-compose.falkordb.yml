@@ -1,6 +1,6 @@
 version: '3.8'
 
-# FalkorDB storage backend for NeuralMemory.
+# FalkorDB storage backend for PugBrain.
 #
 # Usage:
 #   docker compose -f docker-compose.falkordb.yml up -d

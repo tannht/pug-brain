@@ -1,6 +1,6 @@
-# NeuralMemory Skills
+# PugBrain Skills
 
-Composable AI agent skills for NeuralMemory, following the [ship-faster](https://github.com/Heyvhuang/ship-faster) pattern.
+Composable AI agent skills for PugBrain, following the [ship-faster](https://github.com/Heyvhuang/ship-faster) pattern.
 
 ## Available Skills
 
@@ -70,6 +70,6 @@ allowed-tools:
 
 ## Prerequisites
 
-- NeuralMemory installed (`pip install neural-memory`)
-- NeuralMemory MCP server configured in Claude Code
+- PugBrain installed (`pip install neural-memory`)
+- PugBrain MCP server configured in Claude Code
 - At least one brain with some memories (for audit/evolution)

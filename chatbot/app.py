@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""NeuralMemory Documentation Chatbot — Gradio UI.
+"""PugBrain Documentation Chatbot — Gradio UI.
 
-A self-answering chatbot that uses NeuralMemory's spreading activation
+A self-answering chatbot that uses PugBrain's spreading activation
 to retrieve relevant documentation. No LLM needed — the brain IS the answer.
 
 Usage (local):
@@ -33,12 +33,12 @@ DEPTH_MAP: dict[str, DepthLevel] = {
 }
 
 EXAMPLE_QUERIES = [
-    "How do I install NeuralMemory?",
+    "How do I install PugBrain?",
     "What is spreading activation?",
     "How do I configure embeddings?",
     "What MCP tools are available?",
     "How does memory consolidation work?",
-    "What is a neuron in NeuralMemory?",
+    "What is a neuron in PugBrain?",
     "How to set up cloud sync?",
     "What is the difference between CLI and MCP?",
 ]
@@ -139,7 +139,7 @@ async def answer_query(query: str, depth_label: str) -> tuple[str, str, str]:
 def create_app() -> gr.Blocks:
     """Build the Gradio interface."""
     with gr.Blocks(
-        title="NeuralMemory Docs",
+        title="PugBrain Docs",
         theme=gr.themes.Soft(
             primary_hue="purple",
             secondary_hue="violet",
@@ -147,9 +147,9 @@ def create_app() -> gr.Blocks:
     ) as app:
         gr.Markdown(
             """
-# NeuralMemory Documentation Assistant
+# PugBrain Documentation Assistant
 
-Ask questions about NeuralMemory — powered by spreading activation, not an LLM.
+Ask questions about PugBrain — powered by spreading activation, not an LLM.
 
 The brain retrieves relevant documentation using the same neural activation
 engine that powers `nmem_recall`. No AI hallucinations — only real docs.
@@ -160,7 +160,7 @@ engine that powers `nmem_recall`. No AI hallucinations — only real docs.
             with gr.Column(scale=4):
                 query_input = gr.Textbox(
                     label="Your question",
-                    placeholder="How do I install NeuralMemory?",
+                    placeholder="How do I install PugBrain?",
                     lines=2,
                 )
             with gr.Column(scale=1):
@@ -199,7 +199,7 @@ engine that powers `nmem_recall`. No AI hallucinations — only real docs.
         gr.Markdown(
             """
 ---
-*Powered by [NeuralMemory](https://github.com/nhadaututtheky/neural-memory)
+*Powered by [PugBrain](https://github.com/nhadaututtheky/neural-memory)
 — brain-inspired persistent memory for AI agents.*
 """
         )
@@ -211,7 +211,7 @@ engine that powers `nmem_recall`. No AI hallucinations — only real docs.
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="NeuralMemory Docs Chatbot")
+    parser = argparse.ArgumentParser(description="PugBrain Docs Chatbot")
     parser.add_argument("--port", type=int, default=7860, help="Port number")
     parser.add_argument("--share", action="store_true", help="Create public URL")
     args = parser.parse_args()

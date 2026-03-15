@@ -1,1 +1,1 @@
-"""Integration tests for NeuralMemory."""
+"""Integration tests for PugBrain."""

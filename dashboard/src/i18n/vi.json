@@ -191,7 +191,7 @@
     "reportBug": "Báo lỗi",
     "reportBugDesc": "Phát hiện lỗi? Tạo issue với các bước tái hiện.",
     "featureRequest": "Yêu cầu tính năng",
-    "featureRequestDesc": "Có ý tưởng cải thiện NeuralMemory? Chúng tôi rất muốn nghe.",
+    "featureRequestDesc": "Có ý tưởng cải thiện PugBrain? Chúng tôi rất muốn nghe.",
     "discussions": "GitHub Discussions",
     "discussionsDesc": "Câu hỏi, mẹo hay, và hỗ trợ cộng đồng.",
     "testSuccess": "Đã gửi tin nhắn thử thành công",
@@ -241,6 +241,6 @@
     "calls": "Lượt gọi",
     "avgDuration": "Thời gian TB",
     "server": "Server",
-    "noData": "Chưa có dữ liệu. Sử dụng các công cụ NeuralMemory để bắt đầu theo dõi."
+    "noData": "Chưa có dữ liệu. Sử dụng các công cụ PugBrain để bắt đầu theo dõi."
   }
 }

@@ -191,7 +191,7 @@
     "reportBug": "Report a Bug",
     "reportBugDesc": "Found something broken? Open an issue with steps to reproduce.",
     "featureRequest": "Feature Request",
-    "featureRequestDesc": "Have an idea to improve NeuralMemory? We'd love to hear it.",
+    "featureRequestDesc": "Have an idea to improve PugBrain? We'd love to hear it.",
     "discussions": "GitHub Discussions",
     "discussionsDesc": "Questions, tips, and community support.",
     "testSuccess": "Test message sent successfully",
@@ -278,6 +278,6 @@
     "calls": "Calls",
     "avgDuration": "Avg Duration",
     "server": "Server",
-    "noData": "No tool events recorded yet. Use NeuralMemory tools to start tracking."
+    "noData": "No tool events recorded yet. Use PugBrain tools to start tracking."
   }
 }

@@ -1,6 +1,6 @@
 # Server API
 
-NeuralMemory provides a FastAPI-based REST API server.
+PugBrain provides a FastAPI-based REST API server.
 
 ## Quick Start
 
@@ -42,7 +42,7 @@ API information.
 
 ```json
 {
-  "name": "NeuralMemory",
+  "name": "PugBrain",
   "description": "Reflex-based memory system for AI agents",
   "version": "0.6.0",
   "docs": "/docs",

@@ -22,7 +22,7 @@ export function getGraphHtml(
              style-src ${webview.cspSource} 'unsafe-inline';
              script-src 'nonce-${nonce}';
              img-src ${webview.cspSource} data:;">
-  <title>NeuralMemory Graph</title>
+  <title>PugBrain Graph</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 

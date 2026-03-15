@@ -76,7 +76,7 @@ describe("buildChildEnv", () => {
     }
   });
 
-  it("passes through all NeuralMemory-specific env vars", () => {
+  it("passes through all PugBrain-specific env vars", () => {
     process.env.NEURALMEMORY_DIR = "/data/nm";
     process.env.NEURAL_MEMORY_DIR = "/alt/dir";
     process.env.NEURAL_MEMORY_JSON = "/config.json";

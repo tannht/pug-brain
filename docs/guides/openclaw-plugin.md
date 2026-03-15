@@ -1,6 +1,6 @@
 # OpenClaw Plugin Setup
 
-NeuralMemory replaces OpenClaw's built-in memory system (`memory-core`) with a
+PugBrain replaces OpenClaw's built-in memory system (`memory-core`) with a
 neural graph that survives context compaction, detects contradictions, and learns
 from usage patterns.
 
@@ -11,10 +11,10 @@ When a session hits the context window limit, compaction summarizes older messag
 and **discards** what hasn't been written to disk. Any insight the agent didn't
 explicitly save is lost.
 
-NeuralMemory stores everything in a persistent SQLite neural graph **outside** the
+PugBrain stores everything in a persistent SQLite neural graph **outside** the
 context window. Memories survive compaction, session restarts, and device changes.
 
-| Feature | memory-core | NeuralMemory |
+| Feature | memory-core | PugBrain |
 |---------|-------------|--------------|
 | Storage | Markdown files | SQLite neural graph |
 | Search | Vector + BM25 (needs embedding API) | Spreading activation (zero cost) |
@@ -51,7 +51,7 @@ npm install -g pugbrain
 Verify both are working before continuing:
 
 ```bash
-nmem --help       # should show NeuralMemory CLI commands
+nmem --help       # should show PugBrain CLI commands
 nmem-mcp --help   # should show MCP server help
 ```
 
@@ -106,7 +106,7 @@ section:
 - **`load.paths`** — explicitly tells OpenClaw where to find the plugin. Required
   when the plugin was registered via manual copy in Step 2.
 
-- **`slots.memory`** — disables `memory-core` and activates NeuralMemory as the
+- **`slots.memory`** — disables `memory-core` and activates PugBrain as the
   exclusive memory provider. Plugin slots are exclusive — only one plugin can own
   a slot at a time.
 
@@ -147,7 +147,7 @@ OpenClaw Agent
 OpenClaw Plugin (TypeScript, in-process)
     │
     ▼ JSON-RPC over stdio
-NeuralMemory MCP Server (Python subprocess)
+PugBrain MCP Server (Python subprocess)
     │
     ▼
 SQLite Neural Graph (~/.pugbrain/brains/)
@@ -292,10 +292,10 @@ keys are accepted: `pythonPath`, `brain`, `autoContext`, `autoCapture`,
 ### Using `"memory": "none"`
 
 ```json
-// WRONG — disables ALL memory plugins including NeuralMemory
+// WRONG — disables ALL memory plugins including PugBrain
 { "plugins": { "slots": { "memory": "none" } } }
 
-// CORRECT — activates NeuralMemory, disables memory-core
+// CORRECT — activates PugBrain, disables memory-core
 { "plugins": { "slots": { "memory": "pugbrain" } } }
 ```
 
@@ -312,7 +312,7 @@ mcp:
 
 OpenClaw skills provide instructions to the LLM but cannot spawn MCP server
 processes. The plugin approach bundles its own MCP client that communicates with
-the NeuralMemory Python process over stdio.
+the PugBrain Python process over stdio.
 
 ### Adding rules to AGENTS.MD
 
@@ -327,7 +327,7 @@ is the slot config in Step 2 — it prevents `memory-core` from loading entirely
 
 ## Further Reading
 
-- [Quick Start](../getting-started/quickstart.md) — Basic NeuralMemory usage
+- [Quick Start](../getting-started/quickstart.md) — Basic PugBrain usage
 - [CLI Reference](../getting-started/cli.md) — All commands and options
 - [Integration Guide](integration.md) — Setup for Claude Code, Cursor, and other editors
 - [MCP Server Guide](mcp-server.md) — MCP configuration for 20+ editors

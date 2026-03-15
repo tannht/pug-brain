@@ -22,7 +22,7 @@
  *
  * v1.10.0: Singleton MCP client — multiple workspaces (multi-agent) share
  * the same connected client instance, keyed by (pythonPath, brain). Fixes
- * "NeuralMemory service not running" when OpenClaw registers the plugin
+ * "PugBrain service not running" when OpenClaw registers the plugin
  * for a second workspace after gateway startup.
  *
  * Registers:
@@ -38,7 +38,7 @@ import type {
   BeforeAgentStartResult,
   AgentEndEvent,
 } from "./types.js";
-import { NeuralMemoryMcpClient } from "./mcp-client.js";
+import { PugBrainMcpClient } from "./mcp-client.js";
 import type { PluginLogger } from "./types.js";
 import { createToolsFromMcp, createFallbackTools, createCompatibilityTools } from "./tools.js";
 import type { ToolDefinition } from "./tools.js";
@@ -147,12 +147,12 @@ export function resolveConfig(raw?: Record<string, unknown>): PluginConfig {
 // Multiple workspaces may call register() independently, but all
 // should share the same MCP process per (pythonPath, brain) combo.
 
-const mcpClients = new Map<string, NeuralMemoryMcpClient>();
+const mcpClients = new Map<string, PugBrainMcpClient>();
 
 function getOrCreateMcpClient(
   cfg: PluginConfig,
   logger: PluginLogger,
-): NeuralMemoryMcpClient {
+): PugBrainMcpClient {
   const key = `${cfg.pythonPath}::${cfg.brain}`;
 
   const existing = mcpClients.get(key);
@@ -161,7 +161,7 @@ function getOrCreateMcpClient(
     return existing;
   }
 
-  const mcp = new NeuralMemoryMcpClient({
+  const mcp = new PugBrainMcpClient({
     pythonPath: cfg.pythonPath,
     brain: cfg.brain,
     logger,

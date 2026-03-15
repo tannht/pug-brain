@@ -40,7 +40,7 @@ ONBOARDING_STEPS: tuple[OnboardingHint, ...] = (
     OnboardingHint(
         step=2,
         title="Enable auto-capture",
-        description="Let NeuralMemory automatically detect and save decisions, errors, and TODOs from conversation text.",
+        description="Let PugBrain automatically detect and save decisions, errors, and TODOs from conversation text.",
         example_tool="pugbrain_auto",
         example_args={"action": "process", "text": "<paste conversation text>"},
     ),

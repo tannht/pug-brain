@@ -1,4 +1,4 @@
-# NeuralMemory
+# PugBrain
 
 <p align="center">
   <strong>Reflex-based memory system for AI agents</strong><br>
@@ -18,9 +18,9 @@
 
 ---
 
-## What is NeuralMemory?
+## What is PugBrain?
 
-NeuralMemory stores experiences as interconnected neurons and recalls them through **spreading activation** - mimicking how the human brain works. Instead of searching a database, memories are retrieved through associative recall.
+PugBrain stores experiences as interconnected neurons and recalls them through **spreading activation** - mimicking how the human brain works. Instead of searching a database, memories are retrieved through associative recall.
 
 ```bash
 # Store a memory
@@ -33,7 +33,7 @@ nmem recall "auth bug fix"
 
 ## Why Not RAG / Vector Search?
 
-| Aspect | RAG / Vector Search | NeuralMemory |
+| Aspect | RAG / Vector Search | PugBrain |
 |--------|---------------------|--------------|
 | **Model** | Search Engine | Human Brain |
 | **LLM/Embedding** | Required (embedding API calls) | **None** — pure algorithmic graph traversal |
@@ -48,7 +48,7 @@ nmem recall "auth bug fix"
     **Query:** "Why did Tuesday's outage happen?"
 
     - **RAG**: Returns "JWT caused outage" (missing *why* we used JWT)
-    - **NeuralMemory**: Traces `outage ← CAUSED_BY ← JWT ← SUGGESTED_BY ← Alice` → full causal chain
+    - **PugBrain**: Traces `outage ← CAUSED_BY ← JWT ← SUGGESTED_BY ← Alice` → full causal chain
 
 ## The Problem
 
@@ -157,7 +157,7 @@ pip install neural-memory[all]      # All features
 
 ## VS Code Extension
 
-Install the NeuralMemory extension for a visual brain explorer directly in your editor:
+Install the PugBrain extension for a visual brain explorer directly in your editor:
 
 - **Memory Tree View** — Browse neurons grouped by type in the activity bar
 - **Graph Explorer** — Interactive Cytoscape.js force-directed graph
@@ -211,7 +211,7 @@ nmem serve
 
     ---
 
-    Install NeuralMemory and get started in minutes
+    Install PugBrain and get started in minutes
 
     [:octicons-arrow-right-24: Install](getting-started/installation.md)
 
@@ -227,7 +227,7 @@ nmem serve
 
     ---
 
-    Understand how NeuralMemory works
+    Understand how PugBrain works
 
     [:octicons-arrow-right-24: Concepts](concepts/how-it-works.md)
 

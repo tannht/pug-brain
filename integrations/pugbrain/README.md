@@ -1,4 +1,4 @@
-# NeuralMemory — OpenClaw Plugin
+# PugBrain — OpenClaw Plugin
 
 Brain-inspired persistent memory for AI agents. Stores experiences as interconnected neurons and recalls them through spreading activation, mimicking how the human brain works.
 
@@ -48,7 +48,7 @@ Add to `~/.openclaw/openclaw.json`:
 }
 ```
 
-> **Important**: Setting `slots.memory = "pugbrain"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of NeuralMemory tools.
+> **Important**: Setting `slots.memory = "pugbrain"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of PugBrain tools.
 
 ## Tools
 
@@ -87,7 +87,7 @@ If the MCP server is unreachable at startup, the plugin falls back to 5 core too
 OpenClaw Agent
     |
     v
-NeuralMemory Plugin (this package)
+PugBrain Plugin (this package)
     |  Spawns + manages lifecycle
     v
 nmem-mcp (Python MCP server, stdio transport)

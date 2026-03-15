@@ -4,7 +4,7 @@ Share knowledge between agents and team members.
 
 ## Overview
 
-NeuralMemory supports multiple ways to share brains:
+PugBrain supports multiple ways to share brains:
 
 | Mode | Description | Use Case |
 |------|-------------|----------|
@@ -73,7 +73,7 @@ The export is a JSON file containing:
 
 ### Enable Shared Mode
 
-Connect to a NeuralMemory server:
+Connect to a PugBrain server:
 
 ```bash
 # Enable with server URL

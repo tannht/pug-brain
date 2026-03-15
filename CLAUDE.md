@@ -1,4 +1,4 @@
-# NeuralMemory — AI Coding Standards
+# PugBrain — AI Coding Standards
 
 Project-level rules that Claude Code reads automatically.
 

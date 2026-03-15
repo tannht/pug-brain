@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "../commands/brain";
 import { getConfig } from "../utils/config";
@@ -49,13 +49,13 @@ export class CommentTriggerWatcher implements vscode.CodeLensProvider {
         async (content: string) => {
           if (!this._server.isRunning()) {
             vscode.window.showWarningMessage(
-              "NeuralMemory server is not running.",
+              "PugBrain server is not running.",
             );
             return;
           }
 
           const brainId = readCurrentBrain();
-          const client = new NeuralMemoryClient(this._server.baseUrl);
+          const client = new PugBrainClient(this._server.baseUrl);
 
           try {
             const result = await client.encode(brainId, { content });

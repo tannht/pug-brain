@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train a NeuralMemory brain from project documentation.
+"""Train a PugBrain brain from project documentation.
 
 Usage:
     python chatbot/train_docs_brain.py                    # Train brain from docs/

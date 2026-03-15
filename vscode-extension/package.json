@@ -1,7 +1,7 @@
 {
   "name": "pugbrain",
-  "displayName": "NeuralMemory",
-  "description": "Visual brain explorer, inline recall, and memory management for NeuralMemory",
+  "displayName": "PugBrain",
+  "description": "Visual brain explorer, inline recall, and memory management for PugBrain",
   "version": "0.5.0",
   "publisher": "neuralmem",
   "license": "MIT",
@@ -34,89 +34,89 @@
       {
         "command": "pugbrain.encode",
         "title": "Encode Selection as Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.encodeInput",
         "title": "Encode Text as Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.recall",
         "title": "Recall Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.openGraph",
         "title": "Open Graph Explorer",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.switchBrain",
         "title": "Switch Brain",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.createBrain",
         "title": "Create Brain",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.refreshMemories",
         "title": "Refresh Memory Tree",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(refresh)"
       },
       {
         "command": "pugbrain.startServer",
         "title": "Start Server",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.connectServer",
         "title": "Connect to Server",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
         "command": "pugbrain.recallFromTree",
         "title": "Recall Related Memories",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search)"
       },
       {
         "command": "pugbrain.indexCodebase",
         "title": "Index Codebase",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search-fuzzy)"
       },
       {
         "command": "pugbrain.importMemories",
         "title": "Import Memories from External Source",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(cloud-download)"
       },
       {
         "command": "pugbrain.recap",
         "title": "Recap Session Context",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(history)"
       },
       {
         "command": "pugbrain.recapTopic",
         "title": "Recap by Topic",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search)"
       },
       {
         "command": "pugbrain.eternalSave",
         "title": "Save Eternal Context",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(save)"
       },
       {
         "command": "pugbrain.eternalStatus",
         "title": "Eternal Context Status",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(info)"
       }
     ],
@@ -124,7 +124,7 @@
       "activitybar": [
         {
           "id": "pugbrain",
-          "title": "NeuralMemory",
+          "title": "PugBrain",
           "icon": "media/brain.svg"
         }
       ]
@@ -188,7 +188,7 @@
       }
     ],
     "configuration": {
-      "title": "NeuralMemory",
+      "title": "PugBrain",
       "properties": {
         "pugbrain.pythonPath": {
           "type": "string",
@@ -198,12 +198,12 @@
         "pugbrain.autoStart": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically start the NeuralMemory server on activation"
+          "description": "Automatically start the PugBrain server on activation"
         },
         "pugbrain.serverUrl": {
           "type": "string",
           "default": "http://127.0.0.1:8000",
-          "description": "URL of the NeuralMemory server"
+          "description": "URL of the PugBrain server"
         },
         "pugbrain.graphNodeLimit": {
           "type": "number",

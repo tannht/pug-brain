@@ -1,6 +1,6 @@
 # Neurons & Synapses
 
-The fundamental building blocks of NeuralMemory.
+The fundamental building blocks of PugBrain.
 
 ## Neurons
 

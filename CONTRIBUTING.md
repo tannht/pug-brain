@@ -1,6 +1,6 @@
-# Contributing to NeuralMemory
+# Contributing to PugBrain
 
-Thank you for your interest in contributing to NeuralMemory! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to PugBrain! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -242,7 +242,7 @@ Include:
 Include:
 
 - Python version
-- NeuralMemory version
+- PugBrain version
 - Operating system
 - Steps to reproduce
 - Expected vs actual behavior

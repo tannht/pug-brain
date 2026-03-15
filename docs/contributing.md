@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for your interest in contributing to NeuralMemory!
+Thank you for your interest in contributing to PugBrain!
 
 ## Getting Started
 

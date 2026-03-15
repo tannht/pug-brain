@@ -1,5 +1,5 @@
 ---
-title: NeuralMemory Docs
+title: PugBrain Docs
 emoji: 🧠
 colorFrom: purple
 colorTo: indigo
@@ -8,12 +8,12 @@ sdk_version: "5.23.0"
 app_file: app.py
 pinned: false
 license: mit
-short_description: NeuralMemory docs — pure neural activation
+short_description: PugBrain docs — pure neural activation
 ---
 
-# NeuralMemory Documentation Assistant
+# PugBrain Documentation Assistant
 
-Ask questions about [NeuralMemory](https://github.com/nhadaututtheky/neural-memory) — powered by spreading activation, not an LLM.
+Ask questions about [PugBrain](https://github.com/nhadaututtheky/neural-memory) — powered by spreading activation, not an LLM.
 
 The brain retrieves relevant documentation using the same neural activation engine that powers `nmem_recall`. No AI hallucinations — only real docs.
 

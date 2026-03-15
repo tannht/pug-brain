@@ -1,4 +1,4 @@
-"""Real-time and incremental synchronization for NeuralMemory.
+"""Real-time and incremental synchronization for PugBrain.
 
 Heavy modules (SyncClient, SyncEngine) are imported lazily to avoid
 pulling in aiohttp and the full storage stack at startup — which would

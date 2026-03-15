@@ -104,7 +104,7 @@ DEFAULT_FUNCTIONS: list[dict[str, Any]] = [
         "name": "memory_recall",
         "enabled": True,
         "timeout_ms": 10000,
-        "description": "Recall from NeuralMemory brain",
+        "description": "Recall from PugBrain brain",
     },
     {
         "name": "memory_store",

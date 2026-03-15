@@ -1,4 +1,4 @@
-# NeuralMemory FAQ
+# PugBrain FAQ
 
 ## Installation
 
@@ -34,13 +34,13 @@ The `-e` flag enables editable mode — code changes take effect immediately wit
 
 ### Q: Too many commands — is there a simpler UI/UX approach?
 
-Yes. If you use VS Code, the **NeuralMemory extension** provides a full GUI — no terminal commands needed:
+Yes. If you use VS Code, the **PugBrain extension** provides a full GUI — no terminal commands needed:
 
 - **Encode memory**: Select text → `Ctrl+Shift+M E`
 - **Query memory**: `Ctrl+Shift+M Q` → type your question
-- **Start/stop server**: `Ctrl+Shift+P` → NeuralMemory: Start Server
-- **Switch brain**: `Ctrl+Shift+P` → NeuralMemory: Switch Brain
-- **View graph**: `Ctrl+Shift+P` → NeuralMemory: Open Graph View
+- **Start/stop server**: `Ctrl+Shift+P` → PugBrain: Start Server
+- **Switch brain**: `Ctrl+Shift+P` → PugBrain: Switch Brain
+- **View graph**: `Ctrl+Shift+P` → PugBrain: Open Graph View
 
 The sidebar panel also shows neurons, fibers, and brain stats at a glance.
 
@@ -59,21 +59,21 @@ pip install -e ".[all,dev]"
 
 ## VS Code Extension
 
-### Q: How to use NeuralMemory without writing Python code?
+### Q: How to use PugBrain without writing Python code?
 
 Install the VS Code extension:
 
 1. Open VS Code
 2. Go to Extensions (`Ctrl+Shift+X`)
-3. Search **NeuralMemory**
+3. Search **PugBrain**
 4. Click **Install**
 
 > **Note**: The extension still requires Python + `neural-memory` package installed on the machine as its backend.
 
 ### Q: Extension not showing data?
 
-1. Start the server: `Ctrl+Shift+P` → **NeuralMemory: Start Server**
-2. Switch brain if needed: `Ctrl+Shift+P` → **NeuralMemory: Switch Brain** → select your brain
+1. Start the server: `Ctrl+Shift+P` → **PugBrain: Start Server**
+2. Switch brain if needed: `Ctrl+Shift+P` → **PugBrain: Switch Brain** → select your brain
 3. Click refresh
 
 ### Q: Server running on a different port than the extension expects?
@@ -90,7 +90,7 @@ A new brain starts empty — there is no data to display yet. You need to encode
 
 1. Select any text in your editor
 2. Press `Ctrl+Shift+M E` to encode it
-3. Click refresh in the NeuralMemory sidebar
+3. Click refresh in the PugBrain sidebar
 
 After encoding, neurons and fibers will appear in the sidebar.
 
@@ -108,9 +108,9 @@ The VS Code sidebar is the main way to browse your neurons and fibers.
 
 ### Q: How do I keep memories from different projects separate?
 
-**You don't need to do anything.** NeuralMemory auto-detects which git repo and branch you're in, then tags your memories accordingly. When you recall, it prioritizes memories from your current context.
+**You don't need to do anything.** PugBrain auto-detects which git repo and branch you're in, then tags your memories accordingly. When you recall, it prioritizes memories from your current context.
 
-Just use NeuralMemory normally — the right memories surface for the right project.
+Just use PugBrain normally — the right memories surface for the right project.
 
 ### Q: What if I want complete separation between projects?
 
@@ -161,7 +161,7 @@ Next session, say "recap" or "what were we working on?" and everything reloads i
 
 ## Database Training
 
-### Q: Can NeuralMemory learn from my database?
+### Q: Can PugBrain learn from my database?
 
 Yes. The `pugbrain_train_db` tool teaches your brain to understand database structure:
 
@@ -189,7 +189,7 @@ This shows how many schema entities have been trained into the current brain.
 
 ## AI Agent Skills
 
-### Q: What are NeuralMemory skills?
+### Q: What are PugBrain skills?
 
 Composable AI agent workflows that follow the [ship-faster](https://github.com/Heyvhuang/ship-faster) SKILL.md pattern. They give Claude Code structured methods for memory management:
 
@@ -201,7 +201,7 @@ Composable AI agent workflows that follow the [ship-faster](https://github.com/H
 
 ### Q: How do I install the skills?
 
-Copy from the NeuralMemory repo to your Claude Code skills directory:
+Copy from the PugBrain repo to your Claude Code skills directory:
 
 ```bash
 # Linux/macOS
@@ -223,13 +223,13 @@ In Claude Code, invoke by name:
 /memory-evolution "Focus on the auth topic"
 ```
 
-### Q: Do they require anything besides NeuralMemory?
+### Q: Do they require anything besides PugBrain?
 
-Just the NeuralMemory MCP server configured in Claude Code. The skills use existing MCP tools (`pugbrain_remember`, `pugbrain_recall`, `pugbrain_stats`, `pugbrain_health`, etc.) — no new dependencies.
+Just the PugBrain MCP server configured in Claude Code. The skills use existing MCP tools (`pugbrain_remember`, `pugbrain_recall`, `pugbrain_stats`, `pugbrain_health`, etc.) — no new dependencies.
 
 ## Data & Multi-tool Sharing
 
-### Q: Do I need to install NeuralMemory per project?
+### Q: Do I need to install PugBrain per project?
 
 No. Install once globally and it works for the entire machine:
 
@@ -261,7 +261,7 @@ nmem config show
 
 ### Q: How do I let Claude Code query my brain using natural language?
 
-Add the NeuralMemory MCP server to `~/.claude.json`:
+Add the PugBrain MCP server to `~/.claude.json`:
 
 ```json
 {
@@ -315,13 +315,13 @@ nmem_sync_config(action="set", hub_url="http://localhost:8000")
 
 Local hubs don't require API keys or HTTPS.
 
-## NeuralMemory vs RAG
+## PugBrain vs RAG
 
-### Q: I have 100 document files (law, specs, etc.) — should I use NeuralMemory or RAG?
+### Q: I have 100 document files (law, specs, etc.) — should I use PugBrain or RAG?
 
 **RAG/Vector Search is better for document lookup.** Here's why:
 
-| Aspect | RAG | NeuralMemory |
+| Aspect | RAG | PugBrain |
 |--------|-----|-------------|
 | **Best for** | "Find the paragraph about X" | "Why did we decide X?" |
 | **Query style** | Semantic similarity search | Associative recall through graph traversal |
@@ -336,15 +336,15 @@ Local hubs don't require API keys or HTTPS.
 |----------|--------|
 | "What does Article 42 say?" (document lookup) | **RAG** |
 | "Which law covers remote work?" (search) | **RAG** |
-| "Why did the team choose Article 42 over 43?" (decision chain) | **NeuralMemory** |
-| "What pattern do we see in deploy failures?" (habit detection) | **NeuralMemory** |
-| "What did Alice suggest in yesterday's meeting?" (episodic recall) | **NeuralMemory** |
+| "Why did the team choose Article 42 over 43?" (decision chain) | **PugBrain** |
+| "What pattern do we see in deploy failures?" (habit detection) | **PugBrain** |
+| "What did Alice suggest in yesterday's meeting?" (episodic recall) | **PugBrain** |
 
 **Can I use both?** Yes — and that's often the best approach:
 - **RAG** for document corpus search (laws, specs, API docs)
-- **NeuralMemory** for agent memory (decisions, errors, workflows, context across sessions)
+- **PugBrain** for agent memory (decisions, errors, workflows, context across sessions)
 
-They complement each other. RAG answers "what does the document say?", NeuralMemory answers "what did we learn and decide?"
+They complement each other. RAG answers "what does the document say?", PugBrain answers "what did we learn and decide?"
 
 ### Q: What about `pugbrain_train` for documents — doesn't that compete with RAG?
 
@@ -353,13 +353,13 @@ They complement each other. RAG answers "what does the document say?", NeuralMem
 - Onboarding guides where relationships matter
 - Small doc sets (<20 files) where graph traversal adds value
 
-For **large document corpus search** (100+ files, legal compliance, exact text retrieval), RAG with a proper vector database (Chroma, Pinecone, Weaviate) will outperform NeuralMemory significantly. NeuralMemory's strength is *associative recall* and *relationship tracing*, not *semantic text search*.
+For **large document corpus search** (100+ files, legal compliance, exact text retrieval), RAG with a proper vector database (Chroma, Pinecone, Weaviate) will outperform PugBrain significantly. PugBrain's strength is *associative recall* and *relationship tracing*, not *semantic text search*.
 
-### Q: Is NeuralMemory basically a Knowledge Graph database?
+### Q: Is PugBrain basically a Knowledge Graph database?
 
 **Close, but no.** They share graph structure, but serve fundamentally different purposes:
 
-| Aspect | Knowledge Graph DB (Neo4j, FalkorDB) | NeuralMemory |
+| Aspect | Knowledge Graph DB (Neo4j, FalkorDB) | PugBrain |
 |--------|--------------------------------------|-------------|
 | **Purpose** | Static knowledge map — store entities & relationships | Living agent memory — learn from experience |
 | **Schema** | Explicit: entities, relationships defined upfront | Emergent: neurons form connections organically |
@@ -370,17 +370,17 @@ For **large document corpus search** (100+ files, legal compliance, exact text r
 
 **In short:**
 - Knowledge Graph = **encyclopedia** (static facts, explicit relationships)
-- NeuralMemory = **biological memory** (learns, forgets, associates, consolidates)
+- PugBrain = **biological memory** (learns, forgets, associates, consolidates)
 
-NeuralMemory *can use* a knowledge graph DB as its backend (FalkorDB opt-in is shipped), but the memory system itself adds biological behaviors on top: decay, Hebbian learning, sleep consolidation, spreading activation, and memory stages (episodic → semantic).
+PugBrain *can use* a knowledge graph DB as its backend (FalkorDB opt-in is shipped), but the memory system itself adds biological behaviors on top: decay, Hebbian learning, sleep consolidation, spreading activation, and memory stages (episodic → semantic).
 
 ---
 
 ## Technical & Architecture
 
-### Q: Does NeuralMemory use LLMs or embeddings?
+### Q: Does PugBrain use LLMs or embeddings?
 
-**No.** NeuralMemory does **not** call any LLM or embedding API for encoding or retrieval. This is a common misconception.
+**No.** PugBrain does **not** call any LLM or embedding API for encoding or retrieval. This is a common misconception.
 
 | Operation | How it works |
 |-----------|-------------|
@@ -395,11 +395,11 @@ This means:
 - **Fully offline** — works without internet after install
 - **Deterministic** — same query on same brain = same results (no model randomness)
 
-The only AI involvement is the *agent itself* (Claude, GPT, etc.) deciding when to call NeuralMemory tools. The memory system is pure algorithmic graph traversal.
+The only AI involvement is the *agent itself* (Claude, GPT, etc.) deciding when to call PugBrain tools. The memory system is pure algorithmic graph traversal.
 
 ### Q: What are the performance benchmarks?
 
-NeuralMemory includes reproducible benchmarks. Key results (median, 10 runs each):
+PugBrain includes reproducible benchmarks. Key results (median, 10 runs each):
 
 **Activation Engine** (synthetic graphs):
 
@@ -426,7 +426,7 @@ python benchmarks/run_benchmarks.py
 
 ### Q: Do I need to manually migrate my database when upgrading?
 
-**No.** NeuralMemory auto-migrates your database schema on startup. When you upgrade to a new version, the first time the brain is opened, `run_migrations()` detects the current schema version and applies all necessary migrations sequentially.
+**No.** PugBrain auto-migrates your database schema on startup. When you upgrade to a new version, the first time the brain is opened, `run_migrations()` detects the current schema version and applies all necessary migrations sequentially.
 
 For example, upgrading from v4.0 (schema v22) to v4.2 (schema v26) runs migrations v22→v23→v24→v25→v26 automatically. Each step is logged:
 
@@ -492,7 +492,7 @@ If you're unsure, run `nmem brain health` first to see diagnostics and recommend
 
 ### Q: How does multi-device sync handle conflicts?
 
-NeuralMemory uses a **local-first** architecture with hub-and-spoke sync:
+PugBrain uses a **local-first** architecture with hub-and-spoke sync:
 
 ```
 Device A (SQLite) ──┐
@@ -523,9 +523,9 @@ nmem sync pull    # Get remote changes
 nmem sync full    # Bidirectional
 ```
 
-### Q: Is NeuralMemory production-ready?
+### Q: Is PugBrain production-ready?
 
-NeuralMemory is designed for **AI agent memory** — not as a general-purpose database. Here's an honest assessment:
+PugBrain is designed for **AI agent memory** — not as a general-purpose database. Here's an honest assessment:
 
 | Aspect | Status |
 |--------|--------|
@@ -551,7 +551,7 @@ NeuralMemory is designed for **AI agent memory** — not as a general-purpose da
 - Multi-tenant SaaS platforms
 - Replacing production search infrastructure
 
-### Q: How does NeuralMemory handle concurrent access from multiple agents?
+### Q: How does PugBrain handle concurrent access from multiple agents?
 
 SQLite with WAL (Write-Ahead Logging) mode enables:
 
@@ -559,6 +559,6 @@ SQLite with WAL (Write-Ahead Logging) mode enables:
 - **Single writer at a time** — writes are serialized by SQLite's locking
 - **No corruption risk** — WAL mode prevents reader-writer conflicts
 
-For multi-agent write scenarios, NeuralMemory uses a **deferred write queue** — non-critical writes (Hebbian weight updates, conductivity changes) are batched and flushed after the response, reducing lock contention.
+For multi-agent write scenarios, PugBrain uses a **deferred write queue** — non-critical writes (Hebbian weight updates, conductivity changes) are batched and flushed after the response, reducing lock contention.
 
 If you need true multi-writer concurrency across processes, use the [FastAPI server](api/server.md) as a central write coordinator.

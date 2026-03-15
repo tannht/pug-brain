@@ -1,5 +1,5 @@
 /**
- * WebSocket client for real-time sync with the NeuralMemory server.
+ * WebSocket client for real-time sync with the PugBrain server.
  *
  * Protocol (matches server/routes/sync.py):
  *   1. Connect → send {"action": "connect", "client_id": "..."}

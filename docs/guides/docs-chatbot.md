@@ -1,6 +1,6 @@
 # Documentation Chatbot
 
-NeuralMemory includes a self-answering documentation chatbot powered by spreading activation — no LLM required.
+PugBrain includes a self-answering documentation chatbot powered by spreading activation — no LLM required.
 
 **Try it live:** [HuggingFace Space](https://huggingface.co/spaces/nhadaututtheky/pugbrain-docs)
 

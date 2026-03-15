@@ -465,6 +465,6 @@ OpenClaw đã có đôi tay tuyệt vời. Giờ hãy cho nó một bộ não.
 
 *[OpenClaw Plugin](https://www.npmjs.com/package/pugbrain) — Native OpenClaw integration. `npm install -g pugbrain`*
 
-*[ClawHub Skill](https://clawhub.ai/skills/neural-memory) — Install NeuralMemory as an OpenClaw skill in one click.*
+*[ClawHub Skill](https://clawhub.ai/skills/neural-memory) — Install PugBrain as an OpenClaw skill in one click.*
 
 *[Dashboard](http://localhost:8000/dashboard) — Neural graph explorer, integration status, health diagnostics. `nmem serve`*

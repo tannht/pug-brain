@@ -1,6 +1,6 @@
 """Naive keyword-overlap baseline for benchmark comparison.
 
-This is the strawman that NeuralMemory's activation-based recall must beat.
+This is the strawman that PugBrain's activation-based recall must beat.
 Simple approach: tokenize query, count shared words with each memory, rank by overlap.
 """
 

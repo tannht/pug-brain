@@ -303,12 +303,12 @@ async def bench_pipeline(n_runs: int) -> list[dict]:
 
 
 async def bench_ground_truth(k: int = 5) -> tuple[BenchmarkReport, dict[str, dict[str, float]]]:
-    """Run ground-truth evaluation: NeuralMemory vs naive baseline.
+    """Run ground-truth evaluation: PugBrain vs naive baseline.
 
     Returns:
         Tuple of (neural_report, baseline_results)
     """
-    # Set up NeuralMemory
+    # Set up PugBrain
     config = BrainConfig(activation_threshold=0.1, max_spread_hops=4, max_context_tokens=500)
     storage = InMemoryStorage()
     brain = Brain.create(name="ground-truth-bench", config=config)
@@ -324,7 +324,7 @@ async def bench_ground_truth(k: int = 5) -> tuple[BenchmarkReport, dict[str, dic
         result = await encoder.encode(mem.content, tags=mem.tags)
         gt_id_to_fiber[mem.id] = result.fiber.id
 
-    # Evaluate NeuralMemory
+    # Evaluate PugBrain
     neural_report = BenchmarkReport()
     for query in GT_QUERIES:
         result = await pipeline.query(query.query)
@@ -511,8 +511,8 @@ def generate_markdown(
 
         # Overall comparison
         bl = baseline_results.get("overall", {})
-        sections.append("### Overall (NeuralMemory vs Naive Baseline)\n")
-        headers_gt = ["Metric", "NeuralMemory", "Naive Baseline", "Winner"]
+        sections.append("### Overall (PugBrain vs Naive Baseline)\n")
+        headers_gt = ["Metric", "PugBrain", "Naive Baseline", "Winner"]
         rows_gt = []
         for metric_name, neural_val, baseline_val in [
             ("Precision@5", neural_report.mean_precision, bl.get("precision", 0)),
@@ -520,7 +520,7 @@ def generate_markdown(
             ("MRR", neural_report.mrr, bl.get("mrr", 0)),
             ("NDCG@5", neural_report.mean_ndcg, bl.get("ndcg", 0)),
         ]:
-            winner = "NeuralMemory" if neural_val >= baseline_val else "Baseline"
+            winner = "PugBrain" if neural_val >= baseline_val else "Baseline"
             rows_gt.append(
                 [
                     metric_name,
@@ -533,7 +533,7 @@ def generate_markdown(
 
         # Per-category breakdown
         sections.append("\n### Per-Category Recall\n")
-        headers_cat = ["Category", "NeuralMemory", "Baseline", "Count"]
+        headers_cat = ["Category", "PugBrain", "Baseline", "Count"]
         rows_cat = []
         for cat, cat_metrics in sorted(neural_report.category_breakdown.items()):
             bl_cat = baseline_results.get(cat, {})
@@ -605,7 +605,7 @@ async def main() -> None:
     neural_report, baseline_results = await bench_ground_truth(k=5)
     bl = baseline_results.get("overall", {})
     print(
-        f"  NeuralMemory -- P@5={neural_report.mean_precision:.3f}  R@5={neural_report.mean_recall:.3f}  MRR={neural_report.mrr:.3f}  NDCG@5={neural_report.mean_ndcg:.3f}"
+        f"  PugBrain -- P@5={neural_report.mean_precision:.3f}  R@5={neural_report.mean_recall:.3f}  MRR={neural_report.mrr:.3f}  NDCG@5={neural_report.mean_ndcg:.3f}"
     )
     print(
         f"  Baseline     -- P@5={bl.get('precision', 0):.3f}  R@5={bl.get('recall', 0):.3f}  MRR={bl.get('mrr', 0):.3f}  NDCG@5={bl.get('ndcg', 0):.3f}"
