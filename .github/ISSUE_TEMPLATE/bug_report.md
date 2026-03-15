@@ -42,7 +42,7 @@ Paste any error messages or stack traces here
 
 - OS: [e.g., Windows 11, Ubuntu 22.04, macOS 14]
 - Python version: [e.g., 3.11.5]
-- NeuralMemory version: [e.g., 0.1.0]
+- PugBrain version: [e.g., 0.1.0]
 - Installation method: [pip, source]
 
 ## Additional Context

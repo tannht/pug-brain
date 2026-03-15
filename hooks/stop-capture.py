@@ -183,9 +183,9 @@ def main() -> None:
         saved = 0
 
     if saved > 0:
-        print(f"\nNeuralMemory: Auto-saved {saved} memories from this session.")
+        print(f"\nPugBrain: Auto-saved {saved} memories from this session.")
     else:
-        print("\nNeuralMemory: Session ended (no new memories detected).")
+        print("\nPugBrain: Session ended (no new memories detected).")
 
 
 if __name__ == "__main__":

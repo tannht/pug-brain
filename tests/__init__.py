@@ -1,1 +1,1 @@
-"""Tests for NeuralMemory."""
+"""Tests for PugBrain."""

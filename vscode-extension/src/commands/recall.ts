@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import type { QueryResponse } from "../server/types";
 import { readCurrentBrain } from "./brain";
@@ -25,10 +25,10 @@ export function registerRecallCommands(
   server: ServerLifecycle,
 ): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recall", async () => {
+    vscode.commands.registerCommand("pugbrain.recall", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -56,7 +56,7 @@ export function registerRecallCommands(
 
       const depth = parseDepth(depthPick.label);
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(server.baseUrl);
+      const client = new PugBrainClient(server.baseUrl);
 
       // 3. Execute query with progress
       let result: QueryResponse;

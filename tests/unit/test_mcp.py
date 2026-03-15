@@ -40,7 +40,7 @@ class TestMCPServer:
         """Test that get_tools returns all expected tools."""
         tools = server.get_tools()
 
-        assert len(tools) == 43
+        assert len(tools) == 45
         tool_names = {tool["name"] for tool in tools}
         assert tool_names == {
             "pugbrain_remember",
@@ -86,6 +86,8 @@ class TestMCPServer:
             "pugbrain_edit",
             "pugbrain_forget",
             "pugbrain_consolidate",
+            "pugbrain_drift",
+            "pugbrain_tool_stats",
         }
 
     def test_tool_schemas(self, server: MCPServer) -> None:
@@ -995,7 +997,7 @@ class TestMCPProtocol:
         assert response["id"] == 1
         assert "result" in response
         assert response["result"]["protocolVersion"] == "2024-11-05"
-        assert response["result"]["serverInfo"]["name"] == "neural-memory"
+        assert response["result"]["serverInfo"]["name"] == "pug-brain"
         assert "capabilities" in response["result"]
 
     @pytest.mark.asyncio
@@ -1009,7 +1011,7 @@ class TestMCPProtocol:
         assert response["id"] == 2
         assert "result" in response
         assert "tools" in response["result"]
-        assert len(response["result"]["tools"]) == 43
+        assert len(response["result"]["tools"]) == 45
 
     @pytest.mark.asyncio
     async def test_tools_call_message(self, server: MCPServer) -> None:
@@ -1147,27 +1149,27 @@ class TestMCPResources:
 
         assert len(resources) == 2
         uris = {r["uri"] for r in resources}
-        assert "neuralmemory://prompt/system" in uris
-        assert "neuralmemory://prompt/compact" in uris
+        assert "pugbrain://prompt/system" in uris
+        assert "pugbrain://prompt/compact" in uris
 
     def test_get_resource_content_system(self, server: MCPServer) -> None:
         """Test getting system prompt content."""
-        content = server.get_resource_content("neuralmemory://prompt/system")
+        content = server.get_resource_content("pugbrain://prompt/system")
 
         assert content is not None
-        assert "NeuralMemory" in content
+        assert "PugBrain" in content
         assert "pugbrain_remember" in content
 
     def test_get_resource_content_compact(self, server: MCPServer) -> None:
         """Test getting compact prompt content."""
-        content = server.get_resource_content("neuralmemory://prompt/compact")
+        content = server.get_resource_content("pugbrain://prompt/compact")
 
         assert content is not None
         assert len(content) < 3000  # Compact should be shorter than full prompt
 
     def test_get_resource_content_unknown(self, server: MCPServer) -> None:
         """Test getting unknown resource returns None."""
-        content = server.get_resource_content("neuralmemory://unknown")
+        content = server.get_resource_content("pugbrain://unknown")
 
         assert content is None
 
@@ -1191,7 +1193,7 @@ class TestMCPResources:
             "jsonrpc": "2.0",
             "id": 2,
             "method": "resources/read",
-            "params": {"uri": "neuralmemory://prompt/system"},
+            "params": {"uri": "pugbrain://prompt/system"},
         }
 
         response = await handle_message(server, message)
@@ -1200,8 +1202,8 @@ class TestMCPResources:
         assert response["id"] == 2
         assert "result" in response
         assert "contents" in response["result"]
-        assert response["result"]["contents"][0]["uri"] == "neuralmemory://prompt/system"
-        assert "NeuralMemory" in response["result"]["contents"][0]["text"]
+        assert response["result"]["contents"][0]["uri"] == "pugbrain://prompt/system"
+        assert "PugBrain" in response["result"]["contents"][0]["text"]
 
     @pytest.mark.asyncio
     async def test_resources_read_not_found(self, server: MCPServer) -> None:
@@ -1210,7 +1212,7 @@ class TestMCPResources:
             "jsonrpc": "2.0",
             "id": 3,
             "method": "resources/read",
-            "params": {"uri": "neuralmemory://unknown"},
+            "params": {"uri": "pugbrain://unknown"},
         }
 
         response = await handle_message(server, message)

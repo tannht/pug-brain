@@ -35,7 +35,7 @@ ProgressCallback = (
 
 
 class SyncEngine:
-    """Orchestrates importing records from external sources into NeuralMemory.
+    """Orchestrates importing records from external sources into PugBrain.
 
     The engine:
     1. Connects to source via SourceAdapter

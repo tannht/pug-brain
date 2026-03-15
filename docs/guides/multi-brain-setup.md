@@ -1,9 +1,9 @@
 # Multi-Brain Setup
 
-NeuralMemory stores each brain as a separate SQLite database. This gives you complete data isolation between agents, projects, or workspaces.
+PugBrain stores each brain as a separate SQLite database. This gives you complete data isolation between agents, projects, or workspaces.
 
 ```
-~/.neuralmemory/brains/
+~/.pugbrain/brains/
   default.db          ← shared brain (default)
   coder-agent.db      ← Agent 1
   researcher-agent.db ← Agent 2
@@ -18,7 +18,7 @@ Each OpenClaw profile can use a different brain via the `brain` field:
 
 ```json
 {
-  "neuralmemory": {
+  "pugbrain": {
     "brain": "coder-agent"
   }
 }
@@ -64,7 +64,7 @@ If you run multiple OpenClaw agents — each as a separate entity with its own f
 **Profile: Coder**
 ```json
 {
-  "neuralmemory": {
+  "pugbrain": {
     "brain": "coder",
     "autoContext": true,
     "autoCapture": true
@@ -75,7 +75,7 @@ If you run multiple OpenClaw agents — each as a separate entity with its own f
 **Profile: Researcher**
 ```json
 {
-  "neuralmemory": {
+  "pugbrain": {
     "brain": "researcher",
     "autoContext": true,
     "autoCapture": true,
@@ -87,7 +87,7 @@ If you run multiple OpenClaw agents — each as a separate entity with its own f
 **Profile: Security Reviewer**
 ```json
 {
-  "neuralmemory": {
+  "pugbrain": {
     "brain": "security",
     "autoContext": true,
     "autoCapture": false

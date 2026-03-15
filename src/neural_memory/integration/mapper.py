@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Mapping from common external type strings to NeuralMemory MemoryType
+# Mapping from common external type strings to PugBrain MemoryType
 _SOURCE_TYPE_MAP: dict[str, MemoryType] = {
     # Mem0 types
     "fact": MemoryType.FACT,

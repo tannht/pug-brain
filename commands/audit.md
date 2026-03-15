@@ -6,11 +6,11 @@ arguments:
     description: Optional dimension or topic to focus the audit on
     required: false
 allowed-tools:
-  - mcp__neuralmemory__pugbrain_stats
-  - mcp__neuralmemory__pugbrain_health
-  - mcp__neuralmemory__pugbrain_conflicts
-  - mcp__neuralmemory__pugbrain_recall
-  - mcp__neuralmemory__pugbrain_context
+  - mcp__pugbrain_stats
+  - mcp__pugbrain_health
+  - mcp__pugbrain_conflicts
+  - mcp__pugbrain_recall
+  - mcp__pugbrain_context
 ---
 
 # /audit — Brain Health Review

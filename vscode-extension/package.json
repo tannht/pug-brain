@@ -1,7 +1,7 @@
 {
-  "name": "neuralmemory",
-  "displayName": "NeuralMemory",
-  "description": "Visual brain explorer, inline recall, and memory management for NeuralMemory",
+  "name": "pugbrain",
+  "displayName": "PugBrain",
+  "description": "Visual brain explorer, inline recall, and memory management for PugBrain",
   "version": "0.5.0",
   "publisher": "neuralmem",
   "license": "MIT",
@@ -26,113 +26,113 @@
   ],
   "icon": "media/icon.png",
   "activationEvents": [
-    "onView:neuralmemory.memories"
+    "onView:pugbrain.memories"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "neuralmemory.encode",
+        "command": "pugbrain.encode",
         "title": "Encode Selection as Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.encodeInput",
+        "command": "pugbrain.encodeInput",
         "title": "Encode Text as Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.recall",
+        "command": "pugbrain.recall",
         "title": "Recall Memory",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.openGraph",
+        "command": "pugbrain.openGraph",
         "title": "Open Graph Explorer",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.switchBrain",
+        "command": "pugbrain.switchBrain",
         "title": "Switch Brain",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.createBrain",
+        "command": "pugbrain.createBrain",
         "title": "Create Brain",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.refreshMemories",
+        "command": "pugbrain.refreshMemories",
         "title": "Refresh Memory Tree",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(refresh)"
       },
       {
-        "command": "neuralmemory.startServer",
+        "command": "pugbrain.startServer",
         "title": "Start Server",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.connectServer",
+        "command": "pugbrain.connectServer",
         "title": "Connect to Server",
-        "category": "NeuralMemory"
+        "category": "PugBrain"
       },
       {
-        "command": "neuralmemory.recallFromTree",
+        "command": "pugbrain.recallFromTree",
         "title": "Recall Related Memories",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search)"
       },
       {
-        "command": "neuralmemory.indexCodebase",
+        "command": "pugbrain.indexCodebase",
         "title": "Index Codebase",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search-fuzzy)"
       },
       {
-        "command": "neuralmemory.importMemories",
+        "command": "pugbrain.importMemories",
         "title": "Import Memories from External Source",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(cloud-download)"
       },
       {
-        "command": "neuralmemory.recap",
+        "command": "pugbrain.recap",
         "title": "Recap Session Context",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(history)"
       },
       {
-        "command": "neuralmemory.recapTopic",
+        "command": "pugbrain.recapTopic",
         "title": "Recap by Topic",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(search)"
       },
       {
-        "command": "neuralmemory.eternalSave",
+        "command": "pugbrain.eternalSave",
         "title": "Save Eternal Context",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(save)"
       },
       {
-        "command": "neuralmemory.eternalStatus",
+        "command": "pugbrain.eternalStatus",
         "title": "Eternal Context Status",
-        "category": "NeuralMemory",
+        "category": "PugBrain",
         "icon": "$(info)"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "neuralmemory",
-          "title": "NeuralMemory",
+          "id": "pugbrain",
+          "title": "PugBrain",
           "icon": "media/brain.svg"
         }
       ]
     },
     "views": {
-      "neuralmemory": [
+      "pugbrain": [
         {
-          "id": "neuralmemory.memories",
+          "id": "pugbrain.memories",
           "name": "Memories",
           "icon": "media/neuron.svg"
         }
@@ -141,83 +141,83 @@
     "menus": {
       "view/title": [
         {
-          "command": "neuralmemory.refreshMemories",
-          "when": "view == neuralmemory.memories",
+          "command": "pugbrain.refreshMemories",
+          "when": "view == pugbrain.memories",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "neuralmemory.recallFromTree",
-          "when": "view == neuralmemory.memories && viewItem == neuralmemory.neuron",
+          "command": "pugbrain.recallFromTree",
+          "when": "view == pugbrain.memories && viewItem == pugbrain.neuron",
           "group": "inline"
         },
         {
-          "command": "neuralmemory.recallFromTree",
-          "when": "view == neuralmemory.memories && viewItem == neuralmemory.neuron",
+          "command": "pugbrain.recallFromTree",
+          "when": "view == pugbrain.memories && viewItem == pugbrain.neuron",
           "group": "1_actions"
         }
       ]
     },
     "keybindings": [
       {
-        "command": "neuralmemory.encode",
+        "command": "pugbrain.encode",
         "key": "ctrl+shift+m e",
         "mac": "cmd+shift+m e",
         "when": "editorTextFocus"
       },
       {
-        "command": "neuralmemory.recall",
+        "command": "pugbrain.recall",
         "key": "ctrl+shift+m r",
         "mac": "cmd+shift+m r"
       },
       {
-        "command": "neuralmemory.openGraph",
+        "command": "pugbrain.openGraph",
         "key": "ctrl+shift+m g",
         "mac": "cmd+shift+m g"
       },
       {
-        "command": "neuralmemory.indexCodebase",
+        "command": "pugbrain.indexCodebase",
         "key": "ctrl+shift+m i",
         "mac": "cmd+shift+m i"
       },
       {
-        "command": "neuralmemory.recap",
+        "command": "pugbrain.recap",
         "key": "ctrl+shift+m c",
         "mac": "cmd+shift+m c"
       }
     ],
     "configuration": {
-      "title": "NeuralMemory",
+      "title": "PugBrain",
       "properties": {
-        "neuralmemory.pythonPath": {
+        "pugbrain.pythonPath": {
           "type": "string",
           "default": "python",
           "description": "Path to Python interpreter with neural-memory installed"
         },
-        "neuralmemory.autoStart": {
+        "pugbrain.autoStart": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically start the NeuralMemory server on activation"
+          "description": "Automatically start the PugBrain server on activation"
         },
-        "neuralmemory.serverUrl": {
+        "pugbrain.serverUrl": {
           "type": "string",
           "default": "http://127.0.0.1:8000",
-          "description": "URL of the NeuralMemory server"
+          "description": "URL of the PugBrain server"
         },
-        "neuralmemory.graphNodeLimit": {
+        "pugbrain.graphNodeLimit": {
           "type": "number",
           "default": 1000,
           "minimum": 50,
           "maximum": 10000,
           "description": "Maximum number of nodes to render in the graph explorer"
         },
-        "neuralmemory.codeLensEnabled": {
+        "pugbrain.codeLensEnabled": {
           "type": "boolean",
           "default": true,
           "description": "Show CodeLens hints for memory-related comments"
         },
-        "neuralmemory.commentTriggers": {
+        "pugbrain.commentTriggers": {
           "type": "array",
           "default": [
             "remember:",

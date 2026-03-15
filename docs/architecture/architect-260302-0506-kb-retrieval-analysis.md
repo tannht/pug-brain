@@ -1,4 +1,4 @@
-# Architecture Analysis: NeuralMemory KB Retrieval Problems
+# Architecture Analysis: PugBrain KB Retrieval Problems
 
 **Date:** 2026-03-02 | **Type:** Senior Architecture Consultation
 **Detailed reports:** `researcher-260302-0506-cross-language-retrieval.md`, `researcher-260302-0506-agent-recall-relevance.md`, `researcher-260302-0506-pdf-extraction-solutions.md`
@@ -22,7 +22,7 @@
 
 ### Root Cause (Brutal Truth)
 
-FTS5 with Porter stemmer is **English-only by design**. Vietnamese has no word boundaries (agglutinative), so "mức nhớt" is tokenized as garbage. NeuralMemory has embedding infrastructure but uses `all-MiniLM-L6-v2` — a **monolingual English model**. Embeddings exist but don't help cross-lingually.
+FTS5 with Porter stemmer is **English-only by design**. Vietnamese has no word boundaries (agglutinative), so "mức nhớt" is tokenized as garbage. PugBrain has embedding infrastructure but uses `all-MiniLM-L6-v2` — a **monolingual English model**. Embeddings exist but don't help cross-lingually.
 
 ### Architecture Decision
 
@@ -75,7 +75,7 @@ Query ──→ FTS5 ──→ results              Query ──→ ┌─ FTS5 
 
 ### Long-term Applicability: **YES**
 
-This is the correct architectural direction. The hybrid retrieval pattern (FTS5 anchor + embedding similarity + spreading activation → RRF merge) proposed in the roadmap is exactly what the industry uses. NeuralMemory's unique spreading activation layer becomes even more valuable as a **third signal** in the fusion.
+This is the correct architectural direction. The hybrid retrieval pattern (FTS5 anchor + embedding similarity + spreading activation → RRF merge) proposed in the roadmap is exactly what the industry uses. PugBrain's unique spreading activation layer becomes even more valuable as a **third signal** in the fusion.
 
 ```
 Proposed 3-signal fusion:
@@ -97,7 +97,7 @@ Research (arxiv 2511.09984) calls this "decoder-level collapse" — smaller mode
 
 ### Key Constraint
 
-NeuralMemory is an MCP server. **Cannot control what the agent does with results.** Can only control output format/metadata.
+PugBrain is an MCP server. **Cannot control what the agent does with results.** Can only control output format/metadata.
 
 ### Architecture Decision
 
@@ -145,7 +145,7 @@ Pre-translation is the only solution that works **without agent cooperation**. T
 
 ### Translation Options
 
-For NeuralMemory's scale (MCP server, individual user):
+For PugBrain's scale (MCP server, individual user):
 - **Free tier: MyMemory API** — 10K chars/day free, good enough for recall answers
 - **Production: Google Translate** — $15/1M chars, ~$2-5/mo typical
 - **Local: Helsinki-NLP/opus-mt** — 200MB model, 0 cost, offline, ~85% quality
@@ -247,13 +247,13 @@ Docling handles this automatically via its pipeline — it detects non-standard 
 
 ### Chunking Enhancement
 
-Current NeuralMemory chunking (`doc_chunker.py`) already does section-aware markdown chunking with heading hierarchy. Docling's structured output preserves:
+Current PugBrain chunking (`doc_chunker.py`) already does section-aware markdown chunking with heading hierarchy. Docling's structured output preserves:
 - Page numbers
 - Section hierarchy
 - Table structure (as markdown tables)
 - Figure captions and references
 
-This maps directly to NeuralMemory's `DocChunk(heading_path=...)` format.
+This maps directly to PugBrain's `DocChunk(heading_path=...)` format.
 
 ### Long-term Applicability: **PARTIAL**
 

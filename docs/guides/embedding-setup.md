@@ -1,6 +1,6 @@
 # Embedding Setup Guide
 
-NeuralMemory works **without embeddings** — its core retrieval uses spreading activation on a neural graph. Embeddings are an **optional enhancement** that adds cross-language recall and semantic discovery between unrelated memories.
+PugBrain works **without embeddings** — its core retrieval uses spreading activation on a neural graph. Embeddings are an **optional enhancement** that adds cross-language recall and semantic discovery between unrelated memories.
 
 ## When Do You Need Embeddings?
 
@@ -15,10 +15,10 @@ NeuralMemory works **without embeddings** — its core retrieval uses spreading 
 
 ## Quick Start: Auto-Detection
 
-The easiest way to enable embeddings — let NeuralMemory detect what's available:
+The easiest way to enable embeddings — let PugBrain detect what's available:
 
 ```toml
-# ~/.neuralmemory/config.toml
+# ~/.pugbrain/config.toml
 [embedding]
 enabled = true
 provider = "auto"
@@ -43,7 +43,7 @@ Runs entirely on your machine. No API key, no cost, no data leaves your device.
 pip install neural-memory[embeddings]
 ```
 
-**Config** (`~/.neuralmemory/config.toml`):
+**Config** (`~/.pugbrain/config.toml`):
 
 ```toml
 [embedding]
@@ -171,11 +171,11 @@ When embeddings are enabled, two things happen:
 
 ### 1. Embedding Anchors (during recall)
 
-When you recall a memory, NeuralMemory runs keyword search (FTS5) **and** embedding similarity search **in parallel**. Results are merged — this means you can find memories even when the query uses completely different words than what was stored.
+When you recall a memory, PugBrain runs keyword search (FTS5) **and** embedding similarity search **in parallel**. Results are merged — this means you can find memories even when the query uses completely different words than what was stored.
 
 ### 2. Semantic Discovery (during consolidation)
 
-When you run `nmem consolidate`, NeuralMemory:
+When you run `nmem consolidate`, PugBrain:
 1. Embeds all CONCEPT and ENTITY neurons
 2. Computes pairwise cosine similarity
 3. Creates `SIMILAR_TO` synapses between semantically related neurons above the threshold

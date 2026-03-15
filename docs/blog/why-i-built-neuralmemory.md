@@ -33,7 +33,7 @@ You don't search — you **traverse**. Activation spreads through connections. T
 
 ## Building a Neural Memory System
 
-NeuralMemory implements this model directly:
+PugBrain implements this model directly:
 
 **Neurons** — discrete memory units (facts, decisions, events, people, concepts)
 
@@ -50,7 +50,7 @@ NeuralMemory implements this model directly:
 
 ### Encoding: Text to Neural Graph
 
-When you tell NeuralMemory "Alice suggested we use PostgreSQL because MongoDB failed the benchmark on Tuesday", it:
+When you tell PugBrain "Alice suggested we use PostgreSQL because MongoDB failed the benchmark on Tuesday", it:
 
 1. Creates neurons: `Alice` (ENTITY), `PostgreSQL` (CONCEPT), `MongoDB` (CONCEPT), `benchmark` (ACTION), `Tuesday` (TIME)
 2. Creates synapses: PostgreSQL `CAUSED_BY` benchmark failure, benchmark `HAPPENED_AT` Tuesday, Alice `INVOLVES` suggestion
@@ -60,7 +60,7 @@ No manual tagging. No pre-defined schema. The structure emerges from the content
 
 ### Retrieval: Spreading Activation
 
-When you ask "why did the Tuesday outage happen?", NeuralMemory:
+When you ask "why did the Tuesday outage happen?", PugBrain:
 
 1. Activates neurons matching "Tuesday" and "outage"
 2. Activation spreads through synapses (weighted by strength and type)
@@ -71,7 +71,7 @@ One query. Full causal chain. No multi-step prompt engineering.
 
 ### Consolidation: Sleep for AI
 
-Human memory consolidates during sleep — strengthening important connections, pruning weak ones, cross-linking related memories. NeuralMemory has a consolidation engine that does the same:
+Human memory consolidates during sleep — strengthening important connections, pruning weak ones, cross-linking related memories. PugBrain has a consolidation engine that does the same:
 
 - **ENRICH**: Cross-links related memory clusters
 - **PRUNE**: Removes weak synapses below threshold
@@ -82,7 +82,7 @@ Run it periodically. Your brain gets smarter over time.
 
 ## What Makes It Different
 
-| Capability | RAG | NeuralMemory |
+| Capability | RAG | PugBrain |
 |-----------|-----|-------------|
 | "Find text about X" | Great | Great |
 | "Why did X happen?" | Returns mentions | Returns causal chain |
@@ -91,7 +91,7 @@ Run it periodically. Your brain gets smarter over time.
 | Gets smarter over time | No | Yes (consolidation) |
 | Memory decay | No (all equal) | Yes (Ebbinghaus curve) |
 
-The key insight: **for simple lookups, they're equivalent. For reasoning, NeuralMemory wins.** And AI agents increasingly need reasoning, not just lookup.
+The key insight: **for simple lookups, they're equivalent. For reasoning, PugBrain wins.** And AI agents increasingly need reasoning, not just lookup.
 
 ## Architecture
 
@@ -119,7 +119,7 @@ Everything is async Python. Storage is pluggable (SQLite default, in-memory for 
 
 ## Real-World Usage
 
-I use NeuralMemory daily with Claude Code. My agent remembers:
+I use PugBrain daily with Claude Code. My agent remembers:
 
 - Project decisions and their reasoning
 - Bug patterns and resolutions
@@ -131,7 +131,7 @@ The difference is visceral. Instead of re-explaining context every session, I sa
 
 ## What's Next
 
-NeuralMemory is open source (MIT). Current focus areas:
+PugBrain is open source (MIT). Current focus areas:
 
 - **Community-driven integrations** — more MCP tools, more AI assistants
 - **Performance at scale** — handling brains with 100K+ neurons

@@ -1,6 +1,6 @@
 # Safety & Security
 
-Best practices and known risks when using NeuralMemory.
+Best practices and known risks when using PugBrain.
 
 ## Known Risks
 

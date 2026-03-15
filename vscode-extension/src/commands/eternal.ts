@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import type { RecapResponse } from "../server/types";
 import { readCurrentBrain } from "./brain";
@@ -28,10 +28,10 @@ export function registerEternalCommands(
 ): void {
   // ── Recap command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recap", async () => {
+    vscode.commands.registerCommand("pugbrain.recap", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -47,7 +47,7 @@ export function registerEternalCommands(
 
       const level = RECAP_LEVELS.indexOf(levelPick) + 1;
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(server.baseUrl);
+      const client = new PugBrainClient(server.baseUrl);
 
       try {
         const result = await vscode.window.withProgress(
@@ -70,10 +70,10 @@ export function registerEternalCommands(
 
   // ── Recap by topic command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.recapTopic", async () => {
+    vscode.commands.registerCommand("pugbrain.recapTopic", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -89,7 +89,7 @@ export function registerEternalCommands(
       }
 
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(server.baseUrl);
+      const client = new PugBrainClient(server.baseUrl);
 
       try {
         const result = await vscode.window.withProgress(
@@ -112,16 +112,16 @@ export function registerEternalCommands(
 
   // ── Eternal save command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.eternalSave", async () => {
+    vscode.commands.registerCommand("pugbrain.eternalSave", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
 
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(server.baseUrl);
+      const client = new PugBrainClient(server.baseUrl);
 
       try {
         const result = await vscode.window.withProgress(
@@ -146,16 +146,16 @@ export function registerEternalCommands(
 
   // ── Eternal status command ──
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.eternalStatus", async () => {
+    vscode.commands.registerCommand("pugbrain.eternalStatus", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
 
       const brainId = readCurrentBrain();
-      const client = new NeuralMemoryClient(server.baseUrl);
+      const client = new PugBrainClient(server.baseUrl);
 
       try {
         const result = await client.eternal(brainId, { action: "status" });

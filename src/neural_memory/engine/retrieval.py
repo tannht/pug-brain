@@ -138,7 +138,7 @@ class ReflexPipeline:
 
         # PPR activator (lazy: only create if strategy requires it)
         self._ppr_activator: PPRActivation | None = None
-        if config.activation_strategy in ("ppr", "hybrid"):
+        if config.activation_strategy in ("ppr", "hybrid", "auto"):
             from neural_memory.engine.ppr_activation import PPRActivation
 
             self._ppr_activator = PPRActivation(storage, config)
@@ -149,6 +149,10 @@ class ReflexPipeline:
         self._write_queue = DeferredWriteQueue()
         self._query_router = QueryRouter()
         self._cached_encryptor: Any = _UNSET
+
+        # Predictive priming caches (per-session, keyed by session_id)
+        self._activation_caches: dict[str, Any] = {}  # session_id → ActivationCache
+        self._priming_metrics: dict[str, Any] = {}  # session_id → PrimingMetrics
 
         # Adaptive depth selection (Bayesian priors)
         self._adaptive_selector: AdaptiveDepthSelector | None = None
@@ -190,6 +194,7 @@ class ReflexPipeline:
         reference_time: datetime | None = None,
         valid_at: datetime | None = None,
         tags: set[str] | None = None,
+        session_id: str | None = None,
     ) -> RetrievalResult:
         """
         Execute the retrieval pipeline.
@@ -220,6 +225,15 @@ class ReflexPipeline:
 
         # 2. Auto-detect depth if not specified
         _depth_decision: DepthDecision | None = None
+        _session_state = None
+        if session_id:
+            try:
+                from neural_memory.engine.session_state import SessionManager
+
+                _session_state = SessionManager.get_instance().get(session_id)
+            except Exception:
+                logger.debug("Failed to load session state for %s", session_id, exc_info=True)
+
         if depth is None:
             rule_depth = self._detect_depth(stimulus)
             if self._adaptive_selector is not None:
@@ -227,6 +241,7 @@ class ReflexPipeline:
                     _depth_decision = await self._adaptive_selector.select_depth(
                         stimulus,
                         rule_depth,
+                        session_state=_session_state,
                     )
                     depth = _depth_decision.depth
                 except NotImplementedError:
@@ -245,18 +260,85 @@ class ReflexPipeline:
         if temporal_result is not None:
             return temporal_result
 
+        # 2.8 Fiber summary tier — lightweight first-pass retrieval
+        if self._config.fiber_summary_tier_enabled and depth != DepthLevel.INSTANT:
+            fiber_result = await self._try_fiber_summary_tier(
+                stimulus, depth, max_tokens, start_time
+            )
+            if fiber_result is not None:
+                return fiber_result
+
         # 3. Find anchor neurons (time-first) with ranked results
         anchor_sets, ranked_lists = await self._find_anchors_ranked(stimulus)
 
         # 3.5 RRF score fusion: compute initial activation levels from multi-retriever ranks
+        # Use dynamic per-brain retriever weights when available
+        _rrf_weights: dict[str, float] | None = None
+        try:
+            _rrf_weights = await self._storage.get_retriever_weights()  # type: ignore[attr-defined]
+        except Exception:
+            pass  # Storage doesn't support retriever calibration — use defaults
+
         anchor_activations: dict[str, float] | None = None
         if ranked_lists and any(ranked_lists):
-            fused_scores = rrf_fuse(ranked_lists, k=self._config.rrf_k)
+            fused_scores = rrf_fuse(
+                ranked_lists,
+                k=self._config.rrf_k,
+                retriever_weights=_rrf_weights,
+            )
             if fused_scores:
                 anchor_activations = rrf_to_activation_levels(fused_scores)
 
-        # Choose activation method based on strategy
+        # 3.7 Predictive priming: merge session-aware activation boosts
+        _priming_result = None
+        _primed_neuron_ids: set[str] = set()
+        if session_id and _session_state is not None:
+            try:
+                from neural_memory.engine.priming import (
+                    ActivationCache,
+                    PrimingMetrics,
+                    compute_priming,
+                    merge_priming_into_activations,
+                )
+
+                # Get or create per-session cache and metrics
+                if session_id not in self._activation_caches:
+                    self._activation_caches[session_id] = ActivationCache()
+                if session_id not in self._priming_metrics:
+                    self._priming_metrics[session_id] = PrimingMetrics()
+
+                _act_cache = self._activation_caches[session_id]
+                _prim_metrics = self._priming_metrics[session_id]
+
+                # Get recent result neuron IDs from cache for co-activation priming
+                _recent_nids = list(_act_cache.get_priming_activations().keys())[:50]
+
+                _priming_result = await compute_priming(
+                    storage=self._storage,
+                    session_state=_session_state,
+                    activation_cache=_act_cache,
+                    recent_neuron_ids=_recent_nids,
+                    metrics=_prim_metrics,
+                )
+
+                if _priming_result.total_primed > 0:
+                    _primed_neuron_ids = set(_priming_result.activation_boosts.keys())
+                    anchor_activations = merge_priming_into_activations(
+                        anchor_activations, _priming_result
+                    )
+                    logger.debug(
+                        "Priming: %d neurons from %s",
+                        _priming_result.total_primed,
+                        _priming_result.source_counts,
+                    )
+            except Exception:
+                logger.debug("Predictive priming failed (non-critical)", exc_info=True)
+
+        # Choose activation method based on strategy (auto-select from graph density)
         strategy = self._config.activation_strategy
+        if strategy == "auto":
+            strategy = await self._auto_select_strategy()
+
         if strategy == "ppr" and self._ppr_activator is not None:
             # Personalized PageRank activation
             activations, intersections = await self._ppr_activator.activate_from_multiple(
@@ -333,7 +415,7 @@ class ReflexPipeline:
                 )
                 for gate, stats in _raw_cal.items()
             }
-        except (AttributeError, Exception):
+        except Exception:
             logger.debug("Gate calibration fetch failed (non-critical)", exc_info=True)
 
         _sufficiency = check_sufficiency(
@@ -467,6 +549,34 @@ class ReflexPipeline:
             },
         )
 
+        # Update priming cache and metrics (non-critical)
+        if session_id and _priming_result is not None:
+            try:
+                from neural_memory.engine.priming import record_priming_outcome
+
+                _act_cache = self._activation_caches.get(session_id)
+                _prim_metrics = self._priming_metrics.get(session_id)
+
+                # Update activation cache with this query's results
+                if _act_cache is not None:
+                    activation_levels = {
+                        nid: ar.activation_level for nid, ar in activations.items()
+                    }
+                    _act_cache.update_from_result(activation_levels)
+
+                # Record priming outcome (hit/miss)
+                if _prim_metrics is not None and _primed_neuron_ids:
+                    _result_nids = set(activations.keys())
+                    record_priming_outcome(_prim_metrics, _primed_neuron_ids, _result_nids)
+                    result.metadata["priming"] = {
+                        "neurons_primed": _priming_result.total_primed,
+                        "sources": _priming_result.source_counts,
+                        "hit_rate": round(_prim_metrics.hit_rate, 4),
+                        "aggressiveness": round(_prim_metrics.aggressiveness_multiplier, 2),
+                    }
+            except Exception:
+                logger.debug("Priming cache update failed (non-critical)", exc_info=True)
+
         # Record calibration feedback (non-critical)
         try:
             await self._storage.save_calibration_record(  # type: ignore[attr-defined]
@@ -476,9 +586,36 @@ class ReflexPipeline:
                 actual_fibers=len(fibers_matched),
                 query_intent=stimulus.intent.value,
             )
-        except (AttributeError, Exception):
+        except Exception:
             # AttributeError: storage doesn't have calibration mixin (e.g. InMemoryStorage)
             logger.debug("Calibration record save failed (non-critical)", exc_info=True)
+
+        # Record retriever contribution outcomes for dynamic RRF weights (non-critical)
+        if ranked_lists and fibers_matched:
+            try:
+                # Which neurons ended up in final results?
+                result_neuron_ids = {
+                    next(iter(f.neuron_ids)) for f in fibers_matched if f.neuron_ids
+                }
+                for ranked_list in ranked_lists:
+                    if not ranked_list:
+                        continue
+                    rtype = ranked_list[0].retriever
+                    contributed = any(ra.neuron_id in result_neuron_ids for ra in ranked_list)
+                    await self._storage.save_retriever_outcome(  # type: ignore[attr-defined]
+                        retriever_type=rtype,
+                        contributed=contributed,
+                    )
+                # Periodic pruning: cap retriever_calibration per type (every ~100 saves)
+                import random as _rnd
+
+                if _rnd.random() < 0.01:  # ~1% chance per save → prunes ~every 100 saves
+                    try:
+                        await self._storage.prune_retriever_calibration()  # type: ignore[attr-defined]
+                    except Exception:
+                        pass
+            except Exception:
+                logger.debug("Retriever outcome save failed (non-critical)", exc_info=True)
 
         # Record adaptive depth outcome (non-critical)
         if _depth_decision is not None:
@@ -489,13 +626,20 @@ class ReflexPipeline:
             }
             if self._adaptive_selector is not None:
                 try:
+                    # Infer agent_used_result from priming hit rate:
+                    # If primed neurons appeared in result → agent is using the recall
+                    _agent_signal: bool | None = None
+                    if _primed_neuron_ids and activations:
+                        _result_nids = set(activations.keys())
+                        _agent_signal = bool(_primed_neuron_ids & _result_nids)
                     await self._adaptive_selector.record_outcome(
                         stimulus=stimulus,
                         depth_used=depth,
                         confidence=reconstruction.confidence,
                         fibers_matched=len(fibers_matched),
+                        agent_used_result=_agent_signal,
                     )
-                except (NotImplementedError, Exception):
+                except Exception:
                     logger.debug("Depth prior update failed (non-critical)", exc_info=True)
 
         # Optionally attach workflow suggestions (non-critical)
@@ -526,7 +670,72 @@ class ReflexPipeline:
             except Exception:
                 logger.debug("Deferred write flush failed (non-critical)", exc_info=True)
 
+        # Record session query (non-critical)
+        if session_id:
+            try:
+                from neural_memory.engine.session_state import SessionManager
+
+                session_mgr = SessionManager.get_instance()
+                session = session_mgr.get_or_create(session_id)
+                session.record_query(
+                    query=query,
+                    depth_used=depth.value,
+                    confidence=reconstruction.confidence,
+                    fibers_matched=len(fibers_matched),
+                    entities=[e.text for e in stimulus.entities] if stimulus.entities else [],
+                    keywords=list(stimulus.keywords) if stimulus.keywords else [],
+                )
+                # Attach session context to result metadata
+                top_topics = session.get_top_topics()
+                if top_topics:
+                    result.metadata["session_topics"] = top_topics
+                    result.metadata["session_query_count"] = session.query_count
+
+                # Periodic session summary persist
+                if session.needs_persist():
+                    try:
+                        summary = session.to_summary_dict()
+                        await self._storage.save_session_summary(  # type: ignore[attr-defined]
+                            session_id=session.session_id,
+                            topics=summary["topics"],
+                            topic_weights=summary["topic_weights"],
+                            top_entities=summary["top_entities"],
+                            query_count=summary["query_count"],
+                            avg_confidence=summary["avg_confidence"],
+                            avg_depth=summary["avg_depth"],
+                            started_at=utcnow().isoformat(),
+                            ended_at=utcnow().isoformat(),
+                        )
+                        session.mark_persisted()
+                    except Exception:
+                        logger.debug("Session summary persist failed (non-critical)", exc_info=True)
+            except Exception:
+                logger.debug("Session recording failed (non-critical)", exc_info=True)
+
         return result
+
+    async def _auto_select_strategy(self) -> str:
+        """Auto-select activation strategy based on graph density.
+
+        Sparse graph (avg <3 synapses/neuron) → classic BFS reaches more.
+        Dense graph (avg >8 synapses/neuron) → PPR dampens hub noise.
+        Medium → hybrid.
+        """
+        try:
+            density = await self._storage.get_graph_density()  # type: ignore[attr-defined]
+        except Exception:
+            return "classic"  # Fallback if storage doesn't support it
+
+        if density < 3.0:
+            return "classic"
+        elif density > 8.0:
+            if self._ppr_activator is not None:
+                return "ppr"
+            return "classic"
+        else:
+            if self._ppr_activator is not None:
+                return "hybrid"
+            return "classic"
 
     def _detect_depth(self, stimulus: Stimulus) -> DepthLevel:
         """Auto-detect required depth from query intent."""
@@ -652,6 +861,91 @@ class ReflexPipeline:
             )
 
         return None
+
+    async def _try_fiber_summary_tier(
+        self,
+        stimulus: Stimulus,
+        depth: DepthLevel,
+        max_tokens: int,
+        start_time: float,
+    ) -> RetrievalResult | None:
+        """Step 2.8: Fiber summary first-pass retrieval.
+
+        Searches fiber summaries via FTS5 before the full neuron pipeline.
+        If results have sufficient confidence and enough context tokens,
+        returns early without running the expensive activation pipeline.
+        Returns None to fall through to the standard pipeline otherwise.
+        """
+        # Build search query from stimulus keywords + entities
+        search_terms: list[str] = list(stimulus.keywords)
+        for entity in stimulus.entities:
+            search_terms.append(entity.text)
+        if not search_terms:
+            return None
+
+        query_text = " ".join(search_terms)
+        try:
+            fibers = await self._storage.search_fiber_summaries(query_text, limit=10)
+        except Exception:
+            logger.debug("Fiber summary search failed, falling through", exc_info=True)
+            return None
+
+        if not fibers:
+            return None
+
+        # Build context from fiber summaries
+        context_parts: list[str] = []
+        tokens_used = 0
+        for fiber in fibers:
+            summary = fiber.summary or ""
+            if not summary:
+                continue
+            estimated_tokens = len(summary) // 4
+            if tokens_used + estimated_tokens > max_tokens:
+                break
+            context_parts.append(summary)
+            tokens_used += estimated_tokens
+
+        if not context_parts:
+            return None
+
+        # Compute confidence: based on number of matches and token coverage
+        match_ratio = min(1.0, len(context_parts) / max(len(search_terms), 1))
+        token_ratio = min(1.0, tokens_used / max(max_tokens * 0.3, 1))
+        confidence = match_ratio * 0.6 + token_ratio * 0.4
+
+        # Sufficiency gate: only return early if confidence exceeds threshold
+        if confidence < self._config.sufficiency_threshold:
+            logger.debug(
+                "Fiber summary tier: confidence %.2f < threshold %.2f, continuing to neuron pipeline",
+                confidence,
+                self._config.sufficiency_threshold,
+            )
+            return None
+
+        context = "\n\n".join(context_parts)
+        latency_ms = (time.perf_counter() - start_time) * 1000
+
+        logger.debug(
+            "Fiber summary tier sufficient: confidence=%.2f, fibers=%d, tokens=%d, latency=%.1fms",
+            confidence,
+            len(context_parts),
+            tokens_used,
+            latency_ms,
+        )
+
+        return RetrievalResult(
+            answer=context_parts[0] if context_parts else None,
+            confidence=confidence,
+            depth_used=depth,
+            neurons_activated=0,
+            fibers_matched=[f.id for f in fibers[: len(context_parts)]],
+            subgraph=Subgraph(neuron_ids=[], synapse_ids=[], anchor_ids=[]),
+            context=context,
+            latency_ms=latency_ms,
+            tokens_used=tokens_used,
+            metadata={"fiber_summary_tier": True, "fibers_searched": len(fibers)},
+        )
 
     async def _find_seed_neuron(self, stimulus: Stimulus) -> str | None:
         """Find the best seed neuron for temporal reasoning.
@@ -1049,9 +1343,9 @@ class ReflexPipeline:
             brain_id = getattr(self._storage, "_current_brain_id", None) or "default"
             # Resolve persist dir from unified config
             try:
-                from neural_memory.unified_config import get_neuralmemory_dir
+                from neural_memory.unified_config import get_pugbrain_dir
 
-                persist_dir = str(get_neuralmemory_dir() / "vectors" / brain_id)
+                persist_dir = str(get_pugbrain_dir() / "vectors" / brain_id)
             except Exception:
                 persist_dir = None
 

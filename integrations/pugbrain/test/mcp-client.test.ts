@@ -10,7 +10,7 @@ vi.mock("node:child_process", () => ({
 }));
 
 // Must import after mocking
-const { NeuralMemoryMcpClient } = await import("../src/mcp-client.js");
+const { PugBrainMcpClient } = await import("../src/mcp-client.js");
 
 function makeLogger(): PluginLogger {
   return {
@@ -46,7 +46,7 @@ function buildJsonRpcLine(message: object): Buffer {
   return Buffer.from(JSON.stringify(message) + "\n");
 }
 
-describe("NeuralMemoryMcpClient", () => {
+describe("PugBrainMcpClient", () => {
   let logger: PluginLogger;
 
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe("NeuralMemoryMcpClient", () => {
 
   describe("constructor", () => {
     it("sets defaults correctly", () => {
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python3",
         brain: "test-brain",
         logger,
@@ -70,7 +70,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "/usr/bin/python3",
         brain: "default",
         logger,
@@ -102,7 +102,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "custom",
         logger,
@@ -134,7 +134,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -156,7 +156,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -193,7 +193,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -228,7 +228,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -260,7 +260,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -285,7 +285,7 @@ describe("NeuralMemoryMcpClient", () => {
 
   describe("writeMessage / notify guards", () => {
     it("send rejects when process not available", async () => {
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -303,7 +303,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -324,7 +324,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -352,7 +352,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -397,7 +397,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -433,7 +433,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -459,7 +459,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -483,7 +483,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,
@@ -516,7 +516,7 @@ describe("NeuralMemoryMcpClient", () => {
       const proc = makeMockProc();
       mockSpawn.mockReturnValue(proc);
 
-      const client = new NeuralMemoryMcpClient({
+      const client = new PugBrainMcpClient({
         pythonPath: "python",
         brain: "default",
         logger,

@@ -4,8 +4,8 @@ const GITHUB_OWNER = "nhadaututtheky";
 const GITHUB_REPO = "neural-memory";
 const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`;
 const CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
-const STATE_KEY_LAST_CHECK = "neuralmemory.lastUpdateCheck";
-const STATE_KEY_DISMISSED = "neuralmemory.dismissedVersion";
+const STATE_KEY_LAST_CHECK = "pugbrain.lastUpdateCheck";
+const STATE_KEY_DISMISSED = "pugbrain.dismissedVersion";
 
 interface GitHubRelease {
   readonly tag_name: string;
@@ -55,7 +55,7 @@ export async function checkForUpdates(
     // Show notification
     const releaseName = release.name || `v${remoteVersion}`;
     const action = await vscode.window.showInformationMessage(
-      `NeuralMemory ${releaseName} is available (current: v${currentVersion}).`,
+      `PugBrain ${releaseName} is available (current: v${currentVersion}).`,
       "View Release",
       "Dismiss",
     );
@@ -71,7 +71,7 @@ export async function checkForUpdates(
 }
 
 function getLocalVersion(): string {
-  const ext = vscode.extensions.getExtension("neuralmem.neuralmemory");
+  const ext = vscode.extensions.getExtension("neuralmem.pugbrain");
   if (ext) {
     return ext.packageJSON.version as string;
   }
@@ -84,7 +84,7 @@ async function fetchLatestRelease(): Promise<GitHubRelease | null> {
     const resp = await fetch(GITHUB_API_URL, {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "neuralmemory-vscode",
+        "User-Agent": "pugbrain-vscode",
       },
       signal: AbortSignal.timeout(5_000),
     });

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "./brain";
 
@@ -13,11 +13,11 @@ export function registerIndexCommands(
   // Index codebase
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.indexCodebase",
+      "pugbrain.indexCodebase",
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(
-            "NeuralMemory server is not running.",
+            "PugBrain server is not running.",
           );
           return;
         }
@@ -45,7 +45,7 @@ export function registerIndexCommands(
         }
 
         const brainId = readCurrentBrain();
-        const client = new NeuralMemoryClient(server.baseUrl);
+        const client = new PugBrainClient(server.baseUrl);
 
         try {
           const result = await vscode.window.withProgress(

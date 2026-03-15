@@ -1,5 +1,5 @@
 /**
- * TypeScript interfaces mirroring the NeuralMemory server Pydantic models.
+ * TypeScript interfaces mirroring the PugBrain server Pydantic models.
  *
  * Source: neural_memory/server/models.py
  *         neural_memory/server/routes/sync.py

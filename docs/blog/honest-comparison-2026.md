@@ -1,4 +1,4 @@
-# NeuralMemory vs Mem0, Cognee, Graphiti, and Everyone Else — An Honest Comparison
+# PugBrain vs Mem0, Cognee, Graphiti, and Everyone Else — An Honest Comparison
 
 *What a solo-dev neural graph memory system actually offers against $24M-funded competitors, where it falls short, and when you should (or shouldn't) use it.*
 
@@ -8,11 +8,11 @@
 
 Every open-source project tells you why it's great. Few tell you why you might not need it.
 
-NeuralMemory is an AI agent memory system built on spreading activation — a retrieval paradigm borrowed from cognitive science. It competes in a space occupied by Mem0 (47k stars, $24M Series A), Cognee (12k stars, 90 contributors), Graphiti (23k stars, peer-reviewed research), claude-mem (26k stars), and LlamaIndex's memory module (part of a 47k-star framework).
+PugBrain is an AI agent memory system built on spreading activation — a retrieval paradigm borrowed from cognitive science. It competes in a space occupied by Mem0 (47k stars, $24M Series A), Cognee (12k stars, 90 contributors), Graphiti (23k stars, peer-reviewed research), claude-mem (26k stars), and LlamaIndex's memory module (part of a 47k-star framework).
 
-NeuralMemory has 0 stars and 1 contributor.
+PugBrain has 0 stars and 1 contributor.
 
-This post is an honest accounting of where NeuralMemory actually wins, where it loses, and what that means for someone choosing an AI memory system today.
+This post is an honest accounting of where PugBrain actually wins, where it loses, and what that means for someone choosing an AI memory system today.
 
 ---
 
@@ -34,21 +34,21 @@ The approach works. It's battle-tested. And it has an inescapable cost structure
 | Cognee | 1+ (triplet extraction) | Cannot function |
 | Graphiti | 1+ (entity extraction) | Cannot function |
 | claude-mem | 1 (summarization) | Degrades significantly |
-| NeuralMemory | 0 | Full functionality |
+| PugBrain | 0 | Full functionality |
 
 This isn't a minor implementation detail — it's a fundamental architectural divide. Every LLM-dependent system inherits three constraints: API cost per operation, latency from remote calls, and mandatory internet connectivity.
 
-NeuralMemory trades extraction quality for independence. More on whether that trade is worth it below.
+PugBrain trades extraction quality for independence. More on whether that trade is worth it below.
 
 ---
 
-## Where NeuralMemory Genuinely Wins
+## Where PugBrain Genuinely Wins
 
 ### 1. Cost: $0.00 Per Operation, Forever
 
 Mem0's own architecture requires a minimum of 2 LLM calls per `add()` — one for fact extraction, one for conflict resolution. At OpenAI's current pricing, a system processing 10,000 memories per month costs $15-50 in API calls alone, before hosting.
 
-NeuralMemory's core path is regex pattern matching + graph traversal + substring anchoring. The operational cost is zero. Not "low" — zero. This isn't a philosophical argument; it's arithmetic.
+PugBrain's core path is regex pattern matching + graph traversal + substring anchoring. The operational cost is zero. Not "low" — zero. This isn't a philosophical argument; it's arithmetic.
 
 **When this matters**: Personal developer memory, CI/CD pipelines, embedded devices, air-gapped environments, cost-sensitive startups, offline-first applications.
 
@@ -56,7 +56,7 @@ NeuralMemory's core path is regex pattern matching + graph traversal + substring
 
 ### 2. Single-File Portability
 
-NeuralMemory stores everything — neurons, synapses, fibers, versions, action logs — in one SQLite file. Your entire brain is `~/.neuralmemory/brains/default.db` (~20MB for a working brain with 5,000+ neurons).
+PugBrain stores everything — neurons, synapses, fibers, versions, action logs — in one SQLite file. Your entire brain is `~/.pugbrain/brains/default.db` (~20MB for a working brain with 5,000+ neurons).
 
 What this enables:
 - Copy the file to another machine — done, your memory moved
@@ -76,7 +76,7 @@ Nobody else offers "your memory is one file you can email to someone."
 
 Every other system retrieves memories by computing vector similarity between a query embedding and stored embeddings. This works well but is fundamentally "nearest-neighbor search in high-dimensional space."
 
-NeuralMemory uses spreading activation: a query activates seed neurons, activation propagates through weighted synapses with distance-based decay, and the highest-activated cluster is returned. Combined with fiber conductivity (pathways that strengthen with use) and Hebbian co-activation learning, this creates a retrieval system that:
+PugBrain uses spreading activation: a query activates seed neurons, activation propagates through weighted synapses with distance-based decay, and the highest-activated cluster is returned. Combined with fiber conductivity (pathways that strengthen with use) and Hebbian co-activation learning, this creates a retrieval system that:
 
 - Gets better with use (frequently co-activated neurons form stronger connections)
 - Traverses causal chains (A caused B caused C) instead of finding similar documents
@@ -87,13 +87,13 @@ Is this *better* than vector similarity? Not universally. But it's *different* i
 
 ### 4. True Offline-First
 
-NeuralMemory works identically on an airplane, in a submarine, or on a machine that has never connected to the internet. No API keys to configure, no models to download, no services to start.
+PugBrain works identically on an airplane, in a submarine, or on a machine that has never connected to the internet. No API keys to configure, no models to download, no services to start.
 
 This is unique in the space. Every competitor requires at minimum an LLM API key for write operations.
 
 ---
 
-## Where NeuralMemory Honestly Loses
+## Where PugBrain Honestly Loses
 
 ### 1. Extraction Quality — Not Even Close
 
@@ -105,15 +105,15 @@ Given: *"The deployment failed after migrating to the new auth service, which ha
 |--------|-------------------|
 | **Mem0** | Fact: "deployment failed due to incompatible token format in new auth service" |
 | **Graphiti** | Entities: deployment, auth service. Relationship: CAUSED_BY(incompatible token format, deployment failure) |
-| **NeuralMemory** | Keyword neurons: "deployment", "auth", "token". Maybe a CAUSED_BY synapse if the regex catches "failed after" |
+| **PugBrain** | Keyword neurons: "deployment", "auth", "token". Maybe a CAUSED_BY synapse if the regex catches "failed after" |
 
-LLM extraction understands *meaning*. Regex extraction matches *patterns*. For unstructured natural language, LLMs win decisively. NeuralMemory's regex patterns cover common causal markers ("because", "due to", "as a result") but miss complex sentence structures, implicit causality, and domain-specific relationships.
+LLM extraction understands *meaning*. Regex extraction matches *patterns*. For unstructured natural language, LLMs win decisively. PugBrain's regex patterns cover common causal markers ("because", "due to", "as a result") but miss complex sentence structures, implicit causality, and domain-specific relationships.
 
-**The honest implication**: If your memories are well-structured (typed, tagged, with clear keywords), NeuralMemory works well. If your memories are messy natural language, Mem0 or Graphiti will extract more value from them.
+**The honest implication**: If your memories are well-structured (typed, tagged, with clear keywords), PugBrain works well. If your memories are messy natural language, Mem0 or Graphiti will extract more value from them.
 
 ### 2. Community and Ecosystem — Solo vs. Army
 
-| | Mem0 | Graphiti | Cognee | NeuralMemory |
+| | Mem0 | Graphiti | Cognee | PugBrain |
 |-|------|---------|--------|-------------|
 | Stars | 47k | 23k | 12k | 0 |
 | Contributors | 249 | ~50 | 90 | 1 |
@@ -121,22 +121,22 @@ LLM extraction understands *meaning*. Regex extraction matches *patterns*. For u
 | Integrations | 50+ | Neo4j, MCP | 30+ sources | MCP only |
 | SDK languages | Python, TypeScript | Python | Python | Python |
 
-This gap is not closable by technical merit alone. Mem0 has 249 people finding bugs, writing docs, building integrations, and battle-testing in production. NeuralMemory has one person.
+This gap is not closable by technical merit alone. Mem0 has 249 people finding bugs, writing docs, building integrations, and battle-testing in production. PugBrain has one person.
 
 **What this means practically**:
 - If you hit a bug in Mem0, someone has probably already filed an issue and a fix is in progress
-- If you hit a bug in NeuralMemory, you're filing the issue with the person who also has to fix it
-- Mem0 integrates with LangChain, CrewAI, Vercel AI SDK, AWS Strands. NeuralMemory integrates with MCP.
-- If NeuralMemory's author gets hit by a bus, the project is orphaned
+- If you hit a bug in PugBrain, you're filing the issue with the person who also has to fix it
+- Mem0 integrates with LangChain, CrewAI, Vercel AI SDK, AWS Strands. PugBrain integrates with MCP.
+- If PugBrain's author gets hit by a bus, the project is orphaned
 
 ### 3. Retrieval Robustness at Scale
 
-From NeuralMemory's own benchmarks:
+From PugBrain's own benchmarks:
 - At 5,000 neurons, hybrid mode achieves **~50% recall**
 - Spreading activation hits a hard safety cap at 50,000 queue entries
 - Without good keyword anchors in the query, retrieval can return **nothing**
 
-Vector similarity (Mem0, Cognee) always returns *something* — the N most similar memories to your query. It might not be perfect, but it's never empty. NeuralMemory can return an empty "## Relevant Memories" header if your query terms don't substring-match any neuron content.
+Vector similarity (Mem0, Cognee) always returns *something* — the N most similar memories to your query. It might not be perfect, but it's never empty. PugBrain can return an empty "## Relevant Memories" header if your query terms don't substring-match any neuron content.
 
 The embedding fallback (optional, requires `sentence-transformers`) patches this gap, but it's off by default and adds a dependency that undermines the "zero external requirements" pitch.
 
@@ -147,7 +147,7 @@ Graphiti's bi-temporal model is the gold standard here:
 - Contradictions are automatically detected and old facts invalidated
 - "What was true on January 15?" is a first-class query
 
-NeuralMemory has BEFORE/AFTER synapses and `_superseded` metadata, but it cannot:
+PugBrain has BEFORE/AFTER synapses and `_superseded` metadata, but it cannot:
 - Automatically expire stale facts based on temporal validity
 - Answer point-in-time queries accurately
 - Resolve contradictions with the sophistication Graphiti offers
@@ -156,19 +156,19 @@ NeuralMemory has BEFORE/AFTER synapses and `_superseded` metadata, but it cannot
 
 - Mem0 is used in production by companies, selected by AWS for the Strands Agent SDK
 - Graphiti has a peer-reviewed paper and a commercial cloud offering
-- NeuralMemory has 1,299 tests and zero known production deployments outside its author's machine
+- PugBrain has 1,299 tests and zero known production deployments outside its author's machine
 
 Tests are not production. A test suite tells you the code does what the developer intended. Production tells you the code survives what users actually do.
 
 ### 6. Consolidation Doesn't Scale
 
-NeuralMemory's consolidation engine (the process that merges, prunes, and enriches memories over time) uses O(n^2) pattern extraction. On a brain with 602 fibers, it already times out at >5 minutes. At enterprise scale (100k+ memories), consolidation is unusable without fundamental algorithmic changes.
+PugBrain's consolidation engine (the process that merges, prunes, and enriches memories over time) uses O(n^2) pattern extraction. On a brain with 602 fibers, it already times out at >5 minutes. At enterprise scale (100k+ memories), consolidation is unusable without fundamental algorithmic changes.
 
 ---
 
 ## The Integration Question
 
-NeuralMemory ships adapters for ChromaDB, Mem0, Cognee, Graphiti, and LlamaIndex. The pitch: use NM as a unification layer that wraps these systems, adding spreading activation on top of their storage.
+PugBrain ships adapters for ChromaDB, Mem0, Cognee, Graphiti, and LlamaIndex. The pitch: use NM as a unification layer that wraps these systems, adding spreading activation on top of their storage.
 
 ### When Integration Makes Sense
 
@@ -198,22 +198,22 @@ The integration adapters exist but are thin today. They import data from externa
 | Best extraction quality from messy text | **Mem0** |
 | Temporal fact evolution + contradiction handling | **Graphiti** |
 | Broadest ecosystem integration | **Mem0** or **LlamaIndex** |
-| Zero-cost, zero-dependency memory | **NeuralMemory** |
-| Offline-first / air-gapped environments | **NeuralMemory** |
-| Single-file portable brain | **NeuralMemory** |
-| Claude Code personal memory (MCP) | **NeuralMemory** or **claude-mem** |
+| Zero-cost, zero-dependency memory | **PugBrain** |
+| Offline-first / air-gapped environments | **PugBrain** |
+| Single-file portable brain | **PugBrain** |
+| Claude Code personal memory (MCP) | **PugBrain** or **claude-mem** |
 | Enterprise production with SLA | **Mem0 Platform** or **Zep Cloud** |
 | Knowledge graph with document ingestion | **Cognee** |
-| Causal chain traversal | **Graphiti** or **NeuralMemory** |
-| Novel research-grade retrieval | **NeuralMemory** |
+| Causal chain traversal | **Graphiti** or **PugBrain** |
+| Novel research-grade retrieval | **PugBrain** |
 
 ---
 
 ## The Uncomfortable Summary
 
-NeuralMemory occupies a real niche that no competitor fills: **zero-cost, offline-first, portable AI memory with a cognitively-inspired retrieval mechanism**. For a personal developer assistant running as a Claude Code MCP server, it's a genuinely good choice — possibly the best choice, because the alternatives are either expensive (Mem0), heavy (Graphiti + Neo4j), or locked to a single client (claude-mem + Bun).
+PugBrain occupies a real niche that no competitor fills: **zero-cost, offline-first, portable AI memory with a cognitively-inspired retrieval mechanism**. For a personal developer assistant running as a Claude Code MCP server, it's a genuinely good choice — possibly the best choice, because the alternatives are either expensive (Mem0), heavy (Graphiti + Neo4j), or locked to a single client (claude-mem + Bun).
 
-But NeuralMemory is not a replacement for Mem0 or Graphiti in production applications. It doesn't have the extraction quality, the ecosystem, the team, the funding, or the battle-testing. Claiming otherwise would be dishonest.
+But PugBrain is not a replacement for Mem0 or Graphiti in production applications. It doesn't have the extraction quality, the ecosystem, the team, the funding, or the battle-testing. Claiming otherwise would be dishonest.
 
 The most promising path forward is probably not "beat Mem0 at their game." It's one of:
 
@@ -225,6 +225,6 @@ What it shouldn't do is pretend 1 contributor can outship 249.
 
 ---
 
-*[NeuralMemory](https://github.com/nhadaututtheky/neural-memory) v1.0.2 — Reflex-based memory for AI agents. 1,299 tests, 0 API keys required.*
+*[PugBrain](https://github.com/nhadaututtheky/neural-memory) v1.0.2 — Reflex-based memory for AI agents. 1,299 tests, 0 API keys required.*
 
 *Data current as of February 2026. Star counts, versions, and pricing may have changed.*

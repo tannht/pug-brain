@@ -207,7 +207,7 @@ Add to VS Code `settings.json`:
 
 ### VS Code Extension (GUI)
 
-For a graphical experience, install the [NeuralMemory VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.neuralmemory) from the marketplace.
+For a graphical experience, install the [PugBrain VS Code Extension](https://marketplace.visualstudio.com/items?itemName=neuralmem.pugbrain) from the marketplace.
 
 ---
 
@@ -317,11 +317,11 @@ Google's AI-powered editor with built-in MCP Store.
 2. Browse & install servers directly
 3. Authenticate if prompted
 
-### Option 2: Custom Config (for NeuralMemory)
+### Option 2: Custom Config (for PugBrain)
 
 1. Open MCP Store → click **"Manage MCP Servers"**
 2. Click **"View raw config"**
-3. Add NeuralMemory to `mcp_config.json`:
+3. Add PugBrain to `mcp_config.json`:
 
 ```json
 {
@@ -348,7 +348,7 @@ Google's AI-powered editor with built-in MCP Store.
 
 4. Save and restart the editor.
 
-> **Tip:** Antigravity also supports connecting to NeuralMemory's FastAPI server mode. Run `nmem serve` and connect via HTTP if you prefer server-side integration.
+> **Tip:** Antigravity also supports connecting to PugBrain's FastAPI server mode. Run `nmem serve` and connect via HTTP if you prefer server-side integration.
 
 ---
 
@@ -491,7 +491,7 @@ Add to Warp's MCP config (`~/.warp/mcp.json`):
 
 ## Custom / Other MCP Clients
 
-NeuralMemory uses **stdio transport** (JSON-RPC 2.0 over stdin/stdout). Any MCP-compatible client can connect:
+PugBrain uses **stdio transport** (JSON-RPC 2.0 over stdin/stdout). Any MCP-compatible client can connect:
 
 ```json
 {
@@ -554,7 +554,7 @@ If `nmem-mcp` is not in your PATH, use the Python module:
 ## Alternative: Docker
 
 ```bash
-docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/neural-memory:latest nmem-mcp
+docker run -i --rm -v pugbrain:/root/.pugbrain ghcr.io/nhadaututtheky/neural-memory:latest nmem-mcp
 ```
 
 ```json
@@ -563,7 +563,7 @@ docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/ne
     "command": "docker",
     "args": [
       "run", "-i", "--rm",
-      "-v", "neuralmemory:/root/.neuralmemory",
+      "-v", "pugbrain:/root/.pugbrain",
       "ghcr.io/nhadaututtheky/neural-memory:latest",
       "nmem-mcp"
     ]
@@ -578,7 +578,7 @@ docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/ne
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NEURALMEMORY_BRAIN` | `"default"` | Brain name to use |
-| `NEURALMEMORY_DATA_DIR` | `~/.neuralmemory` | Data directory |
+| `NEURALMEMORY_DATA_DIR` | `~/.pugbrain` | Data directory |
 | `NEURAL_MEMORY_DEBUG` | `0` | Enable debug logging (`1` to enable) |
 | `MEM0_API_KEY` | — | Mem0 API key (for import) |
 | `COGNEE_API_KEY` | — | Cognee API key (for import) |
@@ -609,13 +609,13 @@ docker run -i --rm -v neuralmemory:/root/.neuralmemory ghcr.io/nhadaututtheky/ne
 | **Disk** | ~1-50 MB per brain (SQLite) |
 | **Startup time** | < 2 seconds |
 
-NeuralMemory is lightweight — it won't slow down your editor.
+PugBrain is lightweight — it won't slow down your editor.
 
 ---
 
 ## Available Tools
 
-Once configured, these 38 tools are available to your AI assistant:
+Once configured, these 44 tools are available to your AI assistant:
 
 ### Core Memory
 
@@ -694,7 +694,7 @@ Once configured, these 38 tools are available to your AI assistant:
 
 ## Tool Tiers
 
-By default all 38 tools are exposed on every API turn. If you want to reduce token overhead, configure a **tool tier** in `~/.neuralmemory/config.toml`:
+By default all 44 tools are exposed on every API turn. If you want to reduce token overhead, configure a **tool tier** in `~/.pugbrain/config.toml`:
 
 ```toml
 [tool_tier]
@@ -719,7 +719,7 @@ nmem config tier full         # reset to full
 
 - **minimal** — `remember`, `recall`, `context`, `recap`
 - **standard** — minimal + `todo`, `session`, `auto`, `eternal`
-- **full** — all 38 tools
+- **full** — all 44 tools
 
 > Hidden tools remain callable — only the schema listing changes. If the AI model already knows a tool name, it can still call it even when the tool is not exposed in `tools/list`.
 
@@ -731,8 +731,8 @@ The MCP server provides resources for system prompts:
 
 | Resource URI | Description |
 |-------------|-------------|
-| `neuralmemory://prompt/system` | Full system prompt for AI assistants |
-| `neuralmemory://prompt/compact` | Compact version for token-limited contexts |
+| `pugbrain://prompt/system` | Full system prompt for AI assistants |
+| `pugbrain://prompt/compact` | Compact version for token-limited contexts |
 
 ### Get MCP Config via CLI
 
@@ -752,7 +752,7 @@ nmem prompt --json     # As JSON
 
 ## Agent Instructions
 
-Copy these instructions into your project's `CLAUDE.md` (for Claude Code) or `.cursorrules` (for Cursor) to teach your AI assistant how to use NeuralMemory proactively.
+Copy these instructions into your project's `CLAUDE.md` (for Claude Code) or `.cursorrules` (for Cursor) to teach your AI assistant how to use PugBrain proactively.
 
 ### For Claude Code
 
@@ -765,9 +765,9 @@ See [`docs/agent-instructions/.cursorrules`](../agent-instructions/.cursorrules)
 ### Quick Version (any editor)
 
 ```markdown
-## Memory System — NeuralMemory
+## Memory System — PugBrain
 
-This workspace uses NeuralMemory for persistent memory.
+This workspace uses PugBrain for persistent memory.
 Use pugbrain_* MCP tools PROACTIVELY.
 
 ### Session Start (ALWAYS)
@@ -816,7 +816,7 @@ python -m neural_memory.mcp
 ### Python version mismatch
 
 ```bash
-# NeuralMemory requires Python 3.11+
+# PugBrain requires Python 3.11+
 python --version
 
 # If you have multiple Python versions, specify the full path
@@ -824,7 +824,7 @@ python --version
 
 ### Windows: encoding errors
 
-NeuralMemory handles Windows stdio encoding automatically. If you still see encoding issues:
+PugBrain handles Windows stdio encoding automatically. If you still see encoding issues:
 
 ```json
 {
@@ -865,10 +865,10 @@ NEURAL_MEMORY_DEBUG=1 nmem-mcp
 
 ```bash
 # macOS/Linux
-rm -rf ~/.neuralmemory
+rm -rf ~/.pugbrain
 
 # Windows
-rmdir /s /q %USERPROFILE%\.neuralmemory
+rmdir /s /q %USERPROFILE%\.pugbrain
 ```
 
 ---

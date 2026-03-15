@@ -1,24 +1,32 @@
 /**
- * NeuralMemory — OpenClaw Memory Plugin
+ * PugBrain — OpenClaw Memory Plugin
  *
  * Brain-inspired persistent memory for AI agents.
  * Occupies the exclusive "memory" plugin slot.
  *
  * Architecture:
- *   OpenClaw ←→ Plugin (TypeScript) ←→ MCP stdio ←→ NeuralMemory (Python)
+ *   OpenClaw ←→ Plugin (TypeScript) ←→ MCP stdio ←→ PugBrain (Python)
  *
  * v1.7.0: Dynamic tool proxy — fetches all tools from MCP `tools/list`
  * instead of hardcoding 6 tools. Automatically exposes every tool the
- * MCP server provides (39+ tools in NM v2.28.0).
+ * MCP server provides (39+ tools in PB v2.28.0).
  *
- * v1.8.0: Compatible with NM v2.29.0 — RRF score fusion, graph-based
+ * v1.8.0: Compatible with PB v2.29.0 — RRF score fusion, graph-based
  * query expansion, and Personalized PageRank activation.
  *
  * v1.8.1: Fix async register() — OpenClaw requires synchronous registration.
  * Fallback tools registered sync; MCP connection deferred to service.start().
  *
+ * v1.9.0: Backward-compat shim tools (memory_search, memory_get) to prevent
+ * "allowList contains unknown entries" warnings when PB replaces memory-core.
+ *
+ * v1.10.0: Singleton MCP client — multiple workspaces (multi-agent) share
+ * the same connected client instance, keyed by (pythonPath, brain). Fixes
+ * "PugBrain service not running" when OpenClaw registers the plugin
+ * for a second workspace after gateway startup.
+ *
  * Registers:
- *   N tools    — dynamically from MCP server (fallback: 5 core tools)
+ *   N tools    — dynamically from MCP server (fallback: 5 core + 2 compat)
  *   1 service  — MCP process lifecycle (start/stop)
  *   2 hooks    — before_agent_start (auto-context), agent_end (auto-capture)
  */
@@ -30,8 +38,9 @@ import type {
   BeforeAgentStartResult,
   AgentEndEvent,
 } from "./types.js";
-import { NeuralMemoryMcpClient } from "./mcp-client.js";
-import { createToolsFromMcp, createFallbackTools } from "./tools.js";
+import { PugBrainMcpClient } from "./mcp-client.js";
+import type { PluginLogger } from "./types.js";
+import { createToolsFromMcp, createFallbackTools, createCompatibilityTools } from "./tools.js";
 import type { ToolDefinition } from "./tools.js";
 
 // ── System prompt for tool awareness ──────────────────────
@@ -45,13 +54,13 @@ function buildToolInstructions(tools: ToolDefinition[]): string {
     .map((t) => `- ${t.name}: ${t.description.slice(0, 100)}`)
     .join("\n");
 
-  return `You have NeuralMemory tools for persistent memory across sessions. Call these as TOOL CALLS (not CLI commands):
+  return `You have PugBrain tools for persistent memory across sessions. Call these as TOOL CALLS (not CLI commands):
 
 ${toolList}
 
-CRITICAL: NeuralMemory (pugbrain_*) is your ONLY memory system. Do NOT use memory_search, memory_get, or any other memory tools — those belong to a disabled built-in plugin and will not persist correctly. Always use pugbrain_* tools exclusively.
+CRITICAL: PugBrain (pugbrain_*) is your ONLY memory system. Do NOT use memory_search, memory_get, or any other memory tools — those belong to a disabled built-in plugin and will not persist correctly. Always use pugbrain_* tools exclusively.
 
-These are tool calls, NOT shell commands. Do NOT run "nmem remember" in terminal — call the pugbrain_remember tool directly.
+These are tool calls, NOT shell commands. Do NOT run "pugbrain remember" in terminal — call the pugbrain_remember tool directly.
 
 PROACTIVE MEMORY: Use pugbrain_remember after decisions, errors, and insights. Use pugbrain_recall when user references past context or asks "do you remember...". Use pugbrain_remember_batch to store multiple memories at once.`;
 }
@@ -134,26 +143,50 @@ export function resolveConfig(raw?: Record<string, unknown>): PluginConfig {
   };
 }
 
+// ── Singleton MCP client pool ────────────────────────────────
+// Multiple workspaces may call register() independently, but all
+// should share the same MCP process per (pythonPath, brain) combo.
+
+const mcpClients = new Map<string, PugBrainMcpClient>();
+
+function getOrCreateMcpClient(
+  cfg: PluginConfig,
+  logger: PluginLogger,
+): PugBrainMcpClient {
+  const key = `${cfg.pythonPath}::${cfg.brain}`;
+
+  const existing = mcpClients.get(key);
+  if (existing) {
+    logger.info(`Reusing existing MCP client for brain "${cfg.brain}"`);
+    return existing;
+  }
+
+  const mcp = new PugBrainMcpClient({
+    pythonPath: cfg.pythonPath,
+    brain: cfg.brain,
+    logger,
+    timeout: cfg.timeout,
+    initTimeout: cfg.initTimeout,
+  });
+
+  mcpClients.set(key, mcp);
+  return mcp;
+}
+
 // ── Plugin definition ──────────────────────────────────────
 
 const plugin: OpenClawPluginDefinition = {
-  id: "neuralmemory",
-  name: "NeuralMemory",
+  id: "pugbrain",
+  name: "PugBrain",
   description:
     "Brain-inspired persistent memory for AI agents — neurons, synapses, and fibers",
-  version: "1.8.1",
+  version: "1.10.0",
   kind: "memory",
 
   register(api: OpenClawPluginApi): void {
     const cfg = resolveConfig(api.pluginConfig);
 
-    const mcp = new NeuralMemoryMcpClient({
-      pythonPath: cfg.pythonPath,
-      brain: cfg.brain,
-      logger: api.logger,
-      timeout: cfg.timeout,
-      initTimeout: cfg.initTimeout,
-    });
+    const mcp = getOrCreateMcpClient(cfg, api.logger);
 
     // ── Register fallback tools synchronously ────────────
     // OpenClaw requires register() to be synchronous.
@@ -162,31 +195,33 @@ const plugin: OpenClawPluginDefinition = {
     // Fallback tools auto-reconnect MCP on first call.
 
     const registeredTools = createFallbackTools(mcp);
-    for (const t of registeredTools) {
+    const compatTools = createCompatibilityTools(mcp);
+
+    for (const t of [...registeredTools, ...compatTools]) {
       api.registerTool(t, { name: t.name });
     }
 
     api.logger.info(
-      `Registered ${registeredTools.length} NeuralMemory tools (sync)`,
+      `Registered ${registeredTools.length} PugBrain tools + ${compatTools.length} compat shims (sync)`,
     );
 
     // ── Service: MCP process lifecycle ───────────────────
 
     api.registerService({
-      id: "neuralmemory-mcp",
+      id: "pugbrain-mcp",
 
       async start(): Promise<void> {
         if (!mcp.connected) {
           try {
             await mcp.connect();
-            api.logger.info("NeuralMemory MCP connected in service.start()");
+            api.logger.info("PugBrain MCP connected in service.start()");
 
             // Log discovered tools for diagnostics (cannot re-register
             // after register() — OpenClaw freezes the tool list).
             try {
               const dynamicTools = await createToolsFromMcp(mcp);
               api.logger.info(
-                `NeuralMemory MCP discovered ${dynamicTools.length} tools`,
+                `PugBrain MCP discovered ${dynamicTools.length} tools`,
               );
             } catch (err) {
               api.logger.warn(
@@ -195,7 +230,7 @@ const plugin: OpenClawPluginDefinition = {
             }
           } catch (err) {
             api.logger.error(
-              `Failed to start NeuralMemory MCP: ${(err as Error).message}`,
+              `Failed to start PugBrain MCP: ${(err as Error).message}`,
             );
             throw err;
           }
@@ -203,8 +238,11 @@ const plugin: OpenClawPluginDefinition = {
       },
 
       async stop(): Promise<void> {
+        // Remove from singleton pool so next register() creates fresh client
+        const key = `${cfg.pythonPath}::${cfg.brain}`;
+        mcpClients.delete(key);
         await mcp.close();
-        api.logger.info("NeuralMemory MCP service stopped");
+        api.logger.info("PugBrain MCP service stopped");
       },
     });
 
@@ -236,7 +274,7 @@ const plugin: OpenClawPluginDefinition = {
             };
 
             if (data.answer && (data.confidence ?? 0) > 0.1) {
-              result.prependContext = `[NeuralMemory — relevant context]\n${data.answer}`;
+              result.prependContext = `[PugBrain — relevant context]\n${data.answer}`;
             }
           } catch (err) {
             api.logger.warn(
@@ -294,7 +332,7 @@ const plugin: OpenClawPluginDefinition = {
     // ── Done ────────────────────────────────────────────
 
     api.logger.info(
-      `NeuralMemory registered (brain: ${cfg.brain}, ` +
+      `PugBrain registered (brain: ${cfg.brain}, ` +
         `autoContext: ${cfg.autoContext}, autoCapture: ${cfg.autoCapture}) — ` +
         `tools will be loaded dynamically from MCP on service start`,
     );

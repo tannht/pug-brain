@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  PugBrain Dashboard API response types 🐶                           */
+/*  Dashboard API response types                                       */
 /*  Matches backend Pydantic models in dashboard_api.py + models.py    */
 /* ------------------------------------------------------------------ */
 
@@ -217,6 +217,41 @@ export interface BrainFilesResponse {
   total_size_bytes: number
 }
 
+// GET /api/dashboard/sync-status
+export interface SyncStatusResponse {
+  enabled: boolean
+  hub_url: string
+  api_key: string
+  auto_sync: boolean
+  conflict_strategy: string
+  device_id: string
+  change_log?: {
+    total_changes: number
+    synced_changes: number
+    unsynced_changes: number
+    latest_sequence: number
+  }
+  devices: SyncDevice[]
+  device_count: number
+}
+
+export interface SyncDevice {
+  device_id: string
+  device_name: string
+  last_sync_at: string | null
+  last_sync_sequence: number
+  registered_at: string
+}
+
+// POST /api/dashboard/sync-config
+export interface SyncConfigUpdateResponse {
+  status: string
+  enabled: boolean
+  hub_url: string
+  api_key: string
+  conflict_strategy: string
+}
+
 // GET /health
 export interface HealthCheckResponse {
   status: string
@@ -247,11 +282,44 @@ export interface TelegramBackupResponse {
   errors?: string[]
 }
 
-// GET /api/dashboard/vector/status
-export interface VectorStoreStatus {
-  available: boolean
-  backend: string
-  vector_count: number
-  dimension: number
-  available_backends: string[]
+// GET /api/dashboard/tool-stats
+export interface ToolStatsSummary {
+  total_events: number
+  success_rate: number
+  top_tools: ToolMetric[]
+}
+
+export interface ToolMetric {
+  tool_name: string
+  server_name: string
+  count: number
+  success_rate: number
+  avg_duration_ms: number
+}
+
+export interface ToolDailyEntry {
+  date: string
+  tool_name: string
+  count: number
+  success_rate: number
+  avg_duration_ms: number
+}
+
+export interface ToolStatsResponse {
+  summary: ToolStatsSummary
+  daily: ToolDailyEntry[]
+}
+
+// GET /api/dashboard/config-status
+export interface ConfigStatusItem {
+  key: string
+  label: string
+  status: "configured" | "not_configured" | "warning" | "info"
+  description: string
+  command: string
+  value: string
+}
+
+export interface ConfigStatusResponse {
+  items: ConfigStatusItem[]
 }

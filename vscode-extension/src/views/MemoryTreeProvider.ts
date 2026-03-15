@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "../commands/brain";
 import type { NeuronItem, NeuronType } from "../server/types";
@@ -32,7 +32,7 @@ class GroupItem extends vscode.TreeItem {
     };
     super(`${meta.label} (${neurons.length})`, vscode.TreeItemCollapsibleState.Collapsed);
     this.iconPath = new vscode.ThemeIcon(meta.icon);
-    this.contextValue = "neuralmemory.group";
+    this.contextValue = "pugbrain.group";
     this.tooltip = `${neurons.length} ${meta.label.toLowerCase()} neurons`;
   }
 }
@@ -52,7 +52,7 @@ class NeuronTreeItem extends vscode.TreeItem {
     };
 
     this.iconPath = new vscode.ThemeIcon(meta.icon);
-    this.contextValue = "neuralmemory.neuron";
+    this.contextValue = "pugbrain.neuron";
     this.description = formatTimestamp(neuron.created_at);
     this.tooltip = new vscode.MarkdownString(
       [
@@ -66,7 +66,7 @@ class NeuronTreeItem extends vscode.TreeItem {
 
     // Click → recall related memories
     this.command = {
-      command: "neuralmemory._recallFromNeuron",
+      command: "pugbrain._recallFromNeuron",
       title: "Recall Related",
       arguments: [neuron.content],
     };
@@ -140,14 +140,14 @@ export class MemoryTreeProvider
     // Recall from neuron (click handler)
     context.subscriptions.push(
       vscode.commands.registerCommand(
-        "neuralmemory._recallFromNeuron",
+        "pugbrain._recallFromNeuron",
         async (content: string) => {
           if (!this._server.isRunning()) {
             return;
           }
 
           const brainId = readCurrentBrain();
-          const client = new NeuralMemoryClient(this._server.baseUrl);
+          const client = new PugBrainClient(this._server.baseUrl);
 
           try {
             const result = await vscode.window.withProgress(
@@ -197,11 +197,11 @@ export class MemoryTreeProvider
     // Context menu: recall related
     context.subscriptions.push(
       vscode.commands.registerCommand(
-        "neuralmemory.recallFromTree",
+        "pugbrain.recallFromTree",
         async (item: NeuronTreeItem) => {
           if (item instanceof NeuronTreeItem) {
             await vscode.commands.executeCommand(
-              "neuralmemory._recallFromNeuron",
+              "pugbrain._recallFromNeuron",
               item.neuron.content,
             );
           }
@@ -211,7 +211,7 @@ export class MemoryTreeProvider
 
     // Refresh
     context.subscriptions.push(
-      vscode.commands.registerCommand("neuralmemory.refreshMemories", () => {
+      vscode.commands.registerCommand("pugbrain.refreshMemories", () => {
         this.refresh();
       }),
     );
@@ -225,7 +225,7 @@ export class MemoryTreeProvider
     }
 
     const brainId = readCurrentBrain();
-    const client = new NeuralMemoryClient(this._server.baseUrl);
+    const client = new PugBrainClient(this._server.baseUrl);
 
     try {
       const result = await client.listNeurons(brainId, { limit: 500 });

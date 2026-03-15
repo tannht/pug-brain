@@ -1,6 +1,6 @@
-# NeuralMemory for VS Code
+# PugBrain for VS Code
 
-A visual brain explorer, inline recall, and memory management extension for [NeuralMemory](https://github.com/nhadaututtheky/neural-memory) — the reflex-based memory system for AI agents.
+A visual brain explorer, inline recall, and memory management extension for [PugBrain](https://github.com/nhadaututtheky/neural-memory) — the reflex-based memory system for AI agents.
 
 ## Features
 
@@ -33,7 +33,7 @@ Index your codebase into neural memory for code-aware recall. Scans Python files
 
 ### External Memory Import
 
-Import memories from other systems into NeuralMemory:
+Import memories from other systems into PugBrain:
 
 - ChromaDB, Mem0, AWF, Cognee, Graphiti, LlamaIndex
 - Full and incremental sync support
@@ -67,7 +67,7 @@ WebSocket connection keeps your tree view, graph, and status bar updated in real
 | Switch Brain | Click status bar | Switch between local brains |
 | Create Brain | — | Create a new isolated brain |
 | Refresh Memory Tree | Tree header icon | Force refresh from server |
-| Start Server | — | Start local NeuralMemory server |
+| Start Server | — | Start local PugBrain server |
 | Connect to Server | — | Connect to a remote server |
 
 > On macOS, use `Cmd` instead of `Ctrl`.
@@ -83,7 +83,7 @@ WebSocket connection keeps your tree view, graph, and status bar updated in real
 
 ## Requirements
 
-- [NeuralMemory](https://pypi.org/project/neural-memory/) v0.9.5+ (`pip install neural-memory`)
+- [PugBrain](https://pypi.org/project/neural-memory/) v0.9.5+ (`pip install neural-memory`)
 - Python 3.11+
 - A configured brain (auto-created on first use, or manually via `pug brain create my-brain && pug brain use my-brain`)
 
@@ -91,19 +91,19 @@ WebSocket connection keeps your tree view, graph, and status bar updated in real
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `neuralmemory.pythonPath` | `"python"` | Python interpreter with neural-memory installed |
-| `neuralmemory.autoStart` | `false` | Auto-start the server on activation |
-| `neuralmemory.serverUrl` | `"http://127.0.0.1:8000"` | NeuralMemory server URL |
-| `neuralmemory.graphNodeLimit` | `1000` | Max nodes in graph explorer (50-10000) |
-| `neuralmemory.codeLensEnabled` | `true` | Show CodeLens hints for functions and comments |
-| `neuralmemory.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns that trigger encode suggestions |
+| `pugbrain.pythonPath` | `"python"` | Python interpreter with neural-memory installed |
+| `pugbrain.autoStart` | `false` | Auto-start the server on activation |
+| `pugbrain.serverUrl` | `"http://127.0.0.1:8000"` | PugBrain server URL |
+| `pugbrain.graphNodeLimit` | `1000` | Max nodes in graph explorer (50-10000) |
+| `pugbrain.codeLensEnabled` | `true` | Show CodeLens hints for functions and comments |
+| `pugbrain.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns that trigger encode suggestions |
 
 ## Getting Started
 
 1. Install the extension
-2. Install NeuralMemory: `pip install neural-memory`
-3. Start the server: run **NeuralMemory: Start Server** from the command palette, or enable `neuralmemory.autoStart`
-5. Open the NeuralMemory sidebar (brain icon in the activity bar)
+2. Install PugBrain: `pip install neural-memory`
+3. Start the server: run **PugBrain: Start Server** from the command palette, or enable `pugbrain.autoStart`
+5. Open the PugBrain sidebar (brain icon in the activity bar)
 
 ## Status Bar
 
@@ -119,7 +119,7 @@ $(brain) my-brain | N:512 S:1024 F:256
 
 ## Support
 
-If you find NeuralMemory useful, consider buying me a coffee:
+If you find PugBrain useful, consider buying me a coffee:
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/vietnamit)
 

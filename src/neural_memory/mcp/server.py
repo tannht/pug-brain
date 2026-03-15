@@ -34,6 +34,7 @@ from neural_memory.mcp.cognitive_handler import CognitiveHandler
 from neural_memory.mcp.conflict_handler import ConflictHandler
 from neural_memory.mcp.connection_handler import ConnectionHandler
 from neural_memory.mcp.db_train_handler import DBTrainHandler
+from neural_memory.mcp.drift_handler import DriftHandler
 from neural_memory.mcp.eternal_handler import EternalHandler
 from neural_memory.mcp.expiry_cleanup_handler import ExpiryCleanupHandler
 from neural_memory.mcp.index_handler import IndexHandler
@@ -97,11 +98,12 @@ class MCPServer(
     VersionCheckHandler,
     SyncToolHandler,
     TelegramHandler,
+    DriftHandler,
 ):
-    """MCP server that exposes NeuralMemory tools.
+    """MCP server that exposes PugBrain tools.
 
     Uses shared SQLite storage for cross-tool memory sharing.
-    Configuration from ~/.neuralmemory/config.toml
+    Configuration from ~/.pugbrain/config.toml
 
     Handler mixins:
         SessionHandler      — _session, _get_active_session
@@ -124,6 +126,7 @@ class MCPServer(
         VersionCheckHandler  — background PyPI version check + update hints
         SyncToolHandler      — _sync, _sync_status, _sync_config (multi-device sync)
         TelegramHandler      — _telegram_backup (send brain to Telegram)
+        DriftHandler         — _drift (semantic drift detection + resolution)
     """
 
     def __init__(self) -> None:
@@ -148,14 +151,14 @@ class MCPServer(
         """Return list of available MCP resources."""
         return [
             {
-                "uri": "neuralmemory://prompt/system",
-                "name": "NeuralMemory System Prompt",
-                "description": "Instructions for AI on when/how to use NeuralMemory",
+                "uri": "pugbrain://prompt/system",
+                "name": "PugBrain System Prompt",
+                "description": "Instructions for AI on when/how to use PugBrain",
                 "mimeType": "text/plain",
             },
             {
-                "uri": "neuralmemory://prompt/compact",
-                "name": "NeuralMemory Compact Prompt",
+                "uri": "pugbrain://prompt/compact",
+                "name": "PugBrain Compact Prompt",
                 "description": "Short version of system prompt for limited context",
                 "mimeType": "text/plain",
             },
@@ -163,9 +166,9 @@ class MCPServer(
 
     def get_resource_content(self, uri: str) -> str | None:
         """Get content for a specific resource URI."""
-        if uri == "neuralmemory://prompt/system":
+        if uri == "pugbrain://prompt/system":
             return get_system_prompt(compact=False)
-        elif uri == "neuralmemory://prompt/compact":
+        elif uri == "pugbrain://prompt/compact":
             return get_system_prompt(compact=True)
         return None
 
@@ -220,6 +223,8 @@ class MCPServer(
             "pugbrain_edit": self._edit,
             "pugbrain_forget": self._forget,
             "pugbrain_consolidate": self._consolidate,
+            "pugbrain_drift": self._drift,
+            "pugbrain_tool_stats": self._tool_stats,
         }
         handler = dispatch.get(name)
         if handler:
@@ -247,7 +252,7 @@ async def handle_message(server: MCPServer, message: dict[str, Any]) -> dict[str
             "id": msg_id,
             "result": {
                 "protocolVersion": "2024-11-05",
-                "serverInfo": {"name": "neural-memory", "version": __version__},
+                "serverInfo": {"name": "pug-brain", "version": __version__},
                 "capabilities": {"tools": {}, "resources": {}},
                 "instructions": get_mcp_instructions(),
             },
@@ -339,14 +344,14 @@ _MAX_MESSAGE_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
 def _lazy_init() -> None:
-    """Run first-time setup if NeuralMemory has never been initialized.
+    """Run first-time setup if PugBrain has never been initialized.
 
     Safe to call on every MCP start — no-ops if config already exists.
     Only touches config/brain/hooks; never writes to stdout (reserved for JSON-RPC).
     """
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     config_path = data_dir / "config.toml"
     if config_path.exists():
         return  # Already initialized — fast path, no heavy imports
@@ -358,9 +363,9 @@ def _lazy_init() -> None:
         setup_config(data_dir)
         setup_brain(data_dir)
         hook_status = setup_hooks_claude()
-        logger.info("NeuralMemory: first-time auto-init complete (hook: %s)", hook_status)
+        logger.info("PugBrain: first-time auto-init complete (hook: %s)", hook_status)
     except Exception:
-        logger.debug("NeuralMemory: auto-init failed (non-critical)", exc_info=True)
+        logger.debug("PugBrain: auto-init failed (non-critical)", exc_info=True)
 
 
 async def run_mcp_server() -> None:

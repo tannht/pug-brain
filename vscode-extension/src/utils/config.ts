@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export interface NeuralMemoryConfig {
+export interface PugBrainConfig {
   readonly pythonPath: string;
   readonly autoStart: boolean;
   readonly serverUrl: string;
@@ -9,8 +9,8 @@ export interface NeuralMemoryConfig {
   readonly commentTriggers: readonly string[];
 }
 
-export function getConfig(): NeuralMemoryConfig {
-  const cfg = vscode.workspace.getConfiguration("neuralmemory");
+export function getConfig(): PugBrainConfig {
+  const cfg = vscode.workspace.getConfiguration("pugbrain");
 
   return {
     pythonPath: cfg.get<string>("pythonPath", "python"),

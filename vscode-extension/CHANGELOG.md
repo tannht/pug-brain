@@ -4,9 +4,9 @@
 
 ### Fixed
 
-- **Extension ID typo** in update checker — was `neuralmemory.neuralmemory`, corrected to `neuralmem.neuralmemory`. Prevents false "update available" notifications.
+- **Extension ID typo** in update checker — was `pugbrain.pugbrain`, corrected to `neuralmem.pugbrain`. Prevents false "update available" notifications.
 - **autoStart default mismatch** — config.ts fallback was `false` while package.json declared `true`. Now both use `true`.
-- **Brain switch not persisted** on fresh install — `writeCurrentBrain()` now creates `~/.neuralmemory/config.toml` if it doesn't exist, instead of silently returning.
+- **Brain switch not persisted** on fresh install — `writeCurrentBrain()` now creates `~/.pugbrain/config.toml` if it doesn't exist, instead of silently returning.
 - **Graph explorer missing brain scope** — `getGraph()` now passes `X-Brain-ID` header to ensure correct brain data is returned.
 - **SyncClient memory leak** — reconnect no longer pushes duplicate SyncClient instances into subscriptions array. Old client is properly disconnected and dereferenced.
 - **Broken REST endpoints** — Import, Eternal, and Recap commands now show clear error messages explaining these features are available via MCP/CLI, instead of silently failing with HTTP 404.
@@ -20,14 +20,14 @@
 
 ### Changed
 
-- Synced with NeuralMemory v2.10.2
+- Synced with PugBrain v2.10.2
 - Updated marketplace listing and README
 
 ## [0.4.0] - 2026-02-08
 
 ### Added
 
-- Synced with NeuralMemory v0.14.0: relation extraction engine
+- Synced with PugBrain v0.14.0: relation extraction engine
 - Relation extraction: auto-creates causal, comparative, and sequential synapses from content
 - Tag origin tracking: auto_tags vs agent_tags with confirmatory Hebbian boost
 - Auto memory type inference at encode time
@@ -42,7 +42,7 @@
 
 ### Added
 
-- Synced with NeuralMemory v0.13.0: cognitive runtime upgrade
+- Synced with PugBrain v0.13.0: cognitive runtime upgrade
 - Formal Hebbian learning rule with novelty-adaptive learning rate and weight saturation
 - Activation stabilization: iterative dampening settles neural activations into stable patterns
 - Multi-neuron answer reconstruction: strategy-based synthesis (single, fiber-summary, multi-neuron)
@@ -61,7 +61,7 @@
 
 ### Added
 
-- Synced with NeuralMemory v0.9.5: OpenMemory-inspired intelligence features
+- Synced with PugBrain v0.9.5: OpenMemory-inspired intelligence features
 - Type-aware decay: facts persist longer, todos expire faster
 - Score breakdown: retrieval results now show why memories ranked high
 - SimHash dedup: near-duplicate detection catches paraphrased content
@@ -71,7 +71,7 @@
 
 ### Performance
 
-- Synced with NeuralMemory v0.9.4: retrieval pipeline 3-5x faster
+- Synced with PugBrain v0.9.4: retrieval pipeline 3-5x faster
 - SQLite WAL mode + 8MB cache for concurrent reads
 - Batch storage methods: single SQL queries replace hundreds of sequential calls
 - Deferred write queue: non-critical writes (Hebbian, conductivity) batched after response
@@ -90,7 +90,7 @@
 - API key handling prefers environment variables (`MEM0_API_KEY`, `COGNEE_API_KEY`) over connection params
 - CLI commands refactored: smaller functions, better error messages
 - 584 tests passing, all bare `except` clauses eliminated
-- Synced with NeuralMemory v0.9.3
+- Synced with PugBrain v0.9.3
 
 ## [0.1.7] - 2026-02-07
 
@@ -99,7 +99,7 @@
 - Input validation: content length limits (100KB), enum validation, path boundary checks
 - ReDoS protection: text truncation before regex processing
 - Spreading activation queue cap to prevent memory exhaustion
-- Synced with NeuralMemory v0.9.2 security hardening
+- Synced with PugBrain v0.9.2 security hardening
 
 ## [0.1.6] - 2026-02-07
 
@@ -107,7 +107,7 @@
 
 - Eternal Context commands: Recap Session (`Ctrl+Shift+M C`), Recap by Topic, Save Eternal Context, Eternal Context Status
 - Import Memories from external sources (ChromaDB, Mem0, AWF, Cognee, Graphiti, LlamaIndex)
-- Synced with NeuralMemory v0.9.2: 3-tier auto-save, trigger engine, lazy loading
+- Synced with PugBrain v0.9.2: 3-tier auto-save, trigger engine, lazy loading
 
 ## [0.1.5] - 2026-02-06
 
@@ -136,7 +136,7 @@
 
 ### Changed
 
-- Sync with NeuralMemory v0.9.1 system optimizations
+- Sync with PugBrain v0.9.1 system optimizations
 - Backend: fiber-neuron junction table for 100-1000x faster lookups
 - Backend: sigmoid time decay, weighted co-activation binding
 - Backend: smarter auto-capture with length validation and hash dedup

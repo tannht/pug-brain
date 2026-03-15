@@ -1,6 +1,6 @@
 {
   "name": "pugbrain",
-  "version": "1.8.1",
+  "version": "1.10.0",
   "description": "PugBrain plugin for OpenClaw — brain-inspired persistent memory for AI agents",
   "type": "module",
   "main": "dist/index.js",
@@ -32,10 +32,10 @@
   ],
   "author": "PugBrain Contributors",
   "license": "MIT",
-  "homepage": "https://github.com/nhadaututtheky/neural-memory#readme",
+  "homepage": "https://github.com/nhadaututtheky/pug-brain#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nhadaututtheky/neural-memory"
+    "url": "https://github.com/nhadaututtheky/pug-brain"
   },
   "files": [
     "src/",

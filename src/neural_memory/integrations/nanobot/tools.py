@@ -1,4 +1,4 @@
-"""NeuralMemory tools for Nanobot's ToolRegistry.
+"""PugBrain tools for Nanobot's ToolRegistry.
 
 Four tools conforming to Nanobot's Tool ABC interface:
 - pugbrain_remember — store a memory
@@ -177,7 +177,7 @@ class NMRecallTool(BaseNMTool):
     @property
     def description(self) -> str:
         return (
-            "Query memories from NeuralMemory using spreading activation. "
+            "Query memories from PugBrain using spreading activation. "
             "Use this to recall past information, decisions, patterns, or "
             "context relevant to the current task."
         )
@@ -259,7 +259,7 @@ class NMRecallTool(BaseNMTool):
 
 
 class NMContextTool(BaseNMTool):
-    """Get recent context from NeuralMemory."""
+    """Get recent context from PugBrain."""
 
     @property
     def name(self) -> str:
@@ -268,7 +268,7 @@ class NMContextTool(BaseNMTool):
     @property
     def description(self) -> str:
         return (
-            "Get recent context from NeuralMemory. Use at the start of "
+            "Get recent context from PugBrain. Use at the start of "
             "tasks to inject relevant recent memories."
         )
 

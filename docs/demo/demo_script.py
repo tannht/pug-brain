@@ -1,4 +1,4 @@
-"""NeuralMemory demo script -- run this to generate a terminal recording.
+"""PugBrain demo script -- run this to generate a terminal recording.
 
 Usage:
     # Record with asciinema:
@@ -69,9 +69,9 @@ def pause(seconds: float = 1.0) -> None:
 
 
 def main() -> None:
-    """Run the NeuralMemory demo."""
+    """Run the PugBrain demo."""
     print()
-    print(f"{BOLD}  NeuralMemory Demo{RESET}")
+    print(f"{BOLD}  PugBrain Demo{RESET}")
     print(f"{DIM}  Reflex-based memory for AI agents{RESET}")
     pause(1.5)
 
@@ -200,7 +200,7 @@ def main() -> None:
     # ── Done ──
     print()
     print(f"{GREEN}{BOLD}{'-' * 50}{RESET}")
-    print(f"{GREEN}{BOLD}  That's NeuralMemory.{RESET}")
+    print(f"{GREEN}{BOLD}  That's PugBrain.{RESET}")
     print(f"{DIM}  pip install neural-memory{RESET}")
     print(f"{DIM}  github.com/nhadaututtheky/neural-memory{RESET}")
     print(f"{GREEN}{BOLD}{'-' * 50}{RESET}")

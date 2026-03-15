@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "./brain";
 
@@ -21,10 +21,10 @@ export function registerEncodeCommands(
 ): void {
   // Encode selection (or fall back to input)
   context.subscriptions.push(
-    vscode.commands.registerCommand("neuralmemory.encode", async () => {
+    vscode.commands.registerCommand("pugbrain.encode", async () => {
       if (!server.isRunning()) {
         vscode.window.showWarningMessage(
-          "NeuralMemory server is not running.",
+          "PugBrain server is not running.",
         );
         return;
       }
@@ -51,11 +51,11 @@ export function registerEncodeCommands(
   // Encode from input box (always)
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "neuralmemory.encodeInput",
+      "pugbrain.encodeInput",
       async () => {
         if (!server.isRunning()) {
           vscode.window.showWarningMessage(
-            "NeuralMemory server is not running.",
+            "PugBrain server is not running.",
           );
           return;
         }
@@ -95,7 +95,7 @@ async function encodeContent(
     : undefined;
 
   const brainId = readCurrentBrain();
-  const client = new NeuralMemoryClient(server.baseUrl);
+  const client = new PugBrainClient(server.baseUrl);
 
   // Truncate display content for notification
   const displayContent = content.length > 60

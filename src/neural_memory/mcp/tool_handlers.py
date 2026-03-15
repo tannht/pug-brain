@@ -247,7 +247,7 @@ class ToolHandler:
                     f"Your query is in {'Vietnamese' if query_lang == 'vi' else 'English'} "
                     f"but most memories are in {'Vietnamese' if majority_lang == 'vi' else 'English'}. "
                     "Enable cross-language recall: add [embedding] section to "
-                    "~/.neuralmemory/config.toml with enabled=true, "
+                    "~/.pugbrain/config.toml with enabled=true, "
                     "provider='sentence_transformer', "
                     "model='paraphrase-multilingual-MiniLM-L12-v2'."
                 )
@@ -257,7 +257,7 @@ class ToolHandler:
                     f"but most memories are in {'Vietnamese' if majority_lang == 'vi' else 'English'}. "
                     "Enable cross-language recall: "
                     "pip install neural-memory[embeddings], then add [embedding] section to "
-                    "~/.neuralmemory/config.toml with enabled=true, "
+                    "~/.pugbrain/config.toml with enabled=true, "
                     "provider='sentence_transformer', "
                     "model='paraphrase-multilingual-MiniLM-L12-v2'."
                 )
@@ -379,6 +379,13 @@ class ToolHandler:
                 return {"error": f"Invalid memory type: {args['type']}"}
         else:
             mem_type = suggest_memory_type(content)
+
+        # Phase A: Merge structured context into content
+        raw_context = args.get("context")
+        if raw_context and isinstance(raw_context, dict):
+            from neural_memory.engine.context_merger import merge_context
+
+            content = merge_context(content, raw_context, mem_type.value)
 
         priority = Priority.from_int(args.get("priority", 5))
 
@@ -570,12 +577,24 @@ class ToolHandler:
             },
         )
 
+        # Phase B: Quality scoring (soft gate — always stores, returns hints)
+        from neural_memory.engine.quality_scorer import score_memory
+
+        raw_tags_list = list(tags) if tags else []
+        quality_result = score_memory(
+            content,
+            memory_type=mem_type.value,
+            tags=raw_tags_list,
+            context=raw_context if isinstance(raw_context, dict) else None,
+        )
+
         response: dict[str, Any] = {
             "success": True,
             "fiber_id": result.fiber.id,
             "memory_type": mem_type.value,
             "neurons_created": len(result.neurons_created),
             "message": f"Remembered: {content[:50]}{'...' if len(content) > 50 else ''}",
+            **quality_result.to_dict(),
         }
 
         if source_id and isinstance(source_id, str):
@@ -865,6 +884,7 @@ class ToolHandler:
             reference_time=utcnow(),
             valid_at=valid_at,
             tags=tags,
+            session_id=f"mcp-{id(self)}",
         )
 
         # Passive auto-capture on long queries
@@ -1042,6 +1062,12 @@ class ToolHandler:
                     response["sources"] = source_map
         except Exception:
             logger.debug("Source enrichment failed (non-critical)", exc_info=True)
+
+        # Session intelligence: attach topic context
+        session_topics = (result.metadata or {}).get("session_topics")
+        if session_topics:
+            response["session_topics"] = session_topics
+            response["session_query_count"] = (result.metadata or {}).get("session_query_count", 0)
 
         await self._record_tool_action("recall", query[:100])
 
@@ -1910,7 +1936,10 @@ class ToolHandler:
             return {"error": "action is required"}
 
         storage = await self.get_storage()
-        brain_id = _require_brain_id(storage)
+        try:
+            brain_id = _require_brain_id(storage)
+        except ValueError:
+            return {"error": "No brain configured"}
 
         if action == "register":
             name = args.get("name")
@@ -1919,14 +1948,17 @@ class ToolHandler:
 
             from neural_memory.core.source import Source
 
-            source = Source.create(
-                brain_id=brain_id,
-                name=name,
-                source_type=args.get("source_type", "document"),
-                version=args.get("version", ""),
-                file_hash=args.get("file_hash", ""),
-                metadata=args.get("metadata") or {},
-            )
+            try:
+                source = Source.create(
+                    brain_id=brain_id,
+                    name=name,
+                    source_type=args.get("source_type", "document"),
+                    version=args.get("version", ""),
+                    file_hash=args.get("file_hash", ""),
+                    metadata=args.get("metadata") or {},
+                )
+            except ValueError:
+                return {"error": f"Invalid source_type: {args.get('source_type')}"}
             source_id = await storage.add_source(source)
             return {
                 "source_id": source_id,
@@ -2220,7 +2252,7 @@ class ToolHandler:
                 "synapses": synapse_list,
             }
 
-        return {"error": f"Memory not found: {memory_id}"}
+        return {"error": "Memory not found"}
 
     async def _edit(self, args: dict[str, Any]) -> dict[str, Any]:
         """Edit an existing memory's type, content, or priority."""
@@ -2313,7 +2345,7 @@ class ToolHandler:
                 "changes": changes,
             }
 
-        return {"error": f"Memory not found: {memory_id}"}
+        return {"error": "Memory not found"}
 
     async def _forget(self, args: dict[str, Any]) -> dict[str, Any]:
         """Explicitly delete or close a specific memory."""
@@ -2338,7 +2370,7 @@ class ToolHandler:
             # Try as neuron_id — find its fiber
             neuron = await storage.get_neuron(memory_id)
             if not neuron:
-                return {"error": f"Memory not found: {memory_id}"}
+                return {"error": "Memory not found"}
             # For neuron-only delete in hard mode
             if hard:
                 await storage.delete_neuron(memory_id)
@@ -2446,3 +2478,25 @@ class ToolHandler:
         result["dry_run"] = dry_run
         result["summary"] = delta.report.summary()
         return result
+
+    async def _tool_stats(self, args: dict[str, Any]) -> dict[str, Any]:
+        """Get tool usage analytics."""
+        storage = await self.get_storage()
+        brain, err = await _get_brain_or_error(storage)
+        if err:
+            return err
+
+        action = args.get("action", "summary")
+        days = args.get("days", 30)
+        limit = args.get("limit", 20)
+
+        if action == "summary":
+            result: dict[str, Any] = await storage.get_tool_stats(brain.id)  # type: ignore[attr-defined]
+            return result
+        elif action == "daily":
+            daily = await storage.get_tool_stats_by_period(  # type: ignore[attr-defined]
+                brain.id, days=days, limit=limit
+            )
+            return {"daily": daily, "days": days}
+        else:
+            return {"error": f"Unknown action: {action}"}

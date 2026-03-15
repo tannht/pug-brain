@@ -69,9 +69,9 @@ def _check_python_version() -> dict[str, Any]:
 
 def _check_config() -> dict[str, Any]:
     """Check config.toml exists and is valid."""
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
     config_path = data_dir / "config.toml"
 
     if not config_path.exists():
@@ -102,9 +102,9 @@ def _check_config() -> dict[str, Any]:
 
 def _check_brain() -> dict[str, Any]:
     """Check default brain DB exists and is accessible."""
-    from neural_memory.unified_config import get_neuralmemory_dir
+    from neural_memory.unified_config import get_pugbrain_dir
 
-    data_dir = get_neuralmemory_dir()
+    data_dir = get_pugbrain_dir()
 
     try:
         from neural_memory.unified_config import get_config
@@ -219,11 +219,11 @@ def _check_embedding_provider() -> dict[str, Any]:
 def _check_schema_version() -> dict[str, Any]:
     """Check database schema version."""
     try:
-        from neural_memory.unified_config import get_config, get_neuralmemory_dir
+        from neural_memory.unified_config import get_config, get_pugbrain_dir
 
         config = get_config(reload=True)
         brain_name = config.current_brain
-        db_path = get_neuralmemory_dir() / "brains" / f"{brain_name}.db"
+        db_path = get_pugbrain_dir() / "brains" / f"{brain_name}.db"
 
         if not db_path.exists() or db_path.stat().st_size == 0:
             return {
@@ -236,13 +236,18 @@ def _check_schema_version() -> dict[str, Any]:
             import aiosqlite
 
             async with aiosqlite.connect(str(db_path)) as db:
-                cursor = await db.execute("PRAGMA user_version")
-                row = await cursor.fetchone()
-                return row[0] if row else 0
+                # NM stores schema version in schema_version table, not PRAGMA
+                try:
+                    cursor = await db.execute("SELECT version FROM schema_version LIMIT 1")
+                    row = await cursor.fetchone()
+                    return row[0] if row else 0
+                except Exception:
+                    # Table may not exist in very old databases
+                    return 0
 
         version = run_async(_get_version())
 
-        from neural_memory.storage.sqlite.migrations import CURRENT_VERSION
+        from neural_memory.storage.sqlite_schema import SCHEMA_VERSION as CURRENT_VERSION
 
         if version == CURRENT_VERSION:
             return {
@@ -338,7 +343,7 @@ def _check_cli_tools() -> dict[str, Any]:
 def _render_results(result: dict[str, Any]) -> None:
     """Render diagnostic results to terminal."""
     typer.echo()
-    typer.secho("  NeuralMemory Doctor", bold=True)
+    typer.secho("  PugBrain Doctor", bold=True)
     typer.secho("  ───────────────────", dim=True)
     typer.echo()
 

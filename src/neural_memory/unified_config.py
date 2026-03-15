@@ -42,7 +42,7 @@ _TOML_SAFE_STRING = re.compile(r"^[a-zA-Z0-9_\-\./ ]*$")
 _TOML_STR_MAX_LEN = 128
 
 
-def get_neuralmemory_dir() -> Path:
+def get_pugbrain_dir() -> Path:
     """Get PugBrain data directory.
 
     Priority:
@@ -50,24 +50,24 @@ def get_neuralmemory_dir() -> Path:
     2. NEURALMEMORY_DIR environment variable (legacy, for migration)
     3. ~/.pugbrain/
 
-    Also migrates data from ~/.neuralmemory/ to ~/.pugbrain/ on first use.
+    Also migrates data from ~/.pugbrain/ to ~/.pugbrain/ on first use.
     """
     env_dir = os.environ.get("PUGBRAIN_DIR") or os.environ.get("NEURALMEMORY_DIR")
     if env_dir:
         return Path(env_dir).resolve()
 
     new_dir = Path.home() / ".pugbrain"
-    old_dir = Path.home() / ".neuralmemory"
+    old_dir = Path.home() / ".pugbrain"
 
     # Auto-migrate from old directory if new doesn't exist but old does
     if not new_dir.exists() and old_dir.exists():
-        _migrate_from_neuralmemory(old_dir, new_dir)
+        _migrate_from_pugbrain(old_dir, new_dir)
 
     return new_dir
 
 
-def _migrate_from_neuralmemory(old_dir: Path, new_dir: Path) -> None:
-    """Migrate data from ~/.neuralmemory/ to ~/.pugbrain/."""
+def _migrate_from_pugbrain(old_dir: Path, new_dir: Path) -> None:
+    """Migrate data from ~/.pugbrain/ to ~/.pugbrain/."""
     try:
         new_dir.mkdir(parents=True, exist_ok=True)
 
@@ -454,6 +454,7 @@ class SyncConfig:
 
     enabled: bool = False
     hub_url: str = ""
+    api_key: str = ""
     auto_sync: bool = False
     sync_interval_seconds: int = 300
     conflict_strategy: str = "prefer_recent"
@@ -462,6 +463,7 @@ class SyncConfig:
         return {
             "enabled": self.enabled,
             "hub_url": self.hub_url,
+            "api_key": self.api_key,
             "auto_sync": self.auto_sync,
             "sync_interval_seconds": self.sync_interval_seconds,
             "conflict_strategy": self.conflict_strategy,
@@ -483,9 +485,14 @@ class SyncConfig:
             hub_url = ""
         # Truncate URL to reasonable length
         hub_url = hub_url[:256]
+        api_key = str(data.get("api_key", ""))
+        # Validate api_key format: must start with nmk_ or be empty
+        if api_key and not api_key.startswith("nmk_"):
+            api_key = ""
         return cls(
             enabled=bool(data.get("enabled", False)),
             hub_url=hub_url,
+            api_key=api_key,
             auto_sync=bool(data.get("auto_sync", False)),
             sync_interval_seconds=interval,
             conflict_strategy=strategy,
@@ -686,7 +693,7 @@ class ToolMemoryConfig:
     and synapses (EFFECTIVE_FOR, USED_WITH).
     """
 
-    enabled: bool = False
+    enabled: bool = True
     min_duration_ms: int = 0  # Ignore tool calls faster than this
     blacklist: tuple[str, ...] = ()  # Tool name prefixes to skip
     cooccurrence_window_s: int = 60  # Seconds for USED_WITH detection
@@ -797,7 +804,7 @@ class UnifiedConfig:
     """
 
     # Base directory for all PugBrain data
-    data_dir: Path = field(default_factory=get_neuralmemory_dir)
+    data_dir: Path = field(default_factory=get_pugbrain_dir)
 
     # Current active brain
     current_brain: str = field(default_factory=get_default_brain)
@@ -865,7 +872,7 @@ class UnifiedConfig:
     def load(cls, config_path: Path | None = None) -> UnifiedConfig:
         """Load configuration from file, or create default if doesn't exist."""
         if config_path is None:
-            data_dir = get_neuralmemory_dir()
+            data_dir = get_pugbrain_dir()
             config_path = data_dir / "config.toml"
         else:
             data_dir = config_path.parent
@@ -1234,7 +1241,7 @@ def _read_current_brain_from_toml() -> str | None:
         The current_brain string, or ``None`` if the file is missing
         or cannot be parsed.
     """
-    toml_path = get_neuralmemory_dir() / "config.toml"
+    toml_path = get_pugbrain_dir() / "config.toml"
     if not toml_path.exists():
         return None
     try:
@@ -1391,7 +1398,11 @@ async def _get_sqlite_storage(
             raise
 
         # Create brain if it doesn't exist
+        # Try by id first (normal case: brain_id == name),
+        # then fallback to name lookup (handles brains with UUID ids from older versions)
         brain = await storage.get_brain(name)
+        if brain is None:
+            brain = await storage.find_brain_by_name(name)
 
         if brain is None:
             from neural_memory.core.brain import BrainConfig
@@ -1450,7 +1461,10 @@ async def _get_falkordb_storage(config: UnifiedConfig, name: str) -> NeuralStora
 
     # Ensure brain exists and set context
     await storage.set_brain_with_indexes(name)
+    # Try by id first, then fallback to name lookup (older brains may use UUID ids)
     brain = await storage.get_brain(name)
+    if brain is None:
+        brain = await storage.find_brain_by_name(name)
 
     if brain is None:
         from neural_memory.core.brain import BrainConfig

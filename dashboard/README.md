@@ -1,6 +1,6 @@
-# NeuralMemory Dashboard
+# PugBrain Dashboard
 
-React 19 + TypeScript + Vite 7 dashboard for NeuralMemory.
+React 19 + TypeScript + Vite 7 dashboard for PugBrain.
 
 ## Tech Stack
 
@@ -36,7 +36,7 @@ npm install
 npm run dev
 # Opens at http://localhost:5174
 
-# In another terminal, start the NeuralMemory server
+# In another terminal, start the PugBrain server
 pug serve
 ```
 

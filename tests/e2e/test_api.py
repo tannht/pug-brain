@@ -19,7 +19,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Generator[TestCli
     """Create test client with isolated temp storage."""
     import neural_memory.unified_config as uc
 
-    # Point all storage to tmp_path instead of ~/.neuralmemory/
+    # Point all storage to tmp_path instead of ~/.pugbrain/
     monkeypatch.setenv("NEURALMEMORY_DIR", str(tmp_path))
 
     # Clear cached config and storage so they reinitialize with tmp_path
@@ -46,7 +46,7 @@ class TestHealthEndpoints:
 
         assert response.status_code == 200
         data = response.json()
-        assert data["status"] == "healthy"
+        assert data["status"] == "ok"
         assert "version" in data
 
     def test_root_endpoint_redirects_to_ui(self, client: TestClient) -> None:

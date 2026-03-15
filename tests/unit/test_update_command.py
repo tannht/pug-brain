@@ -45,7 +45,7 @@ class TestGetSourceDir:
     """Tests for source directory detection."""
 
     def test_finds_source_dir_for_current_project(self) -> None:
-        """Source dir detection works for the current NeuralMemory project."""
+        """Source dir detection works for the current PugBrain project."""
         source_dir = _get_source_dir()
         assert source_dir is not None
         assert (source_dir / "pyproject.toml").exists()

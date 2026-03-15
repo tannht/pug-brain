@@ -1,15 +1,19 @@
-# CLI Reference
+# CLI Guide
 
-Complete reference for all NeuralMemory CLI commands.
+Guide to using the PugBrain CLI with examples and common workflows.
+
+!!! info "See also"
+    For a complete auto-generated reference of all 66 commands, see the [CLI Reference](cli-reference.md).
+    For MCP tool usage in Claude Code, see the [MCP Tools Reference](../api/mcp-tools.md).
 
 ## Core Commands
 
-### nmem remember
+### pugbrain remember
 
 Store a memory in the brain.
 
 ```bash
-nmem remember "content" [OPTIONS]
+pugbrain remember "content" [OPTIONS]
 ```
 
 **Options:**
@@ -29,19 +33,19 @@ nmem remember "content" [OPTIONS]
 **Examples:**
 
 ```bash
-nmem remember "Fixed auth bug with null check"
-nmem remember "We decided to use PostgreSQL" --type decision
-nmem remember "Refactor auth module" --type todo --priority 7
-nmem remember "Meeting notes" --expires 7 --tag meeting
-nmem remember "Team knowledge" --shared
+pugbrain remember "Fixed auth bug with null check"
+pugbrain remember "We decided to use PostgreSQL" --type decision
+pugbrain remember "Refactor auth module" --type todo --priority 7
+pugbrain remember "Meeting notes" --expires 7 --tag meeting
+pugbrain remember "Team knowledge" --shared
 ```
 
-### nmem recall
+### pugbrain recall
 
 Query memories using spreading activation.
 
 ```bash
-nmem recall "query" [OPTIONS]
+pugbrain recall "query" [OPTIONS]
 ```
 
 **Options:**
@@ -59,18 +63,18 @@ nmem recall "query" [OPTIONS]
 **Examples:**
 
 ```bash
-nmem recall "auth bug fix"
-nmem recall "meetings with Alice" --depth 2
-nmem recall "Why did the build fail?" --show-routing
-nmem recall "team decisions" --shared --min-confidence 0.5
+pugbrain recall "auth bug fix"
+pugbrain recall "meetings with Alice" --depth 2
+pugbrain recall "Why did the build fail?" --show-routing
+pugbrain recall "team decisions" --shared --min-confidence 0.5
 ```
 
-### nmem todo
+### pugbrain todo
 
 Quick shortcut for TODO items.
 
 ```bash
-nmem todo "task" [OPTIONS]
+pugbrain todo "task" [OPTIONS]
 ```
 
 **Options:**
@@ -83,12 +87,12 @@ nmem todo "task" [OPTIONS]
 | `--tag` | `-t` | Tags (repeatable) |
 | `--json` | `-j` | Output as JSON |
 
-### nmem context
+### pugbrain context
 
 Get recent memories for context injection.
 
 ```bash
-nmem context [OPTIONS]
+pugbrain context [OPTIONS]
 ```
 
 **Options:**
@@ -99,12 +103,12 @@ nmem context [OPTIONS]
 | `--fresh-only` | | Only include memories < 30 days old |
 | `--json` | `-j` | Output as JSON |
 
-### nmem list
+### pugbrain list
 
 List memories with filters.
 
 ```bash
-nmem list [OPTIONS]
+pugbrain list [OPTIONS]
 ```
 
 **Options:**
@@ -119,28 +123,28 @@ nmem list [OPTIONS]
 | `--limit` | `-l` | Maximum results (default: 20) |
 | `--json` | `-j` | Output as JSON |
 
-### nmem stats
+### pugbrain stats
 
 Show brain statistics.
 
 ```bash
-nmem stats [--json]
+pugbrain stats [--json]
 ```
 
-### nmem check
+### pugbrain check
 
 Check content for sensitive information.
 
 ```bash
-nmem check "content" [--json]
+pugbrain check "content" [--json]
 ```
 
-### nmem cleanup
+### pugbrain cleanup
 
 Clean expired memories.
 
 ```bash
-nmem cleanup [OPTIONS]
+pugbrain cleanup [OPTIONS]
 ```
 
 **Options:**
@@ -152,13 +156,13 @@ nmem cleanup [OPTIONS]
 | `--dry-run` | `-n` | Preview without deleting |
 | `--force` | `-f` | Skip confirmation |
 
-### nmem consolidate
+### pugbrain consolidate
 
 Consolidate brain memories: prune weak links, merge overlapping fibers,
 advance episodic memories to semantic stage, and more.
 
 ```bash
-nmem consolidate [OPTIONS]
+pugbrain consolidate [OPTIONS]
 ```
 
 **Options:**
@@ -190,28 +194,28 @@ nmem consolidate [OPTIONS]
 | `all` | Run all strategies in dependency order (default) |
 
 > **Note:** `mature` is a fully supported strategy. It advances episodic memories
-> to the semantic stage, which improves recall quality. `nmem health` may recommend
+> to the semantic stage, which improves recall quality. `pugbrain health` may recommend
 > running it when the consolidation ratio is low.
 
 **Examples:**
 
 ```bash
-nmem consolidate                          # Run all strategies
-nmem consolidate --strategy prune         # Only prune weak links
-nmem consolidate -s mature                # Advance episodic memories
-nmem consolidate --dry-run                # Preview without changes
-nmem consolidate -s merge --merge-overlap 0.3
+pugbrain consolidate                          # Run all strategies
+pugbrain consolidate --strategy prune         # Only prune weak links
+pugbrain consolidate -s mature                # Advance episodic memories
+pugbrain consolidate --dry-run                # Preview without changes
+pugbrain consolidate -s merge --merge-overlap 0.3
 ```
 
 > **Tip:** Always use `--strategy <name>` (named flag). Positional syntax
-> (`nmem consolidate prune`) is not supported and will produce a helpful error.
+> (`pugbrain consolidate prune`) is not supported and will produce a helpful error.
 
-### nmem decay
+### pugbrain decay
 
 Apply memory decay (Ebbinghaus forgetting curve).
 
 ```bash
-nmem decay [OPTIONS]
+pugbrain decay [OPTIONS]
 ```
 
 **Options:**
@@ -226,36 +230,36 @@ nmem decay [OPTIONS]
 
 ## Brain Commands
 
-### nmem brain list
+### pugbrain brain list
 
 List all brains.
 
 ```bash
-nmem brain list [--json]
+pugbrain brain list [--json]
 ```
 
-### nmem brain create
+### pugbrain brain create
 
 Create a new brain.
 
 ```bash
-nmem brain create NAME [--use/--no-use]
+pugbrain brain create NAME [--use/--no-use]
 ```
 
-### nmem brain use
+### pugbrain brain use
 
 Switch to a brain.
 
 ```bash
-nmem brain use NAME
+pugbrain brain use NAME
 ```
 
-### nmem brain export
+### pugbrain brain export
 
 Export brain to file.
 
 ```bash
-nmem brain export [OPTIONS]
+pugbrain brain export [OPTIONS]
 ```
 
 **Options:**
@@ -266,12 +270,12 @@ nmem brain export [OPTIONS]
 | `--name` | `-n` | Brain name (default: current) |
 | `--exclude-sensitive` | `-s` | Exclude sensitive content |
 
-### nmem brain import
+### pugbrain brain import
 
 Import brain from file.
 
 ```bash
-nmem brain import FILE [OPTIONS]
+pugbrain brain import FILE [OPTIONS]
 ```
 
 **Options:**
@@ -283,32 +287,32 @@ nmem brain import FILE [OPTIONS]
 | `--merge` | | Merge with existing brain |
 | `--scan` | | Scan for sensitive content |
 
-### nmem brain delete
+### pugbrain brain delete
 
 Delete a brain.
 
 ```bash
-nmem brain delete NAME [--force]
+pugbrain brain delete NAME [--force]
 ```
 
-### nmem brain health
+### pugbrain brain health
 
 Check brain health.
 
 ```bash
-nmem brain health [--name NAME] [--json]
+pugbrain brain health [--name NAME] [--json]
 ```
 
 ---
 
 ## Project Commands
 
-### nmem project create
+### pugbrain project create
 
 Create a project.
 
 ```bash
-nmem project create NAME [OPTIONS]
+pugbrain project create NAME [OPTIONS]
 ```
 
 **Options:**
@@ -320,48 +324,48 @@ nmem project create NAME [OPTIONS]
 | `--tag` | `-t` | Tags (repeatable) |
 | `--priority` | `-p` | Priority (default: 1.0) |
 
-### nmem project list
+### pugbrain project list
 
 List projects.
 
 ```bash
-nmem project list [--active] [--json]
+pugbrain project list [--active] [--json]
 ```
 
-### nmem project show
+### pugbrain project show
 
 Show project details.
 
 ```bash
-nmem project show NAME [--json]
+pugbrain project show NAME [--json]
 ```
 
-### nmem project delete
+### pugbrain project delete
 
 Delete a project.
 
 ```bash
-nmem project delete NAME [--force]
+pugbrain project delete NAME [--force]
 ```
 
-### nmem project extend
+### pugbrain project extend
 
 Extend project deadline.
 
 ```bash
-nmem project extend NAME DAYS [--json]
+pugbrain project extend NAME DAYS [--json]
 ```
 
 ---
 
 ## Shared Mode Commands
 
-### nmem shared enable
+### pugbrain shared enable
 
 Enable shared storage mode.
 
 ```bash
-nmem shared enable URL [OPTIONS]
+pugbrain shared enable URL [OPTIONS]
 ```
 
 **Options:**
@@ -371,68 +375,68 @@ nmem shared enable URL [OPTIONS]
 | `--api-key` | `-k` | API key for authentication |
 | `--timeout` | `-t` | Request timeout in seconds |
 
-### nmem shared disable
+### pugbrain shared disable
 
 Disable shared mode.
 
 ```bash
-nmem shared disable
+pugbrain shared disable
 ```
 
-### nmem shared status
+### pugbrain shared status
 
 Show shared mode status.
 
 ```bash
-nmem shared status [--json]
+pugbrain shared status [--json]
 ```
 
-### nmem shared test
+### pugbrain shared test
 
 Test server connection.
 
 ```bash
-nmem shared test
+pugbrain shared test
 ```
 
-### nmem shared sync
+### pugbrain shared sync
 
 Sync with server.
 
 ```bash
-nmem shared sync [--direction push|pull|both] [--json]
+pugbrain shared sync [--direction push|pull|both] [--json]
 ```
 
 ---
 
 ## Telegram Commands
 
-### nmem telegram status
+### pugbrain telegram status
 
 Show Telegram integration configuration status.
 
 ```bash
-nmem telegram status [--json]
+pugbrain telegram status [--json]
 ```
 
 Shows: bot token configured (yes/no), bot name/username, chat IDs, backup-on-consolidation flag.
 
-### nmem telegram test
+### pugbrain telegram test
 
 Send a test message to all configured Telegram chats.
 
 ```bash
-nmem telegram test [--json]
+pugbrain telegram test [--json]
 ```
 
-Verifies bot token and chat IDs are working. Sends a "NeuralMemory test" message.
+Verifies bot token and chat IDs are working. Sends a "PugBrain test" message.
 
-### nmem telegram backup
+### pugbrain telegram backup
 
 Send brain .db file as backup to all configured Telegram chats.
 
 ```bash
-nmem telegram backup [OPTIONS]
+pugbrain telegram backup [OPTIONS]
 ```
 
 **Options:**
@@ -445,7 +449,7 @@ nmem telegram backup [OPTIONS]
 **Setup:**
 
 1. Set bot token: `export NMEM_TELEGRAM_BOT_TOKEN="your-bot-token"`
-2. Add chat IDs to `~/.neuralmemory/config.toml`:
+2. Add chat IDs to `~/.pugbrain/config.toml`:
 
 ```toml
 [telegram]
@@ -456,22 +460,22 @@ chat_ids = ["123456789"]
 **Examples:**
 
 ```bash
-nmem telegram status               # Check config
-nmem telegram test                  # Verify bot works
-nmem telegram backup                # Backup current brain
-nmem telegram backup --brain work   # Backup specific brain
+pugbrain telegram status               # Check config
+pugbrain telegram test                  # Verify bot works
+pugbrain telegram backup                # Backup current brain
+pugbrain telegram backup --brain work   # Backup specific brain
 ```
 
 ---
 
 ## Server Commands
 
-### nmem serve
+### pugbrain serve
 
 Start the FastAPI server.
 
 ```bash
-nmem serve [OPTIONS]
+pugbrain serve [OPTIONS]
 ```
 
 **Options:**
@@ -482,36 +486,36 @@ nmem serve [OPTIONS]
 | `--port` | Port to bind (default: 8000) |
 | `--reload` | Enable auto-reload for development |
 
-### nmem mcp
+### pugbrain mcp
 
 Start MCP server for Claude integration.
 
 ```bash
-nmem mcp
+pugbrain mcp
 ```
 
-### nmem prompt
+### pugbrain prompt
 
 Show MCP system prompt.
 
 ```bash
-nmem prompt [--compact] [--json]
+pugbrain prompt [--compact] [--json]
 ```
 
-### nmem mcp-config
+### pugbrain mcp-config
 
 Show MCP configuration.
 
 ```bash
-nmem mcp-config
+pugbrain mcp-config
 ```
 
-### nmem install-skills
+### pugbrain install-skills
 
 Install bundled agent skills to `~/.claude/skills/`.
 
 ```bash
-nmem install-skills [OPTIONS]
+pugbrain install-skills [OPTIONS]
 ```
 
 **Options:**
@@ -524,9 +528,9 @@ nmem install-skills [OPTIONS]
 **Examples:**
 
 ```bash
-nmem install-skills            # Install all skills
-nmem install-skills --force    # Overwrite with latest
-nmem install-skills --list     # Show available skills
+pugbrain install-skills            # Install all skills
+pugbrain install-skills --force    # Overwrite with latest
+pugbrain install-skills --list     # Show available skills
 ```
 
 ---

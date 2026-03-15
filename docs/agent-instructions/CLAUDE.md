@@ -1,10 +1,10 @@
-# NeuralMemory — Instructions for Claude Code
+# PugBrain — Instructions for Claude Code
 
 > Copy this section into your project's `CLAUDE.md` or `~/.claude/CLAUDE.md` (global).
 
 ## Memory System
 
-This workspace uses **NeuralMemory** for persistent memory across sessions.
+This workspace uses **PugBrain** for persistent memory across sessions.
 You have access to `pugbrain_*` MCP tools. Use them **proactively** — do not wait for the user to ask.
 
 ### Session Start (ALWAYS do this)

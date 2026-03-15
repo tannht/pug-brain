@@ -1,4 +1,4 @@
-# NeuralMemory — Version Bump & Feature Reference
+# PugBrain — Version Bump & Feature Reference
 
 > Complete checklist and feature catalog. Update this file when adding new features.
 
@@ -68,7 +68,7 @@
 | `pug cleanup` | Remove expired memories | --expired, --type, --dry-run, --force, --json |
 | `pug consolidate` | Prune/merge/summarize | --brain, --strategy, --dry-run, --prune-threshold, --merge-overlap, --min-inactive-days |
 | `pug decay` | Run memory decay | --brain |
-| `pug init` | Initialize NeuralMemory | — |
+| `pug init` | Initialize PugBrain | — |
 | `pug serve` | Run FastAPI server | --host, --port |
 | `pug mcp` | Run MCP server | — |
 | `pug mcp-config` | Generate MCP config JSON | --with-prompt, --compact |
@@ -155,8 +155,8 @@
 | `pugbrain_telegram_backup` | brain_name? | Send brain .db backup to configured Telegram chats |
 
 **MCP Resources:**
-- `neuralmemory://prompt/system` — Full system prompt
-- `neuralmemory://prompt/compact` — Compact system prompt
+- `pugbrain://prompt/system` — Full system prompt
+- `pugbrain://prompt/compact` — Compact system prompt
 
 ---
 
@@ -166,28 +166,28 @@
 
 | Command ID | Label | Keybinding |
 |------------|-------|------------|
-| `neuralmemory.encode` | Encode Selection as Memory | `Ctrl+Shift+M E` |
-| `neuralmemory.encodeInput` | Encode Text as Memory | — |
-| `neuralmemory.recall` | Recall Memory | `Ctrl+Shift+M R` |
-| `neuralmemory.openGraph` | Open Graph Explorer | `Ctrl+Shift+M G` |
-| `neuralmemory.switchBrain` | Switch Brain | — |
-| `neuralmemory.createBrain` | Create Brain | — |
-| `neuralmemory.refreshMemories` | Refresh Memory Tree | — |
-| `neuralmemory.startServer` | Start Server | — |
-| `neuralmemory.connectServer` | Connect to Server | — |
-| `neuralmemory.recallFromTree` | Recall Related Memories | — |
-| `neuralmemory.indexCodebase` | Index Codebase | `Ctrl+Shift+M I` |
+| `pugbrain.encode` | Encode Selection as Memory | `Ctrl+Shift+M E` |
+| `pugbrain.encodeInput` | Encode Text as Memory | — |
+| `pugbrain.recall` | Recall Memory | `Ctrl+Shift+M R` |
+| `pugbrain.openGraph` | Open Graph Explorer | `Ctrl+Shift+M G` |
+| `pugbrain.switchBrain` | Switch Brain | — |
+| `pugbrain.createBrain` | Create Brain | — |
+| `pugbrain.refreshMemories` | Refresh Memory Tree | — |
+| `pugbrain.startServer` | Start Server | — |
+| `pugbrain.connectServer` | Connect to Server | — |
+| `pugbrain.recallFromTree` | Recall Related Memories | — |
+| `pugbrain.indexCodebase` | Index Codebase | `Ctrl+Shift+M I` |
 
 ### Settings (6)
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `neuralmemory.pythonPath` | `"python"` | Python interpreter path |
-| `neuralmemory.autoStart` | `false` | Auto-start server on activate |
-| `neuralmemory.serverUrl` | `"http://127.0.0.1:8000"` | Server URL |
-| `neuralmemory.graphNodeLimit` | `1000` | Max nodes in graph (50-10000) |
-| `neuralmemory.codeLensEnabled` | `true` | Show CodeLens hints |
-| `neuralmemory.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns |
+| `pugbrain.pythonPath` | `"python"` | Python interpreter path |
+| `pugbrain.autoStart` | `false` | Auto-start server on activate |
+| `pugbrain.serverUrl` | `"http://127.0.0.1:8000"` | Server URL |
+| `pugbrain.graphNodeLimit` | `1000` | Max nodes in graph (50-10000) |
+| `pugbrain.codeLensEnabled` | `true` | Show CodeLens hints |
+| `pugbrain.commentTriggers` | `["remember:", "note:", "decision:", "todo:"]` | Comment patterns |
 
 ### UI
 
@@ -218,7 +218,7 @@ Brain tự động tích lũy memories qua MCP usage, aligned với "The Key: As
 | `fact` | 0.7 | 5 | "answer is", "works because", "giải pháp là" |
 | `insight` | 0.8 | 6 | "turns out", "root cause was", "hóa ra", "TIL" |
 
-### Configuration (`~/.neuralmemory/config.toml`)
+### Configuration (`~/.pugbrain/config.toml`)
 
 ```toml
 [auto]

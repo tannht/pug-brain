@@ -48,7 +48,7 @@ class TestEnvVarBrainPinning:
             assert call_args[0][1] == "env-brain"  # name argument
 
     @pytest.mark.asyncio
-    async def test_neuralmemory_brain_env_var_also_works(self, tmp_path: object) -> None:
+    async def test_pugbrain_brain_env_var_also_works(self, tmp_path: object) -> None:
         """NEURALMEMORY_BRAIN (long form) should also pin without mutation."""
         mock_config = MagicMock()
         mock_config.current_brain = "original-brain"

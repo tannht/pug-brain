@@ -1,4 +1,4 @@
-"""Embedding provider setup — nmem setup embeddings.
+"""Embedding provider setup — pugbrain setup embeddings.
 
 Interactive command to configure embedding provider. Lists available
 providers, checks installation status, and validates configuration.
@@ -18,18 +18,18 @@ _PROVIDERS: list[dict[str, str | None]] = [
         "name": "Sentence Transformers",
         "type": "local",
         "module": "sentence_transformers",
-        "install": "pip install neural-memory[embeddings]",
+        "install": "pip install pug-brain[embeddings]",
         "default_model": "all-MiniLM-L6-v2",
         "multilingual_model": "paraphrase-multilingual-MiniLM-L12-v2",
         "note": "~440MB, runs locally, no API key needed",
-        "env_key": None,
+        "env_key": "",
     },
     {
         "key": "gemini",
         "name": "Google Gemini",
         "type": "cloud",
         "module": "google.generativeai",
-        "install": "pip install neural-memory[embeddings-gemini]",
+        "install": "pip install pug-brain[embeddings-gemini]",
         "default_model": "models/text-embedding-004",
         "note": "Free tier, needs GEMINI_API_KEY",
         "env_key": "GEMINI_API_KEY",
@@ -39,17 +39,17 @@ _PROVIDERS: list[dict[str, str | None]] = [
         "name": "Ollama",
         "type": "local",
         "module": "ollama",
-        "install": "pip install neural-memory[embeddings]",
+        "install": "pip install pug-brain[embeddings]",
         "default_model": "nomic-embed-text",
         "note": "Free, needs Ollama running locally",
-        "env_key": None,
+        "env_key": "",
     },
     {
         "key": "openai",
         "name": "OpenAI",
         "type": "cloud",
         "module": "openai",
-        "install": "pip install neural-memory[embeddings-openai]",
+        "install": "pip install pug-brain[embeddings-openai]",
         "default_model": "text-embedding-3-small",
         "note": "Paid, needs OPENAI_API_KEY",
         "env_key": "OPENAI_API_KEY",
@@ -66,7 +66,7 @@ def _is_installed(module_name: str) -> bool:
         return False
 
 
-def _has_env_key(key: str | None) -> bool:
+def _has_env_key(key: str) -> bool:
     """Check if an environment variable is set."""
     if not key:
         return True
@@ -88,7 +88,7 @@ def run_embedding_setup() -> None:
         module = p["module"]
         assert module is not None
         installed = _is_installed(module)
-        has_key = _has_env_key(p.get("env_key"))
+        has_key = _has_env_key(p.get("env_key") or "")
 
         status_parts = []
         if installed:
@@ -176,13 +176,11 @@ def _save_embedding_config(provider_key: str, model: str) -> None:
     from neural_memory.unified_config import get_config
 
     config = get_config(reload=True)
-    config.embedding = replace(
-        config.embedding,
-        enabled=True,
-        provider=provider_key,
-        model=model,
+    updated = replace(
+        config,
+        embedding=replace(config.embedding, enabled=True, provider=provider_key, model=model),
     )
-    config.save()
+    updated.save()
 
 
 def _save_embedding_disabled() -> None:
@@ -192,5 +190,5 @@ def _save_embedding_disabled() -> None:
     from neural_memory.unified_config import get_config
 
     config = get_config(reload=True)
-    config.embedding = replace(config.embedding, enabled=False)
-    config.save()
+    updated = replace(config, embedding=replace(config.embedding, enabled=False))
+    updated.save()

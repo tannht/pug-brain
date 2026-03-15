@@ -1,6 +1,6 @@
-## Memory System — NeuralMemory
+## Memory System — PugBrain
 
-This workspace uses NeuralMemory for persistent memory across sessions.
+This workspace uses PugBrain for persistent memory across sessions.
 You have access to pugbrain_* MCP tools. Use them PROACTIVELY.
 
 ### Session Start (ALWAYS)

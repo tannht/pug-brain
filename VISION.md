@@ -1,18 +1,18 @@
-# NeuralMemory — Vision & North Star
+# PugBrain — Vision & North Star
 
-> NeuralMemory không tìm memory — nó **kích hoạt** memory.
+> PugBrain không tìm memory — nó **kích hoạt** memory.
 > Recall Through Activation, Not Search.
 
 ---
 
 ## The Key: Associative Reflex (Phản xạ Liên tưởng)
 
-NeuralMemory không phải database. Không phải vector store. Không phải RAG pipeline.
+PugBrain không phải database. Không phải vector store. Không phải RAG pipeline.
 
-NeuralMemory là **bộ nhớ sinh học cho AI** — nó sống, nó quên, nó liên tưởng,
+PugBrain là **bộ nhớ sinh học cho AI** — nó sống, nó quên, nó liên tưởng,
 và nó là chuẩn mở cho mọi AI tool chia sẻ ký ức.
 
-Khi bạn hỏi một câu, NeuralMemory không "tìm kiếm" — nó **kích hoạt lan truyền**
+Khi bạn hỏi một câu, PugBrain không "tìm kiếm" — nó **kích hoạt lan truyền**
 qua mạng neuron, giống cách bộ não thật phản xạ. Ký ức liên quan tự nổi lên,
 không cần keyword match, không cần cosine similarity.
 
@@ -70,7 +70,7 @@ Luật sư nhớ: "lãi suất" → Điều 468 BLDS → mở sách ra đọc.
 Kế toán nhớ chính xác: "Lương tháng 3 = 25 triệu, vì hợp đồng quy định."
 ```
 
-Não thật có **2 chế độ nhớ** — NeuralMemory phải hỗ trợ cả hai:
+Não thật có **2 chế độ nhớ** — PugBrain phải hỗ trợ cả hai:
 
 #### Chế độ 1: Verbatim Memory (Nhớ Nguyên Văn)
 
@@ -236,9 +236,9 @@ See [ROADMAP.md](ROADMAP.md) for full details.
 
 ---
 
-## What NeuralMemory Is NOT
+## What PugBrain Is NOT
 
-| NeuralMemory is NOT | It IS |
+| PugBrain is NOT | It IS |
 |---|---|
 | A database | A living memory system |
 | A vector store | An associative reflex engine |
@@ -254,7 +254,7 @@ See [ROADMAP.md](ROADMAP.md) for full details.
 
 ## Two Memory Modes (Hai Chế Độ Nhớ)
 
-NeuralMemory phải hỗ trợ cả hai cách não thật nhớ thông tin:
+PugBrain phải hỗ trợ cả hai cách não thật nhớ thông tin:
 
 ```
 ┌──────────────────────┐     ┌──────────────────────┐
@@ -280,7 +280,7 @@ Cả hai chế độ đều dùng **spreading activation** — khác nhau ở:
 
 ## One-Line North Star
 
-> **NeuralMemory: Bộ nhớ sinh học cho AI — kích hoạt thay vì tìm kiếm,
+> **PugBrain: Bộ nhớ sinh học cho AI — kích hoạt thay vì tìm kiếm,
 > liên tưởng thay vì truy vấn, truy xuất nguồn thay vì bịa đặt,
 > di động thay vì gắn chặt.**
 

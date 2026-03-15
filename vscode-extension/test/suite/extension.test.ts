@@ -1,5 +1,5 @@
 /**
- * Integration tests for the NeuralMemory VS Code extension.
+ * Integration tests for the PugBrain VS Code extension.
  *
  * Runs inside the VS Code Extension Development Host via @vscode/test-electron.
  */
@@ -9,7 +9,7 @@ import * as vscode from "vscode";
 
 suite("Extension", () => {
   test("extension should be present", () => {
-    const ext = vscode.extensions.getExtension("neuralmemory.neuralmemory");
+    const ext = vscode.extensions.getExtension("pugbrain.pugbrain");
     assert.ok(ext, "Extension not found in registry");
   });
 
@@ -17,16 +17,16 @@ suite("Extension", () => {
     const allCommands = await vscode.commands.getCommands(true);
 
     const expected = [
-      "neuralmemory.encode",
-      "neuralmemory.encodeInput",
-      "neuralmemory.recall",
-      "neuralmemory.openGraph",
-      "neuralmemory.switchBrain",
-      "neuralmemory.createBrain",
-      "neuralmemory.refreshMemories",
-      "neuralmemory.startServer",
-      "neuralmemory.connectServer",
-      "neuralmemory.recallFromTree",
+      "pugbrain.encode",
+      "pugbrain.encodeInput",
+      "pugbrain.recall",
+      "pugbrain.openGraph",
+      "pugbrain.switchBrain",
+      "pugbrain.createBrain",
+      "pugbrain.refreshMemories",
+      "pugbrain.startServer",
+      "pugbrain.connectServer",
+      "pugbrain.recallFromTree",
     ];
 
     for (const cmd of expected) {
@@ -38,7 +38,7 @@ suite("Extension", () => {
   });
 
   test("configuration defaults should be set", () => {
-    const config = vscode.workspace.getConfiguration("neuralmemory");
+    const config = vscode.workspace.getConfiguration("pugbrain");
 
     assert.strictEqual(config.get("pythonPath"), "python");
     assert.strictEqual(config.get("autoStart"), false);

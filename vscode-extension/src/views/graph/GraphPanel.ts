@@ -7,14 +7,14 @@
  */
 
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../../server/client";
+import { PugBrainClient } from "../../server/client";
 import type { ServerLifecycle } from "../../server/lifecycle";
 import type { GraphData } from "../../server/types";
 import { readCurrentBrain } from "../../commands/brain";
 import { getConfig } from "../../utils/config";
 import { getGraphHtml, getNonce } from "./graphTemplate";
 
-const VIEW_TYPE = "neuralmemory.graphExplorer";
+const VIEW_TYPE = "pugbrain.graphExplorer";
 
 /**
  * Message types sent FROM the webview TO the extension.
@@ -95,7 +95,7 @@ export class GraphPanel {
 
     const panel = vscode.window.createWebviewPanel(
       VIEW_TYPE,
-      "NeuralMemory Graph",
+      "PugBrain Graph",
       vscode.ViewColumn.Beside,
       {
         enableScripts: true,
@@ -167,7 +167,7 @@ export class GraphPanel {
     this._postMessage({ type: "loading" });
 
     try {
-      const client = new NeuralMemoryClient(this._server.baseUrl);
+      const client = new PugBrainClient(this._server.baseUrl);
       this._fullData = await client.getGraph(readCurrentBrain());
       this._sendSlicedData();
     } catch (err) {
@@ -269,7 +269,7 @@ export class GraphPanel {
     );
 
     if (action === "Recall Related") {
-      await vscode.commands.executeCommand("neuralmemory.recall");
+      await vscode.commands.executeCommand("pugbrain.recall");
     } else if (action === "View Neighborhood") {
       await this._fetchSubgraph(nodeId);
     }

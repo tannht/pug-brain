@@ -22,6 +22,7 @@ from neural_memory.storage.sqlite_cognitive import SQLiteCognitiveMixin
 from neural_memory.storage.sqlite_compression import SQLiteCompressionMixin
 from neural_memory.storage.sqlite_depth_priors import SQLiteDepthPriorMixin
 from neural_memory.storage.sqlite_devices import SQLiteDevicesMixin
+from neural_memory.storage.sqlite_drift import SQLiteDriftMixin
 from neural_memory.storage.sqlite_fibers import SQLiteFiberMixin
 from neural_memory.storage.sqlite_maturation import SQLiteMaturationMixin
 from neural_memory.storage.sqlite_neurons import SQLiteNeuronMixin
@@ -30,9 +31,11 @@ from neural_memory.storage.sqlite_reviews import SQLiteReviewsMixin
 from neural_memory.storage.sqlite_schema import (
     SCHEMA,
     SCHEMA_VERSION,
+    ensure_fiber_fts_tables,
     ensure_fts_tables,
     run_migrations,
 )
+from neural_memory.storage.sqlite_sessions import SQLiteSessionsMixin
 from neural_memory.storage.sqlite_sources import SQLiteSourcesMixin
 from neural_memory.storage.sqlite_synapses import SQLiteSynapseMixin
 from neural_memory.storage.sqlite_sync_state import SQLiteSyncStateMixin
@@ -63,6 +66,8 @@ class SQLiteStorage(
     SQLiteCognitiveMixin,
     SQLiteChangeLogMixin,
     SQLiteDevicesMixin,
+    SQLiteSessionsMixin,
+    SQLiteDriftMixin,
     SQLiteSourcesMixin,
     SQLiteToolEventsMixin,
     SQLiteTrainingFilesMixin,
@@ -118,8 +123,9 @@ class SQLiteStorage(
         # Full schema: CREATE TABLE/INDEX IF NOT EXISTS (safe after migration)
         await self._conn.executescript(SCHEMA)
 
-        # FTS5 virtual table + sync triggers (individual execute, not executescript)
+        # FTS5 virtual tables + sync triggers (individual execute, not executescript)
         await ensure_fts_tables(self._conn)
+        await ensure_fiber_fts_tables(self._conn)
         self._has_fts = await self._check_fts_available()
 
         # Stamp version for brand-new databases
@@ -309,6 +315,7 @@ class SQLiteStorage(
         conn = self._ensure_conn()
 
         brain_tables = (
+            "session_summaries",
             "change_log",
             "devices",
             "review_schedules",

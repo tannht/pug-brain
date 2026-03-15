@@ -1,8 +1,8 @@
-"""NeuralMemory vs Vanilla Vector Search -- Qualitative Comparison.
+"""PugBrain vs Vanilla Vector Search -- Qualitative Comparison.
 
 Shows WHAT each system returns for the same queries, not just scores.
 The difference: vector search returns the single best match.
-NeuralMemory returns context -- related memories, connections, chains.
+PugBrain returns context -- related memories, connections, chains.
 
 Usage:
     python benchmarks/nm_vs_rag.py
@@ -95,7 +95,7 @@ GRAY = "\033[90m"
 # -- Main -------------------------------------------------
 
 async def main() -> None:
-    # Setup NeuralMemory
+    # Setup PugBrain
     storage = InMemoryStorage()
     brain = Brain.create("benchmark")
     await storage.save_brain(brain)
@@ -114,7 +114,7 @@ async def main() -> None:
 
     # Run comparison
     print(f"{BOLD}{'=' * 80}{RESET}")
-    print(f"{BOLD}  NeuralMemory vs Vector Search -- Side-by-Side Comparison{RESET}")
+    print(f"{BOLD}  PugBrain vs Vector Search -- Side-by-Side Comparison{RESET}")
     print(f"{BOLD}{'=' * 80}{RESET}\n")
 
     for query, qtype in QUERIES:
@@ -131,15 +131,15 @@ async def main() -> None:
         else:
             print(f"    {RED}(no results){RESET}")
 
-        # NeuralMemory
+        # PugBrain
         try:
             result = await pipeline.query(query, depth=DepthLevel.DEEP)
         except Exception as exc:
-            print(f"\n  {GREEN}{BOLD}NeuralMemory (spreading activation):{RESET}")
+            print(f"\n  {GREEN}{BOLD}PugBrain (spreading activation):{RESET}")
             print(f"    {RED}Error: {exc}{RESET}")
             print(f"\n{DIM}{'-' * 80}{RESET}\n")
             continue
-        print(f"\n  {GREEN}{BOLD}NeuralMemory (spreading activation):{RESET}")
+        print(f"\n  {GREEN}{BOLD}PugBrain (spreading activation):{RESET}")
         print(f"    {DIM}Neurons activated: {result.neurons_activated} | Confidence: {result.confidence:.2f}{RESET}")
 
         # Parse relevant memories from context
@@ -182,12 +182,12 @@ async def main() -> None:
     print("                  Great for: 'Find me the doc that mentions X'")
     print("                  Fails at:  'Why did X happen?' (needs chain traversal)")
     print()
-    print(f"  {GREEN}NeuralMemory{RESET}:   Returns activated context -- memories + connections.")
+    print(f"  {GREEN}PugBrain{RESET}:   Returns activated context -- memories + connections.")
     print("                  Great for: Causal chains, temporal queries, associations")
     print("                  Graph grows smarter with more memories (consolidation)")
     print()
     print(f"  {DIM}15 memories | 5 queries | Baseline: bag-of-words cosine similarity{RESET}")
-    print(f"  {DIM}NeuralMemory: ReflexPipeline depth=DEEP (spreading activation + causal){RESET}")
+    print(f"  {DIM}PugBrain: ReflexPipeline depth=DEEP (spreading activation + causal){RESET}")
     print()
 
 

@@ -1,14 +1,14 @@
 # Integration Guide
 
-Integrate NeuralMemory with AI assistants, IDEs, and development tools.
+Integrate PugBrain with AI assistants, IDEs, and development tools.
 
 ## Claude Code Integration
 
 ### Option A: MCP Server (Recommended)
 
-NeuralMemory provides a native MCP (Model Context Protocol) server.
+PugBrain provides a native MCP (Model Context Protocol) server.
 
-#### 1. Install NeuralMemory
+#### 1. Install PugBrain
 
 ```bash
 pip install neural-memory
@@ -109,7 +109,7 @@ echo "Recent project context: $CONTEXT"
 
 ## VS Code Extension
 
-NeuralMemory has a dedicated VS Code extension with visual brain exploration and inline memory tools.
+PugBrain has a dedicated VS Code extension with visual brain exploration and inline memory tools.
 
 ### Installation
 
@@ -134,24 +134,24 @@ Then install the generated `.vsix` file via **Extensions > Install from VSIX** o
 
 ### Configuration
 
-In VS Code settings (`neuralmemory.*`):
+In VS Code settings (`pugbrain.*`):
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `serverUrl` | `http://localhost:8000` | NeuralMemory server URL |
+| `serverUrl` | `http://localhost:8000` | PugBrain server URL |
 | `pythonPath` | `python` | Python executable path |
 | `graphNodeLimit` | `200` | Max nodes shown in graph |
 | `codeLensTriggers` | `remember,note,decision,todo` | Comment triggers |
 
 ### Usage
 
-1. Start the NeuralMemory server: `nmem serve`
+1. Start the PugBrain server: `nmem serve`
 2. Open VS Code — the extension connects automatically
 3. Use command palette (`Ctrl+Shift+P`) for:
-   - `NeuralMemory: Encode Selection as Memory`
-   - `NeuralMemory: Recall Memory`
-   - `NeuralMemory: Open Graph Explorer`
-   - `NeuralMemory: Switch Brain`
+   - `PugBrain: Encode Selection as Memory`
+   - `PugBrain: Recall Memory`
+   - `PugBrain: Open Graph Explorer`
+   - `PugBrain: Switch Brain`
 
 ---
 
@@ -164,7 +164,7 @@ Add to `.cursorrules` in your project:
 ```markdown
 ## Memory System
 
-This project uses NeuralMemory for persistent context.
+This project uses PugBrain for persistent context.
 
 ### Getting Context
 Before starting work:
@@ -213,7 +213,7 @@ Create custom commands in Cursor settings:
 Create `.windsurfrules` in your project:
 
 ```markdown
-## NeuralMemory Integration
+## PugBrain Integration
 
 ### Session Start
 ```bash
@@ -307,7 +307,7 @@ In `.continue/config.json`:
   "customCommands": [
     {
       "name": "memory-context",
-      "description": "Get NeuralMemory context",
+      "description": "Get PugBrain context",
       "prompt": "{{#if output}}Project memory context:\n\n{{output}}{{/if}}",
       "command": "nmem context --limit 10"
     }
@@ -371,7 +371,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install NeuralMemory
+      - name: Install PugBrain
         run: pip install neural-memory
 
       - name: Remember deployment

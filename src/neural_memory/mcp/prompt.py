@@ -1,12 +1,12 @@
-"""System prompt for AI tools using NeuralMemory.
+"""System prompt for AI tools using PugBrain.
 
-This prompt instructs AI assistants on when and how to use NeuralMemory
+This prompt instructs AI assistants on when and how to use PugBrain
 for persistent memory across sessions.
 """
 
-SYSTEM_PROMPT = """# NeuralMemory - Persistent Memory System
+SYSTEM_PROMPT = """# PugBrain - Persistent Memory System
 
-You have access to NeuralMemory, a persistent memory system that survives across sessions.
+You have access to PugBrain, a persistent memory system that survives across sessions.
 Use it to remember important information and recall past context.
 
 ## When to REMEMBER (pugbrain_remember)
@@ -254,7 +254,7 @@ pugbrain_pin(fiber_ids=["fiber-id-1"], pinned=false)                  # Unpin (l
 
 Install optional extraction dependencies for non-text formats:
 ```
-pip install neural-memory[extract]   # PDF, DOCX, PPTX, HTML, XLSX support
+pip install pug-brain[extract]   # PDF, DOCX, PPTX, HTML, XLSX support
 ```
 
 ## Health & Diagnostics
@@ -319,6 +319,9 @@ If no path exists, the concepts are disconnected — store memories that link th
 - `pugbrain_gaps(action="detect", topic="...", source="recall_miss")` — Track knowledge gaps
 - `pugbrain_schema(action="evolve", hypothesis_id="h-1", content="...", reason="...")` — Evolve hypothesis
 - `pugbrain_schema(action="history", hypothesis_id="h-1")` — Version chain
+- `pugbrain_drift(action="detect")` — Find tag synonyms/aliases via Jaccard similarity
+- `pugbrain_drift(action="list")` — Show existing drift clusters
+- `pugbrain_drift(action="merge", cluster_id="...")` — Merge synonym tags
 
 ## Telegram Backup (pugbrain_telegram_backup)
 
@@ -401,7 +404,7 @@ Use **pugbrain_sync** for real-time multi-device memory synchronization:
 
 Use **git backup** for version-controlled snapshots:
 - Better for single-device users who want history/rollback
-- Commit the `~/.neuralmemory/` data directory to a private repo
+- Commit the `~/.pugbrain/` data directory to a private repo
 - No conflict resolution — just point-in-time snapshots
 - Manual process (commit/push when you want)
 
@@ -411,7 +414,7 @@ Use **git backup** for version-controlled snapshots:
 - Both → use pugbrain_sync for real-time + git for disaster recovery
 """
 
-COMPACT_PROMPT = """You have NeuralMemory for persistent memory across sessions.
+COMPACT_PROMPT = """You have PugBrain for persistent memory across sessions.
 
 **Core:**
 - **Remember** (pugbrain_remember): Save decisions, preferences, facts, errors, todos, workflows.
@@ -470,7 +473,7 @@ def get_system_prompt(compact: bool = False) -> str:
 
 
 MCP_INSTRUCTIONS = """\
-CRITICAL BEHAVIOR: You MUST use Neural Memory proactively in EVERY session.
+CRITICAL BEHAVIOR: You MUST use PugBrain proactively in EVERY session.
 
 MANDATORY ACTIONS:
 1. SESSION START: Call pugbrain_recall("current project context") to load past context.
@@ -529,12 +532,12 @@ pugbrain_predict for falsifiable predictions, pugbrain_verify to check outcomes.
 Use pugbrain_schema(action="evolve") when a hypothesis needs updating.
 Use pugbrain_gaps(action="detect") when you notice the brain doesn't know something.
 
-ALL 38 TOOLS: pugbrain_remember, pugbrain_recall, pugbrain_context, pugbrain_todo, pugbrain_auto, pugbrain_suggest,
+ALL 39 TOOLS: pugbrain_remember, pugbrain_recall, pugbrain_context, pugbrain_todo, pugbrain_auto, pugbrain_suggest,
 pugbrain_session, pugbrain_eternal, pugbrain_recap, pugbrain_stats, pugbrain_health, pugbrain_evolution, pugbrain_habits,
 pugbrain_version, pugbrain_transplant, pugbrain_conflicts, pugbrain_alerts, pugbrain_index, pugbrain_train, pugbrain_train_db,
 pugbrain_pin, pugbrain_review, pugbrain_narrative, pugbrain_import, pugbrain_explain, pugbrain_hypothesize, pugbrain_evidence,
 pugbrain_predict, pugbrain_verify, pugbrain_cognitive, pugbrain_gaps, pugbrain_schema, pugbrain_edit, pugbrain_forget,
-pugbrain_sync, pugbrain_sync_status, pugbrain_sync_config, pugbrain_telegram_backup.
+pugbrain_sync, pugbrain_sync_status, pugbrain_sync_config, pugbrain_telegram_backup, pugbrain_drift.
 
 NEVER skip remembering after completing a feature, fixing a bug, or making a decision.
 Each session starts fresh — without explicit saves, ALL discoveries are lost forever.\
@@ -557,9 +560,9 @@ def get_mcp_instructions() -> str:
 def get_prompt_for_mcp() -> dict[str, str]:
     """Get prompt formatted for MCP resources."""
     return {
-        "uri": "neuralmemory://prompt/system",
-        "name": "NeuralMemory System Prompt",
-        "description": "Instructions for AI assistants on using NeuralMemory",
+        "uri": "pugbrain://prompt/system",
+        "name": "PugBrain System Prompt",
+        "description": "Instructions for AI assistants on using PugBrain",
         "mimeType": "text/plain",
         "text": SYSTEM_PROMPT,
     }

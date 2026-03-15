@@ -1,5 +1,5 @@
 /**
- * NeuralMemory dynamic tool proxy for OpenClaw.
+ * PugBrain dynamic tool proxy for OpenClaw.
  *
  * Fetches all available tools from the MCP server via `tools/list` and
  * converts them into OpenClaw tool definitions. This means the plugin
@@ -16,7 +16,7 @@
  *   - Uses `number` instead of `integer` for Gemini compatibility
  */
 
-import type { NeuralMemoryMcpClient, McpToolDefinition } from "./mcp-client.js";
+import type { PugBrainMcpClient, McpToolDefinition } from "./mcp-client.js";
 
 // ── Types ──────────────────────────────────────────────────
 
@@ -130,7 +130,7 @@ function toSafeSchema(inputSchema?: Record<string, unknown>): JsonSchema {
 /**
  * Create a tool call helper that auto-reconnects to MCP.
  */
-function makeCallFn(mcp: NeuralMemoryMcpClient) {
+function makeCallFn(mcp: PugBrainMcpClient) {
   return async (
     toolName: string,
     args: Record<string, unknown>,
@@ -141,7 +141,7 @@ function makeCallFn(mcp: NeuralMemoryMcpClient) {
       } catch (err) {
         return {
           error: true,
-          message: `NeuralMemory auto-connect failed: ${(err as Error).message}`,
+          message: `PugBrain auto-connect failed: ${(err as Error).message}`,
         };
       }
     }
@@ -171,7 +171,7 @@ function mcpToolToOpenClaw(
 ): ToolDefinition {
   return {
     name: mcpTool.name,
-    description: mcpTool.description ?? `NeuralMemory tool: ${mcpTool.name}`,
+    description: mcpTool.description ?? `PugBrain tool: ${mcpTool.name}`,
     parameters: toSafeSchema(mcpTool.inputSchema),
     execute: (_id, args) => call(mcpTool.name, args),
   };
@@ -182,7 +182,7 @@ function mcpToolToOpenClaw(
  * Must be called after MCP connection is established.
  */
 export async function createToolsFromMcp(
-  mcp: NeuralMemoryMcpClient,
+  mcp: PugBrainMcpClient,
 ): Promise<ToolDefinition[]> {
   const mcpTools = await mcp.listTools();
   const call = makeCallFn(mcp);
@@ -194,7 +194,7 @@ export async function createToolsFromMcp(
  * Ensures the plugin still works even if the MCP server is an older version.
  */
 export function createFallbackTools(
-  mcp: NeuralMemoryMcpClient,
+  mcp: PugBrainMcpClient,
 ): ToolDefinition[] {
   const call = makeCallFn(mcp);
 
@@ -202,7 +202,7 @@ export function createFallbackTools(
     {
       name: "pugbrain_remember",
       description:
-        "Store a memory in NeuralMemory. Use this to remember facts, decisions, " +
+        "Store a memory in PugBrain. Use this to remember facts, decisions, " +
         "insights, todos, errors, and other information that should persist across sessions.",
       parameters: {
         type: "object",
@@ -231,7 +231,7 @@ export function createFallbackTools(
     {
       name: "pugbrain_recall",
       description:
-        "Query memories from NeuralMemory. Use this to recall past information, " +
+        "Query memories from PugBrain. Use this to recall past information, " +
         "decisions, patterns, or context relevant to the current task.",
       parameters: {
         type: "object",
@@ -247,7 +247,7 @@ export function createFallbackTools(
     },
     {
       name: "pugbrain_context",
-      description: "Get recent context from NeuralMemory.",
+      description: "Get recent context from PugBrain.",
       parameters: {
         type: "object",
         properties: {
@@ -268,6 +268,55 @@ export function createFallbackTools(
       description: "Get brain health diagnostics including grade and recommendations.",
       parameters: { type: "object", properties: {}, additionalProperties: false },
       execute: (_id, args) => call("pugbrain_health", args),
+    },
+  ];
+}
+
+/**
+ * Create backward-compatible shim tools that map legacy OpenClaw memory-core
+ * tool names to PugBrain equivalents.
+ *
+ * This prevents "allowList contains unknown entries (memory_search, memory_get)"
+ * warnings when NM occupies the `memory` plugin slot, which removes the built-in
+ * memory-core tools but leaves the tools.profile allowList referencing them.
+ */
+export function createCompatibilityTools(
+  mcp: PugBrainMcpClient,
+): ToolDefinition[] {
+  const call = makeCallFn(mcp);
+
+  return [
+    {
+      name: "memory_search",
+      description:
+        "Search memories (legacy alias for nmem_recall). " +
+        "Prefer nmem_recall for full PugBrain features.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "The search query" },
+        },
+        required: ["query"],
+        additionalProperties: false,
+      },
+      execute: (_id, args) =>
+        call("nmem_recall", { query: args.query, depth: 1 }),
+    },
+    {
+      name: "memory_get",
+      description:
+        "Get a memory by ID (legacy alias for nmem_recall). " +
+        "Prefer nmem_recall for full PugBrain features.",
+      parameters: {
+        type: "object",
+        properties: {
+          id: { type: "string", description: "Memory identifier or query" },
+        },
+        required: ["id"],
+        additionalProperties: false,
+      },
+      execute: (_id, args) =>
+        call("nmem_recall", { query: String(args.id), depth: 0 }),
     },
   ];
 }

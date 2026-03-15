@@ -1,4 +1,4 @@
-"""Tests for NeuralMemory-Nanobot integration.
+"""Tests for PugBrain-Nanobot integration.
 
 Covers:
 1. Protocol conformance — tools satisfy NanobotTool protocol
@@ -363,7 +363,7 @@ class TestNMMemoryStore:
         assert isinstance(result, str)
         # Should have section headers when data exists
         if result:
-            assert "NeuralMemory" in result or "Recent" in result
+            assert "PugBrain" in result or "Recent" in result
 
 
 # ── Setup function ───────────────────────────────────────

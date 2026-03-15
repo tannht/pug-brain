@@ -1,4 +1,4 @@
-"""Long-horizon coherence test for NeuralMemory.
+"""Long-horizon coherence test for PugBrain.
 
 Simulates 5 sessions across 30 days:
 1. Day 1: encode initial memories, query

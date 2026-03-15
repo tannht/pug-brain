@@ -23,7 +23,7 @@ class TestGitContext:
     def test_detect_git_context(self) -> None:
         """Returns GitContext in a git repo."""
         ctx = detect_git_context(Path("."))
-        # This test runs inside the NeuralMemory repo itself
+        # This test runs inside the PugBrain repo itself
         assert ctx is not None
         assert isinstance(ctx, GitContext)
 

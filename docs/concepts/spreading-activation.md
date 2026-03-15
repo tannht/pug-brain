@@ -1,6 +1,6 @@
 # Spreading Activation
 
-The core retrieval mechanism in NeuralMemory.
+The core retrieval mechanism in PugBrain.
 
 ## What is Spreading Activation?
 
@@ -13,7 +13,7 @@ Spreading activation is a cognitive model of how memory retrieval works in the h
 - Pie (food made with it)
 - iPhone (brand association)
 
-NeuralMemory implements this computationally:
+PugBrain implements this computationally:
 
 ```
 Query: "apple"
@@ -27,7 +27,7 @@ Query: "apple"
 
 ## How It Works
 
-NeuralMemory supports two activation modes: **Classic** (distance-based decay) and **Reflex** (trail-based decay through fiber pathways). Reflex mode is the default in v0.6.0+.
+PugBrain supports two activation modes: **Classic** (distance-based decay) and **Reflex** (trail-based decay through fiber pathways). Reflex mode is the default in v0.6.0+.
 
 ### 1. Anchor Selection (Time-First)
 

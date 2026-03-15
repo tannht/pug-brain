@@ -1,4 +1,4 @@
-"""Standard IR evaluation metrics for NeuralMemory benchmarks.
+"""Standard IR evaluation metrics for PugBrain benchmarks.
 
 Implements:
 - Precision@K: How many top-K results are relevant

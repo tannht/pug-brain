@@ -38,8 +38,8 @@ def _create_fake_db(path: Path, *, size: int = 0) -> None:
 
 @pytest.fixture()
 def tmp_data_dir(tmp_path: Path) -> Path:
-    """Return a temporary NeuralMemory data directory."""
-    return tmp_path / ".neuralmemory"
+    """Return a temporary PugBrain data directory."""
+    return tmp_path / ".pugbrain"
 
 
 def _make_config(data_dir: Path) -> UnifiedConfig:
@@ -221,12 +221,12 @@ class TestReadCurrentBrainFromToml:
     def test_reads_brain_name(self, tmp_data_dir: Path) -> None:
         _write_toml(tmp_data_dir, "my-brain")
 
-        with patch("neural_memory.unified_config.get_neuralmemory_dir", return_value=tmp_data_dir):
+        with patch("neural_memory.unified_config.get_pugbrain_dir", return_value=tmp_data_dir):
             result = _read_current_brain_from_toml()
         assert result == "my-brain"
 
     def test_returns_none_when_missing(self, tmp_path: Path) -> None:
-        with patch("neural_memory.unified_config.get_neuralmemory_dir", return_value=tmp_path):
+        with patch("neural_memory.unified_config.get_pugbrain_dir", return_value=tmp_path):
             result = _read_current_brain_from_toml()
         assert result is None
 
@@ -236,7 +236,7 @@ class TestReadCurrentBrainFromToml:
         toml_path = data_dir / "config.toml"
         toml_path.write_text('current_brain = "../hacked"\n', encoding="utf-8")
 
-        with patch("neural_memory.unified_config.get_neuralmemory_dir", return_value=data_dir):
+        with patch("neural_memory.unified_config.get_pugbrain_dir", return_value=data_dir):
             result = _read_current_brain_from_toml()
         assert result is None
 
@@ -251,7 +251,7 @@ class TestEndToEndBrainSync:
         _sync_brain_to_toml(tmp_data_dir, "work")
 
         # Simulate MCP reading the toml
-        with patch("neural_memory.unified_config.get_neuralmemory_dir", return_value=tmp_data_dir):
+        with patch("neural_memory.unified_config.get_pugbrain_dir", return_value=tmp_data_dir):
             result = _read_current_brain_from_toml()
         assert result == "work"
 
@@ -301,7 +301,7 @@ class TestReadLegacyBrain:
 
     def test_reads_from_legacy_dir(self, tmp_path: Path) -> None:
         """Falls back to ~/.neural-memory/ when data_dir has no config.json."""
-        data_dir = tmp_path / ".neuralmemory"
+        data_dir = tmp_path / ".pugbrain"
         data_dir.mkdir(parents=True, exist_ok=True)
 
         legacy_dir = tmp_path / ".neural-memory"

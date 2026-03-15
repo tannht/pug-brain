@@ -1,5 +1,5 @@
 /**
- * Unit tests for NeuralMemoryClient (HTTP client).
+ * Unit tests for PugBrainClient (HTTP client).
  *
  * Tests run with plain Mocha — no VS Code runtime needed.
  * Uses a mock fetch to verify request construction and response handling.
@@ -53,20 +53,20 @@ globalThis.fetch = (async (
 }) as typeof fetch;
 
 // Now import client (it uses global fetch)
-import { NeuralMemoryClient, ApiError } from "../../src/server/client";
+import { PugBrainClient, ApiError } from "../../src/server/client";
 
 // Restore original fetch after all tests
 after(() => {
   globalThis.fetch = originalFetch;
 });
 
-describe("NeuralMemoryClient", () => {
+describe("PugBrainClient", () => {
   const BASE_URL = "http://127.0.0.1:8000";
-  let client: NeuralMemoryClient;
+  let client: PugBrainClient;
 
   beforeEach(() => {
     resetMock();
-    client = new NeuralMemoryClient(BASE_URL);
+    client = new PugBrainClient(BASE_URL);
   });
 
   describe("health()", () => {

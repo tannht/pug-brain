@@ -1,6 +1,6 @@
 # Memory Types
 
-NeuralMemory supports typed memories for better organization and automatic lifecycle management.
+PugBrain supports typed memories for better organization and automatic lifecycle management.
 
 ## Available Types
 
@@ -29,7 +29,7 @@ nmem remember "Review PR before merge" --type instruction
 
 ### Auto-Detection
 
-NeuralMemory can detect types from content:
+PugBrain can detect types from content:
 
 ```bash
 # Detected as TODO

@@ -6,11 +6,11 @@ arguments:
     description: The text to process into memories
     required: true
 allowed-tools:
-  - mcp__neuralmemory__pugbrain_remember
-  - mcp__neuralmemory__pugbrain_recall
-  - mcp__neuralmemory__pugbrain_stats
-  - mcp__neuralmemory__pugbrain_context
-  - mcp__neuralmemory__pugbrain_auto
+  - mcp__pugbrain_remember
+  - mcp__pugbrain_recall
+  - mcp__pugbrain_stats
+  - mcp__pugbrain_context
+  - mcp__pugbrain_auto
 ---
 
 # /intake — Guided Memory Creation

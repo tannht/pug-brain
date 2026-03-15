@@ -7,22 +7,22 @@
 
 ## Basic Installation
 
-Install NeuralMemory from PyPI:
+Install PugBrain from PyPI:
 
 ```bash
-pip install neural-memory
+pip install pug-brain
 ```
 
 This installs the core library with CLI support.
 
 ## Optional Dependencies
 
-NeuralMemory has optional features you can install as needed:
+PugBrain has optional features you can install as needed:
 
 ### Server (FastAPI + Web UI)
 
 ```bash
-pip install neural-memory[server]
+pip install pug-brain[server]
 ```
 
 Includes:
@@ -34,7 +34,7 @@ Includes:
 ### Vietnamese NLP
 
 ```bash
-pip install neural-memory[nlp-vi]
+pip install pug-brain[nlp-vi]
 ```
 
 Includes:
@@ -45,7 +45,7 @@ Includes:
 ### English NLP
 
 ```bash
-pip install neural-memory[nlp-en]
+pip install pug-brain[nlp-en]
 ```
 
 Includes:
@@ -56,7 +56,7 @@ Includes:
 ### Neo4j Storage
 
 ```bash
-pip install neural-memory[neo4j]
+pip install pug-brain[neo4j]
 ```
 
 For production deployments with Neo4j graph database.
@@ -64,7 +64,7 @@ For production deployments with Neo4j graph database.
 ### All Features
 
 ```bash
-pip install neural-memory[all]
+pip install pug-brain[all]
 ```
 
 Installs everything above.
@@ -74,8 +74,8 @@ Installs everything above.
 For contributing or local development:
 
 ```bash
-git clone https://github.com/nhadaututtheky/neural-memory
-cd neural-memory
+git clone https://github.com/nhadaututtheky/pug-brain
+cd pug-brain
 pip install -e ".[dev]"
 pre-commit install
 ```
@@ -84,20 +84,20 @@ pre-commit install
 
 ```bash
 # Check CLI
-nmem --version
+pugbrain --version
 
 # Check help
-nmem --help
+pugbrain --help
 
 # Check brain status
-nmem brain list
+pugbrain brain list
 ```
 
 ## Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `NEURAL_MEMORY_DIR` | Data directory | `~/.neural-memory` |
+| `NEURAL_MEMORY_DIR` | Data directory | `~/.pug-brain` |
 | `NEURAL_MEMORY_BRAIN` | Default brain name | `default` |
 | `NEURAL_MEMORY_JSON` | Always output JSON | `false` |
 
@@ -105,14 +105,14 @@ nmem brain list
 
 ### Command not found
 
-If `nmem` is not found after installation:
+If `pugbrain` is not found after installation:
 
 ```bash
 # Check if scripts are in PATH
 python -m neural_memory.cli --help
 
 # Or use pipx for isolated install
-pipx install neural-memory
+pipx install pug-brain
 ```
 
 ### Permission errors on Windows
@@ -120,7 +120,7 @@ pipx install neural-memory
 Run terminal as Administrator or install with `--user`:
 
 ```bash
-pip install --user neural-memory
+pip install --user pug-brain
 ```
 
 ### Missing dependencies
@@ -129,5 +129,5 @@ If optional features fail:
 
 ```bash
 # Reinstall with all dependencies
-pip install --force-reinstall neural-memory[all]
+pip install --force-reinstall pug-brain[all]
 ```

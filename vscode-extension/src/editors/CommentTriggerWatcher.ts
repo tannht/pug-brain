@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { NeuralMemoryClient } from "../server/client";
+import { PugBrainClient } from "../server/client";
 import { ServerLifecycle } from "../server/lifecycle";
 import { readCurrentBrain } from "../commands/brain";
 import { getConfig } from "../utils/config";
@@ -36,7 +36,7 @@ export class CommentTriggerWatcher implements vscode.CodeLensProvider {
     // Re-fire when config changes (trigger patterns may update)
     context.subscriptions.push(
       vscode.workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration("neuralmemory.commentTriggers")) {
+        if (e.affectsConfiguration("pugbrain.commentTriggers")) {
           this._onDidChange.fire();
         }
       }),
@@ -45,17 +45,17 @@ export class CommentTriggerWatcher implements vscode.CodeLensProvider {
     // Register the inline encode command
     context.subscriptions.push(
       vscode.commands.registerCommand(
-        "neuralmemory._encodeTriggerComment",
+        "pugbrain._encodeTriggerComment",
         async (content: string) => {
           if (!this._server.isRunning()) {
             vscode.window.showWarningMessage(
-              "NeuralMemory server is not running.",
+              "PugBrain server is not running.",
             );
             return;
           }
 
           const brainId = readCurrentBrain();
-          const client = new NeuralMemoryClient(this._server.baseUrl);
+          const client = new PugBrainClient(this._server.baseUrl);
 
           try {
             const result = await client.encode(brainId, { content });
@@ -102,7 +102,7 @@ export class CommentTriggerWatcher implements vscode.CodeLensProvider {
       lenses.push(
         new vscode.CodeLens(range, {
           title: "$(light-bulb) Encode this memory?",
-          command: "neuralmemory._encodeTriggerComment",
+          command: "pugbrain._encodeTriggerComment",
           arguments: [extracted],
           tooltip: `Encode: "${truncate(extracted, 80)}"`,
         }),

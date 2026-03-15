@@ -1,4 +1,4 @@
-# NeuralMemory — OpenClaw Plugin
+# PugBrain — OpenClaw Plugin
 
 Brain-inspired persistent memory for AI agents. Stores experiences as interconnected neurons and recalls them through spreading activation, mimicking how the human brain works.
 
@@ -19,7 +19,7 @@ nmem-mcp --help
 ## Install
 
 ```bash
-npm install -g neuralmemory
+npm install -g pugbrain
 ```
 
 Or add to your OpenClaw config directly.
@@ -32,10 +32,10 @@ Add to `~/.openclaw/openclaw.json`:
 {
   "plugins": {
     "slots": {
-      "memory": "neuralmemory"
+      "memory": "pugbrain"
     },
     "entries": {
-      "neuralmemory": {
+      "pugbrain": {
         "config": {
           "pythonPath": "python",
           "brain": "default",
@@ -48,13 +48,13 @@ Add to `~/.openclaw/openclaw.json`:
 }
 ```
 
-> **Important**: Setting `slots.memory = "neuralmemory"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of NeuralMemory tools.
+> **Important**: Setting `slots.memory = "pugbrain"` disables the default `memory-core` plugin. Without this, agents may still use `memory_search` instead of PugBrain tools.
 
 ## Tools
 
 **v1.7.0+**: The plugin dynamically fetches **all tools** from the MCP server at startup. Whatever version of `neural-memory` you have installed, the plugin automatically exposes every tool it provides — no plugin update needed when new tools are added.
 
-With `neural-memory>=2.28.0`, this includes **39 tools**:
+With `neural-memory>=2.28.0`, this includes **44 tools**:
 
 | Category | Tools |
 |----------|-------|
@@ -87,13 +87,13 @@ If the MCP server is unreachable at startup, the plugin falls back to 5 core too
 OpenClaw Agent
     |
     v
-NeuralMemory Plugin (this package)
+PugBrain Plugin (this package)
     |  Spawns + manages lifecycle
     v
 nmem-mcp (Python MCP server, stdio transport)
     |
     v
-~/.neuralmemory/brains/<brain>.db (SQLite)
+~/.pugbrain/brains/<brain>.db (SQLite)
 ```
 
 The plugin spawns `nmem-mcp` as a subprocess and communicates via JSON-RPC over stdio. Memories are stored in a local SQLite database.

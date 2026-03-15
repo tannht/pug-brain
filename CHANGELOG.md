@@ -145,6 +145,237 @@ Co-Authored-By: claude-flow <ruv@ruv.net>
 fix: trigger auto-version release for pug-master
 
 
+## [4.6.0] - 2026-03-14
+
+### Added
+
+- **`nmem setup rules`** — IDE rules file generator for multi-agent adoption. Generates `.cursorrules`, `.windsurfrules`, `.clinerules`, `GEMINI.md`, and `AGENTS.md` with NM usage instructions. Supports `--all`, `--ide <name>`, `--force`, and interactive selection
+- **17 new tests** for IDE rules generator
+
+## [4.5.0] - 2026-03-14
+
+### Added
+
+- **Context merger (Phase A)** — `nmem_remember` accepts optional `context` dict (e.g. `{reason, alternatives, cause, fix, steps}`) that gets merged into content server-side using type-specific templates. Works with any agent — no need to craft perfect prose
+- **Quality scorer (Phase B)** — Every `nmem_remember` response now includes `quality` ("low"/"medium"/"high"), `score` (0-10), and `hints` (actionable improvement suggestions). Soft gate: always stores, never rejects
+- **36 new tests** for quality scorer (20) and context merger (16)
+
+### Fixed
+
+- **Tool memory config default** — test assertion updated to match `enabled=True` default
+
+## [4.4.1] - 2026-03-14
+
+### Improved
+
+- **Embedding config-status 3-state detection** — Quick Actions card now distinguishes "configured", "installed but disabled", and "not installed" for embedding provider, with actionable enable/disable commands
+
+## [4.4.0] - 2026-03-14
+
+### Added
+
+- **Dashboard Quick Actions card** — Overview page now shows configuration status for 6 features (tool memory, cloud sync, embedding, consolidation, review queue, orphan rate) with actionable shortcut commands and copy buttons
+- **`/api/dashboard/config-status` endpoint** — returns per-feature config status with status badges and commands
+- **Source-Aware Brain plan** — 4-phase architecture plan for smart index with exact citations from source documents
+
+### Fixed
+
+- **Plugin skills path (#71)** — `skills` field in `plugin.json` changed from `"./SKILL.md"` (file) to `"./skills"` (directory) to match Claude Code's expected format. Fixes 2 load errors on plugin install
+- **Tool stats empty** — `tool_memory.enabled` defaulted to `false`, causing dashboard Tool Stats page to show no data. Now defaults to `true` — tool usage tracking works out of the box
+- **E2E health test** — fixed assertion mismatch (`"healthy"` vs `"ok"`)
+
+### Added
+
+- **Source-Aware Brain plan** — 4-phase architecture plan for smart index with exact citations from source documents (source locators, `nmem_cite` tool, source refresh, cloud resolvers)
+
+## [4.3.1] - 2026-03-14
+
+### Fixed
+
+- **Plugin manifest validation (#70)** — removed invalid `features`, `instructions`, `agents` keys from `plugin.json` that broke Claude Code plugin install
+- **Doc trainer orphan neurons** — heading-less chunks now get synthetic heading from filename; added per-file tags for cross-cluster ENRICH linking; increased heading dedup limit 20→100 for common headings like "Overview"
+- **Chatbot brain loading** — use `find_brain_by_name("pugbrain-docs")` instead of non-existent `list_brains()` method
+- **HF deploy script username** — fixed `nhadaututtheky` typo (double t)
+
+### Added
+
+- **`/health` + `/ready` endpoints** — `nmem serve` now exposes health check (brain name, uptime, schema version) and readiness probe (503 when uninitialized) for production monitoring
+- **Cloud sync privacy docs** — privacy model table, encryption details, CF free tier limits in `docs/guides/cloud-sync.md`
+
+### Improved
+
+- **Self-hosted cloud sync** — switched default from shared hub to self-hosted model. Users deploy their own CF Worker + D1 database. Data stays on user's own Cloudflare account
+- **Sync setup instructions** — updated README, FAQ, dashboard SyncPage, and MCP setup flow to guide self-hosted deployment first
+
+### Tests
+
+- 14 new health endpoint tests
+- Total: 3748 passing
+
+## [4.3.0] - 2026-03-13
+
+### Added
+
+- **`nmem_tool_stats` MCP tool** — exposes tool usage analytics (summary + daily breakdown) via MCP (#63)
+- **`/api/dashboard/tool-stats` REST endpoint** — tool usage analytics for dashboard integration
+- **Dashboard: Tool Stats page** — top tools bar chart, usage-over-time line chart, detailed table with success rates and durations (#63)
+- **Background consolidation daemon** — `nmem serve` now runs periodic consolidation using existing `maintenance.scheduled_consolidation_*` config (#65)
+- **HuggingFace Spaces deployment** — chatbot ready for HF Spaces with proper metadata, async Gradio handlers, deploy script, and docs guide (#60)
+- **Cascading retrieval with fiber summary tier** — FTS5 search on fiber summaries as step 2.8 before neuron pipeline, sufficiency gate for early termination, schema v27 (#61, #62)
+
+### Improved
+
+- **Docs messaging** — restructured README and mcp-server.md with "3 tools you need, 41 the agent handles" hierarchy (#59)
+
+### Fixed
+
+- **`nmem doctor` schema version check** — was using `PRAGMA user_version` (always 0) instead of `schema_version` table; now correctly reports v26
+- **`nmem brain health` crash in shared mode** — hardcoded `limit=10000` exceeded server max (1000), causing 422 errors (#67)
+- **`nmem info` crash in shared mode** — same limit issue for typed memories query
+- **`nmem consolidate` FK crash** — summarize strategy referenced anchor neurons pruned by earlier tier; now validates neuron existence before creating summary fibers (#68)
+
+## [4.1.1] - 2026-03-12
+
+### Fixed
+
+- **`nmem doctor` crash** — fixed `No module named 'neural_memory.storage.sqlite'` caused by stale import after storage restructuring (now imports from `sqlite_schema`)
+- **`nmem_pin action=list`** — new `list` action to query pinned fibers (#57)
+
+### Improved
+
+- **Stale references audit** — updated tool counts (39→44), schema version (v22→v26), test counts across README, ROADMAP, plugin.json, mcp-server.md
+- **FAQ** — added "Why is my consolidation 0%?" entry
+- **Regenerated docs** — MCP tools + CLI reference refreshed for v4.1.x
+
+## [4.1.0] - 2026-03-12
+
+### Added
+
+- **Auto-generated MCP Tool Reference** — `scripts/gen_mcp_docs.py` introspects all 44 MCP tool schemas and generates `docs/api/mcp-tools.md` with parameter tables, categories, and tier badges
+- **Auto-generated CLI Reference** — `scripts/gen_cli_docs.py` introspects all 66 CLI commands (Typer/Click) and generates `docs/getting-started/cli-reference.md`
+- **Documentation Chatbot** — Gradio UI (`chatbot/app.py`) powered by PugBrain's ReflexPipeline, answers docs questions without an LLM using spreading activation retrieval
+- **Docs Brain Trainer** — `chatbot/train_docs_brain.py` trains a brain from project docs (40 files → 1045 chunks → 9175 neurons)
+- **CI Docs Freshness Check** — new `docs` job in GitHub Actions runs `--check` mode on both generators, fails CI when auto-generated docs are stale
+
+### Fixed
+
+- **Brain lookup fallback** — `get_brain(name)` now falls back to `find_brain_by_name()` when id-based lookup fails, preventing duplicate "brain.v2" creation for users upgrading from older versions with UUID-based brain ids
+
+### Improved
+
+- **Docs navigation** — added orphan pages (Companion Setup, Lessons Learned) to mkdocs.yml nav
+- **Cross-links** — CLI Guide, CLI Reference, and MCP Tools Reference now link to each other via admonition boxes
+- **CLI Guide renamed** — title changed from "CLI Reference" to "CLI Guide" to avoid confusion with auto-generated reference
+
+## [4.0.1] - 2026-03-12
+
+### Security
+
+- **Fix path traversal** in `index_handler.py` — adapter connection paths now validated with `is_relative_to()` against allowed directories (cwd, home, temp)
+- **Fix path traversal** in `pre_compact.py` hook — stdin transcript path now validated against `~/.claude` directory
+- **Update `cryptography>=46.0.5`** — fix CVE-2026-26007
+- **Add `python-multipart>=0.0.22`** floor constraint — fix CVE-2026-24486
+- **Remove internal info from error messages** — 9 locations no longer leak memory IDs, hypothesis IDs, or filesystem paths to clients
+- **CORS hardening** — replace `localhost:*` wildcard with explicit port list (3000, 3001, 5173, 5174, 8000, 8080, 8888)
+
+### Fixed
+
+- Fix 8 silent `except Exception: pass` blocks — all now log at DEBUG level with `exc_info=True`
+- Fix 14 redundant exception tuples (`except (AttributeError, Exception)` → `except Exception`)
+- Remove unused `python-dateutil` from core dependencies
+
+## [4.0.0] - 2026-03-12
+
+### Added
+
+- **Semantic Drift Detection** — Find tag synonyms/aliases via Jaccard similarity on co-occurrence data
+- **Tag Co-Occurrence Matrix** — Automatically recorded on every memory encode, tracks which tags appear together
+- **Union-Find Clustering** — Groups related tags with confidence thresholds: merge (>0.7), alias (>0.4), review (>0.3)
+- **Temporal Drift Detection** — Compares early vs recent session topics to detect terminology shifts
+- **`nmem_drift` MCP Tool** — detect/list/merge/alias/dismiss actions for managing drift clusters
+- **`detect_drift` Consolidation Strategy** — Runs drift analysis during periodic consolidation
+- **Schema v26** — New `tag_cooccurrence` and `drift_clusters` tables
+
+### Improved
+
+- **Brain Intelligence Complete** — v4.0 milestone: session intelligence, adaptive depth, predictive priming, and semantic drift detection work together as feedback loops
+- Consolidation engine now includes drift detection in the final tier alongside semantic_link
+
+### Tests
+
+- 51 new drift detection tests (Jaccard, clustering, storage, MCP handler, Union-Find)
+- Total: 3810 passing
+
+## [3.5.0] - 2026-03-12
+
+### Added
+
+- **Predictive Priming** — Brain anticipates next query from session context with 4-source priming engine
+- **Activation Cache** — Recent query results carry forward as soft activation with exponential decay (`0.7^n` per query)
+- **Topic Pre-Warming** — Session topics with EMA > 0.5 pre-warm related neurons before query parsing (truly predictive)
+- **Habit-Based Priming** — Query pattern co-occurrence (CONCEPT neurons + BEFORE synapses) predicts next topic, max 3 predicted topics
+- **Co-Activation Priming** — Hebbian binding data (strength >= 0.5, count >= 3) boosts associated neurons
+- **Priming Metrics** — Hit rate tracking with auto-adjusted aggressiveness (0.5x-1.5x) based on priming effectiveness
+- **Session priming fields** — `priming_hit_rate`, `priming_total` exposed in session summaries and result metadata
+
+### Tests
+
+- 57 new tests covering all priming sources, metrics, orchestration, merging, backward compat
+- Total: 3759 passing
+
+## [3.4.0] - 2026-03-12
+
+### Added
+
+- **Session-aware depth selection** — Primed topics go shallower (already in context), new topics go deeper (need exploration). Uses session EMA topic weights
+- **Calibration-driven gate tuning** — High-accuracy gates get confidence boost (+10%), low-accuracy gates get dampened (-30%), very low avg_confidence triggers downgrade to insufficient
+- **Agent feedback signal** — `agent_used_result` parameter: remember-after-recall = strong positive, unused recall = raised bar for success
+- **Dynamic RRF weights** — Per-brain retriever weights evolve from outcome history via `retriever_calibration` table and EMA
+- **Auto activation strategy** — `activation_strategy="auto"` selects classic/PPR/hybrid based on graph density (synapses/neuron ratio)
+- **Schema v25** — `retriever_calibration` table + `graph_density` column on brains
+
+### Tests
+
+- 30 new tests covering all 5 features + backward compatibility
+- Total: 3702 passing
+
+## [3.3.0] - 2026-03-12
+
+### Added
+
+- **Cloud Sync Hub** — Cloudflare Workers + D1 sync hub with API key auth, brain ownership, device management. Live at `neural-memory-sync-hub.vietnam11399.workers.dev`
+- **API key auth** — `nmk_` prefixed keys, SHA-256 hashed storage, Bearer token transport, key masking in all outputs
+- **`nmem_sync_config(action='setup')`** — Guided onboarding flow for cloud sync setup
+- **URL versioning** — Cloud hub uses `/v1/` prefix, localhost preserves backward-compatible paths
+- **HTTP error mapping** — User-friendly messages for 401/403/413/429 status codes
+- **Cloud profile in `nmem_sync_status`** — Shows tier, email, usage when connected to cloud hub
+- **HTTPS enforcement** — Refuses non-HTTPS for cloud hub URLs (localhost exempt)
+
+### Tests
+
+- 22 new tests: SyncConfig api_key, key masking, URL versioning, HTTP error handling
+- Sync hub: 10 Vitest tests (health, auth, validation, type shapes)
+- Total: 3672 passing
+
+## [3.2.0] - 2026-03-11
+
+### Added
+
+- **Session Intelligence (v4.0 Phase 1)** — In-memory session state tracking across MCP calls with topic EMA scoring, LRU eviction (max 10 sessions), 2h auto-expiry, and SQLite persistence via `session_summaries` table (schema v24)
+- **Dashboard assets in wheel** — Bundled `server/static/dist/` via hatch artifacts config, fixing blank dashboard on pip install (#54)
+
+### Fixed
+
+- **Config singleton mutation** — `wizard.py` and `embedding_setup.py` now use immutable `replace()` pattern instead of mutating the cached config singleton (H1/H2)
+- **Structure detector false positives** — Added 4096-char size guard and CSV all-text column rejection heuristic (H4/H5)
+- **Source registry validation** — `_row_to_source()` handles invalid SourceType/SourceStatus gracefully, `update_source()` validates before SQL write (H2/H3)
+- **Source handler error handling** — `_require_brain_id()` and `Source.create()` wrapped in try/except ValueError (H1/M1)
+
+### Tests
+
+- 40 new tests for session intelligence (QueryRecord, SessionState EMA, SessionManager LRU, SQLite persistence)
+- Total: 3650 passing
+
 ## [3.1.0] - 2026-03-11
 ## [v3.1.2] - 2026-03-11
 
@@ -789,7 +1020,7 @@ fix: trigger auto-version release for pug-master
 
 ### Fixed
 
-- **OpenClaw plugin: lazy auto-connect** — Fixed tools returning "NeuralMemory service not running" when OpenClaw calls `register()` multiple times across subsystems (gateway, agent worker, CLI). Agent worker instance now lazily connects on first tool call via `ensureConnected()` with connection mutex to prevent race conditions (#38)
+- **OpenClaw plugin: lazy auto-connect** — Fixed tools returning "PugBrain service not running" when OpenClaw calls `register()` multiple times across subsystems (gateway, agent worker, CLI). Agent worker instance now lazily connects on first tool call via `ensureConnected()` with connection mutex to prevent race conditions (#38)
 
 ## [2.27.1] - 2026-03-06
 ## [v3.1.2] - 2026-03-11
@@ -1260,7 +1491,7 @@ fix: trigger auto-version release for pug-master
 ### Changed
 
 - README: added pugbrain_explain to tools table, brain health section, connection tracing section, embedding auto-detect
-- OpenClaw npm package renamed to `neuralmemory` (published on npm)
+- OpenClaw npm package renamed to `pugbrain` (published on npm)
 
 ## [2.25.1] - 2026-03-05
 ## [v3.1.2] - 2026-03-11
@@ -1555,7 +1786,7 @@ fix: trigger auto-version release for pug-master
 
 ### Fixed
 
-- **Plugin ID mismatch warning** — Renamed package from `@neuralmemory/openclaw-plugin` to `neuralmemory` to match manifest `id`. OpenClaw's `deriveIdHint()` extracts the unscoped package name as `idHint`, which previously produced `openclaw-plugin` ≠ `neuralmemory`
+- **Plugin ID mismatch warning** — Renamed package from `@pugbrain/openclaw-plugin` to `pugbrain` to match manifest `id`. OpenClaw's `deriveIdHint()` extracts the unscoped package name as `idHint`, which previously produced `openclaw-plugin` ≠ `pugbrain`
 - **Tool schema provider compatibility** — Replaced `integer` with `number` (Gemini rejects `integer`), added `additionalProperties: false` (OpenAI strict mode), removed constraint keywords (`maxLength`, `maxItems`, `minimum`, `maximum`) that some providers reject. MCP server validates these server-side
 - **Pre-existing test bugs** — Config test missing `initTimeout` in expected defaults; execute tests passing args as `id` parameter
 
@@ -1701,7 +1932,7 @@ fix: trigger auto-version release for pug-master
 
 ### Added
 
-- **Proactive Memory Auto-Save** — 4-layer system ensures agents use NeuralMemory without explicit instructions
+- **Proactive Memory Auto-Save** — 4-layer system ensures agents use PugBrain without explicit instructions
   - **MCP `instructions`** — Behavioral directives in InitializeResult, auto-injected into agent context
   - **Post-tool passive capture** — Server-side auto-analysis of recall/context/recap/explain results with rate limiting (3/min)
   - **Plugin `instructions` field** — Short nudge for all plugin users
@@ -6124,10 +6355,10 @@ fix: trigger auto-version release for pug-master
 
 ### Fixed
 
-- **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about NeuralMemory tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
+- **Agent forgets tools after `/new`** — `before_agent_start` hook now always injects `systemPrompt` with tool instructions, ensuring the agent knows about PugBrain tools even after session reset. Previously only `prependContext` (data) was injected, leaving the agent unaware of available tools
 - **Agent confuses CLI vs MCP tool calls** — `systemPrompt` injection explicitly states "call as tool, NOT CLI command", preventing agents from running `pug remember` in terminal instead of calling the `pugbrain_remember` tool
 - **`openclaw plugins list` not recognizing plugin on Windows** — Changed `main` and `openclaw.extensions` from TypeScript source (`src/index.ts`) to compiled output (`dist/index.js`). Added `prepublishOnly` and `postinstall` build scripts. Fixed `tsconfig.json` module resolution from `bundler` to `Node16` for broader compatibility
-- **OpenClaw plugin ID mismatch** — Added explicit `"id": "neuralmemory"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "neuralmemory", entry hints "openclaw-plugin")` warning
+- **OpenClaw plugin ID mismatch** — Added explicit `"id": "pugbrain"` to `openclaw` section in `package.json`, fixing the `plugin id mismatch (manifest uses "pugbrain", entry hints "openclaw-plugin")` warning
 - **Content-Length framing bug** — Switched from string-based buffer to raw `Buffer` for byte-accurate MCP message parsing. Fixes silent data corruption with non-ASCII content (Vietnamese, emoji, CJK)
 - **Null dereference after close()** — `writeMessage()` and `notify()` now guard against null process reference
 - **Unhandled tool call errors** — `callTool()` exceptions in tools.ts now caught and returned as structured error responses instead of crashing OpenClaw
@@ -7567,7 +7798,7 @@ fix: trigger auto-version release for pug-master
 
 ### Added
 
-- **OpenClaw Memory Plugin** — `@neuralmemory/openclaw-plugin` npm package
+- **OpenClaw Memory Plugin** — `@pugbrain/openclaw-plugin` npm package
   - MCP stdio client: JSON-RPC 2.0 with Content-Length framing
   - 6 core tools, 2 hooks (before_agent_start, agent_end), 1 service
   - Plugin manifest with `configSchema` + `uiHints`
@@ -9404,18 +9635,18 @@ fix: trigger auto-version release for pug-master
 - **Ground truth evaluation dataset**: 30 curated memories across 5 sessions (Day 1→Day 30) covering project setup, development, integration, sprint review, and production launch
 - **Standard IR metrics**: Precision@K, Recall@K, MRR (Mean Reciprocal Rank), NDCG@K with per-query and per-category aggregation
 - **25 evaluation queries**: 8 factual, 6 temporal, 4 causal, 4 pattern, 3 multi-session coherence queries with expected relevant results
-- **Naive keyword-overlap baseline**: Tokenize-and-rank strawman that NeuralMemory's activation-based recall must beat
+- **Naive keyword-overlap baseline**: Tokenize-and-rank strawman that PugBrain's activation-based recall must beat
 - **Long-horizon coherence test framework**: 5-session simulation across 30 days with recall tracking per session (target: >= 60% at day 30)
 - `benchmarks/ground_truth.py` — ground truth memories, queries, session schedule
 - `benchmarks/metrics.py` — IR metrics: `precision_at_k`, `recall_at_k`, `reciprocal_rank`, `ndcg_at_k`, `evaluate_query`, `BenchmarkReport`
 - `benchmarks/naive_baseline.py` — keyword overlap ranking and baseline evaluation
 - `benchmarks/coherence_test.py` — multi-session coherence test with `CoherenceReport`
-- Ground-truth evaluation section in `run_benchmarks.py` comparing NeuralMemory vs baseline
+- Ground-truth evaluation section in `run_benchmarks.py` comparing PugBrain vs baseline
 - 27 new unit tests: precision (6), recall (4), MRR (5), NDCG (4), query evaluation (1), report aggregation (2), baseline (5)
 
 ### Changed
 
-- `run_benchmarks.py` now includes ground-truth evaluation with NeuralMemory vs naive baseline comparison in generated markdown output
+- `run_benchmarks.py` now includes ground-truth evaluation with PugBrain vs naive baseline comparison in generated markdown output
 
 ## [0.12.0] - 2026-02-07
 ## [v3.1.2] - 2026-03-11

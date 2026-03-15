@@ -1,6 +1,6 @@
 # Memory Layer Unification
 
-NeuralMemory acts as a **unification layer** that imports, normalizes, and connects memories from multiple external memory systems into a single neural graph. Instead of managing fragmented knowledge across Mem0, Cognee, ChromaDB, Graphiti, LlamaIndex, and AWF separately, NeuralMemory brings them together — preserving relationships, embeddings, and provenance while enabling cross-system recall via spreading activation.
+PugBrain acts as a **unification layer** that imports, normalizes, and connects memories from multiple external memory systems into a single neural graph. Instead of managing fragmented knowledge across Mem0, Cognee, ChromaDB, Graphiti, LlamaIndex, and AWF separately, PugBrain brings them together — preserving relationships, embeddings, and provenance while enabling cross-system recall via spreading activation.
 
 ## Architecture
 
@@ -32,7 +32,7 @@ NeuralMemory acts as a **unification layer** that imports, normalizes, and conne
               └─────────┬───────────┘
                         ▼
               ┌─────────────────────┐
-              │   NeuralMemory      │  ← Neurons, synapses, fibers
+              │   PugBrain      │  ← Neurons, synapses, fibers
               │   (unified brain)   │
               └─────────────────────┘
 ```
@@ -41,7 +41,7 @@ NeuralMemory acts as a **unification layer** that imports, normalizes, and conne
 
 1. **SourceAdapter** fetches raw records from the external system
 2. **ExternalRecord** normalizes content, metadata, embeddings, and relationships into a universal format
-3. **RecordMapper** runs each record through the NeuralMemory encoder (creating neurons, synapses, fibers) and assigns TypedMemory with provenance
+3. **RecordMapper** runs each record through the PugBrain encoder (creating neurons, synapses, fibers) and assigns TypedMemory with provenance
 4. **SyncEngine** orchestrates the full pipeline — batched commits, deduplication, cross-record relationship synapses, and sync state tracking
 
 ## Supported Systems
@@ -94,7 +94,7 @@ print(f"Imported {result.records_imported} memories from Mem0")
 adapter = get_adapter("cognee", api_key="your-api-key")
 result, state = await engine.sync(adapter, collection="my_dataset")
 
-# Cognee graph edges become synapses in NeuralMemory
+# Cognee graph edges become synapses in PugBrain
 print(f"Imported {result.records_imported} knowledge nodes")
 ```
 
@@ -179,9 +179,9 @@ class ExternalRecord:
 
 ### Type Resolution
 
-External type strings map automatically to NeuralMemory types:
+External type strings map automatically to PugBrain types:
 
-| Source Type | NeuralMemory Type | Source Systems |
+| Source Type | PugBrain Type | Source Systems |
 |-------------|-------------------|----------------|
 | `fact`, `memory`, `note` | `FACT` | Mem0, generic |
 | `document`, `code`, `text_node` | `REFERENCE` | ChromaDB, LlamaIndex |
@@ -191,7 +191,7 @@ External type strings map automatically to NeuralMemory types:
 | `decision` | `DECISION` | AWF, generic |
 | `error` | `ERROR` | AWF, generic |
 
-If no explicit type is provided, NeuralMemory infers one from content using keyword heuristics.
+If no explicit type is provided, PugBrain infers one from content using keyword heuristics.
 
 ### Relationship Preservation
 
@@ -200,7 +200,7 @@ Graph systems (Cognee, Graphiti, LlamaIndex) export relationships that become sy
 ```
 External: (nodeA) --[caused_by]--> (nodeB)
     ↓
-NeuralMemory: (neuronA) --[CAUSED_BY, weight=0.5]--> (neuronB)
+PugBrain: (neuronA) --[CAUSED_BY, weight=0.5]--> (neuronB)
 ```
 
 Supported relationship mappings: `related_to`, `similar_to`, `caused_by`, `leads_to`, `is_a`, `has_property`, `involves`, `before`, `after`, `co_occurs`, `at_location`, `contains`, `enables`, `prevents`.
@@ -350,7 +350,7 @@ Connects to Mem0's memory API. Supports incremental sync via `updated_at` timest
 - `Mem0Adapter(api_key="...", user_id="user-123")`
 - Fetches all memories for a user via `mem0.get_all()`
 - Supports `fetch_since()` for incremental updates
-- Maps Mem0 categories to NeuralMemory types
+- Maps Mem0 categories to PugBrain types
 - Tags: `import:mem0`, `user:{user_id}`
 
 ### Cognee
@@ -359,7 +359,7 @@ Connects to Cognee's knowledge graph API. Extracts both nodes and edges.
 
 - `CogneeAdapter(api_key="...")`
 - Fetches cognified datasets as knowledge nodes
-- Graph edges become `ExternalRelationship` instances → NeuralMemory synapses
+- Graph edges become `ExternalRelationship` instances → PugBrain synapses
 - Tags: `import:cognee`, `collection:{dataset}`
 
 ### Graphiti
@@ -395,7 +395,7 @@ Reads context from AWF's `.brain/` directory structure (JSON files on disk).
 
 ## Why Unify?
 
-| Problem | Without Unification | With NeuralMemory |
+| Problem | Without Unification | With PugBrain |
 |---------|--------------------|--------------------|
 | **Fragmented recall** | Query each system separately | Single `nmem recall` searches all |
 | **No cross-system links** | ChromaDB docs don't connect to Mem0 memories | Spreading activation finds connections |

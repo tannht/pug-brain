@@ -1,6 +1,6 @@
 # Architecture Overview
 
-NeuralMemory's layered architecture for memory management.
+PugBrain's layered architecture for memory management.
 
 ## System Architecture
 
