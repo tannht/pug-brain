@@ -87,6 +87,7 @@ class TestMCPServer:
             "pugbrain_forget",
             "pugbrain_consolidate",
             "pugbrain_drift",
+            "pugbrain_tool_stats",
         }
 
     def test_tool_schemas(self, server: MCPServer) -> None:
@@ -996,7 +997,7 @@ class TestMCPProtocol:
         assert response["id"] == 1
         assert "result" in response
         assert response["result"]["protocolVersion"] == "2024-11-05"
-        assert response["result"]["serverInfo"]["name"] == "neural-memory"
+        assert response["result"]["serverInfo"]["name"] == "pug-brain"
         assert "capabilities" in response["result"]
 
     @pytest.mark.asyncio
@@ -1010,7 +1011,7 @@ class TestMCPProtocol:
         assert response["id"] == 2
         assert "result" in response
         assert "tools" in response["result"]
-        assert len(response["result"]["tools"]) == 44
+        assert len(response["result"]["tools"]) == 45
 
     @pytest.mark.asyncio
     async def test_tools_call_message(self, server: MCPServer) -> None:

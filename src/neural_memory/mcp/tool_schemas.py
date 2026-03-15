@@ -1588,7 +1588,7 @@ _ALL_TOOL_SCHEMAS: list[dict[str, Any]] = [
         },
     },
     {
-        "name": "nmem_tool_stats",
+        "name": "pugbrain_tool_stats",
         "description": "Tool usage analytics: which tools agents use, frequency, success rates, and daily trends.",
         "inputSchema": {
             "type": "object",
