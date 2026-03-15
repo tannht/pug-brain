@@ -1,99 +1,99 @@
 # CLI Reference
 
-Complete reference for the `pugbrain` command-line interface.
+Complete reference for the `nmem` command-line interface.
 **66 commands** available.
 
 !!! tip
-    Run `pugbrain --help` or `pugbrain <command> --help` for the latest usage info.
+    Run `nmem --help` or `nmem <command> --help` for the latest usage info.
 
 ## Table of Contents
 
 - [Memory Operations](#memory)
-  - [`pugbrain remember`](#pugbrain-remember)
-  - [`pugbrain recall`](#pugbrain-recall)
-  - [`pugbrain context`](#pugbrain-context)
-  - [`pugbrain todo`](#pugbrain-todo)
-  - [`pugbrain q`](#pugbrain-q)
-  - [`pugbrain a`](#pugbrain-a)
-  - [`pugbrain last`](#pugbrain-last)
-  - [`pugbrain today`](#pugbrain-today)
+  - [`nmem remember`](#nmem-remember)
+  - [`nmem recall`](#nmem-recall)
+  - [`nmem context`](#nmem-context)
+  - [`nmem todo`](#nmem-todo)
+  - [`nmem q`](#nmem-q)
+  - [`nmem a`](#nmem-a)
+  - [`nmem last`](#nmem-last)
+  - [`nmem today`](#nmem-today)
 - [Brain Management](#brain)
-  - [`pugbrain brain list`](#pugbrain-brain-list)
-  - [`pugbrain brain use`](#pugbrain-brain-use)
-  - [`pugbrain brain create`](#pugbrain-brain-create)
-  - [`pugbrain brain export`](#pugbrain-brain-export)
-  - [`pugbrain brain import`](#pugbrain-brain-import)
-  - [`pugbrain brain delete`](#pugbrain-brain-delete)
-  - [`pugbrain brain health`](#pugbrain-brain-health)
-  - [`pugbrain brain transplant`](#pugbrain-brain-transplant)
+  - [`nmem brain list`](#nmem-brain-list)
+  - [`nmem brain use`](#nmem-brain-use)
+  - [`nmem brain create`](#nmem-brain-create)
+  - [`nmem brain export`](#nmem-brain-export)
+  - [`nmem brain import`](#nmem-brain-import)
+  - [`nmem brain delete`](#nmem-brain-delete)
+  - [`nmem brain health`](#nmem-brain-health)
+  - [`nmem brain transplant`](#nmem-brain-transplant)
 - [Information & Diagnostics](#info)
-  - [`pugbrain stats`](#pugbrain-stats)
-  - [`pugbrain status`](#pugbrain-status)
-  - [`pugbrain health`](#pugbrain-health)
-  - [`pugbrain check`](#pugbrain-check)
-  - [`pugbrain doctor`](#pugbrain-doctor)
-  - [`pugbrain dashboard`](#pugbrain-dashboard)
-  - [`pugbrain ui`](#pugbrain-ui)
-  - [`pugbrain graph`](#pugbrain-graph)
+  - [`nmem stats`](#nmem-stats)
+  - [`nmem status`](#nmem-status)
+  - [`nmem health`](#nmem-health)
+  - [`nmem check`](#nmem-check)
+  - [`nmem doctor`](#nmem-doctor)
+  - [`nmem dashboard`](#nmem-dashboard)
+  - [`nmem ui`](#nmem-ui)
+  - [`nmem graph`](#nmem-graph)
 - [Training & Import/Export](#training)
-  - [`pugbrain train`](#pugbrain-train)
-  - [`pugbrain index`](#pugbrain-index)
-  - [`pugbrain import`](#pugbrain-import)
-  - [`pugbrain export`](#pugbrain-export)
+  - [`nmem train`](#nmem-train)
+  - [`nmem index`](#nmem-index)
+  - [`nmem import`](#nmem-import)
+  - [`nmem export`](#nmem-export)
 - [Configuration & Setup](#config)
-  - [`pugbrain init`](#pugbrain-init)
-  - [`pugbrain setup`](#pugbrain-setup)
-  - [`pugbrain mcp-config`](#pugbrain-mcp-config)
-  - [`pugbrain prompt`](#pugbrain-prompt)
-  - [`pugbrain hooks`](#pugbrain-hooks)
-  - [`pugbrain config preset`](#pugbrain-config-preset)
-  - [`pugbrain config tier`](#pugbrain-config-tier)
-  - [`pugbrain install-skills`](#pugbrain-install-skills)
+  - [`nmem init`](#nmem-init)
+  - [`nmem setup`](#nmem-setup)
+  - [`nmem mcp-config`](#nmem-mcp-config)
+  - [`nmem prompt`](#nmem-prompt)
+  - [`nmem hooks`](#nmem-hooks)
+  - [`nmem config preset`](#nmem-config-preset)
+  - [`nmem config tier`](#nmem-config-tier)
+  - [`nmem install-skills`](#nmem-install-skills)
 - [Server & MCP](#server)
-  - [`pugbrain serve`](#pugbrain-serve)
-  - [`pugbrain mcp`](#pugbrain-mcp)
+  - [`nmem serve`](#nmem-serve)
+  - [`nmem mcp`](#nmem-mcp)
 - [Maintenance](#maintenance)
-  - [`pugbrain decay`](#pugbrain-decay)
-  - [`pugbrain consolidate`](#pugbrain-consolidate)
-  - [`pugbrain cleanup`](#pugbrain-cleanup)
-  - [`pugbrain flush`](#pugbrain-flush)
+  - [`nmem decay`](#nmem-decay)
+  - [`nmem consolidate`](#nmem-consolidate)
+  - [`nmem cleanup`](#nmem-cleanup)
+  - [`nmem flush`](#nmem-flush)
 - [Project Management](#project)
-  - [`pugbrain project create`](#pugbrain-project-create)
-  - [`pugbrain project list`](#pugbrain-project-list)
-  - [`pugbrain project show`](#pugbrain-project-show)
-  - [`pugbrain project delete`](#pugbrain-project-delete)
-  - [`pugbrain project extend`](#pugbrain-project-extend)
+  - [`nmem project create`](#nmem-project-create)
+  - [`nmem project list`](#nmem-project-list)
+  - [`nmem project show`](#nmem-project-show)
+  - [`nmem project delete`](#nmem-project-delete)
+  - [`nmem project extend`](#nmem-project-extend)
 - [Advanced Features](#advanced)
-  - [`pugbrain shared enable`](#pugbrain-shared-enable)
-  - [`pugbrain shared disable`](#pugbrain-shared-disable)
-  - [`pugbrain shared status`](#pugbrain-shared-status)
-  - [`pugbrain shared test`](#pugbrain-shared-test)
-  - [`pugbrain shared sync`](#pugbrain-shared-sync)
-  - [`pugbrain habits list`](#pugbrain-habits-list)
-  - [`pugbrain habits show`](#pugbrain-habits-show)
-  - [`pugbrain habits clear`](#pugbrain-habits-clear)
-  - [`pugbrain habits status`](#pugbrain-habits-status)
-  - [`pugbrain version create`](#pugbrain-version-create)
-  - [`pugbrain version list`](#pugbrain-version-list)
-  - [`pugbrain version rollback`](#pugbrain-version-rollback)
-  - [`pugbrain version diff`](#pugbrain-version-diff)
-  - [`pugbrain telegram status`](#pugbrain-telegram-status)
-  - [`pugbrain telegram test`](#pugbrain-telegram-test)
-  - [`pugbrain telegram backup`](#pugbrain-telegram-backup)
-  - [`pugbrain list`](#pugbrain-list)
-  - [`pugbrain migrate`](#pugbrain-migrate)
-  - [`pugbrain update`](#pugbrain-update)
+  - [`nmem shared enable`](#nmem-shared-enable)
+  - [`nmem shared disable`](#nmem-shared-disable)
+  - [`nmem shared status`](#nmem-shared-status)
+  - [`nmem shared test`](#nmem-shared-test)
+  - [`nmem shared sync`](#nmem-shared-sync)
+  - [`nmem habits list`](#nmem-habits-list)
+  - [`nmem habits show`](#nmem-habits-show)
+  - [`nmem habits clear`](#nmem-habits-clear)
+  - [`nmem habits status`](#nmem-habits-status)
+  - [`nmem version create`](#nmem-version-create)
+  - [`nmem version list`](#nmem-version-list)
+  - [`nmem version rollback`](#nmem-version-rollback)
+  - [`nmem version diff`](#nmem-version-diff)
+  - [`nmem telegram status`](#nmem-telegram-status)
+  - [`nmem telegram test`](#nmem-telegram-test)
+  - [`nmem telegram backup`](#nmem-telegram-backup)
+  - [`nmem list`](#nmem-list)
+  - [`nmem migrate`](#nmem-migrate)
+  - [`nmem update`](#nmem-update)
 
 ---
 
 ## Memory Operations {#memory}
 
-### `pugbrain remember`
+### `nmem remember`
 
 Store a new memory (type auto-detected if not specified).
 
 ```
-pugbrain remember [OPTIONS]
+nmem remember [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -111,12 +111,12 @@ pugbrain remember [OPTIONS]
 | `--stdin` | boolean | No | `False` | Read content from stdin (safe for shell-special characters) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain recall`
+### `nmem recall`
 
 Query memories with intelligent routing (query type auto-detected).
 
 ```
-pugbrain recall [OPTIONS]
+nmem recall [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -130,12 +130,12 @@ pugbrain recall [OPTIONS]
 | `--show-routing / -R` | boolean | No | `False` | Show query routing info |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain context`
+### `nmem context`
 
 Get recent context (for injecting into AI conversations).
 
 ```
-pugbrain context [OPTIONS]
+nmem context [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -144,12 +144,12 @@ pugbrain context [OPTIONS]
 | `--fresh-only` | boolean | No | `False` | Only include memories < 30 days old |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain todo`
+### `nmem todo`
 
 Quick shortcut to add a TODO memory.
 
 ```
-pugbrain todo [OPTIONS]
+nmem todo [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -161,12 +161,12 @@ pugbrain todo [OPTIONS]
 | `--tag / -t` | text | No | — | Tags for the task |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain q`
+### `nmem q`
 
-Quick recall - shortcut for 'pugbrain recall'.
+Quick recall - shortcut for 'pug recall'.
 
 ```
-pugbrain q [OPTIONS]
+nmem q [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -174,12 +174,12 @@ pugbrain q [OPTIONS]
 | `query` | text | Yes | — | (positional argument) |
 | `-d` | integer | No | — | — |
 
-### `pugbrain a`
+### `nmem a`
 
-Quick add - shortcut for 'pugbrain remember' with auto-detect.
+Quick add - shortcut for 'pug remember' with auto-detect.
 
 ```
-pugbrain a [OPTIONS]
+nmem a [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -187,58 +187,58 @@ pugbrain a [OPTIONS]
 | `content` | text | Yes | — | (positional argument) |
 | `-p` | integer | No | — | — |
 
-### `pugbrain last`
+### `nmem last`
 
 Show last N memories - quick view of recent activity.
 
 ```
-pugbrain last [OPTIONS]
+nmem last [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `-n` | integer | No | `5` | Number of memories to show |
 
-### `pugbrain today`
+### `nmem today`
 
 Show today's memories.
 
 ```
-pugbrain today [OPTIONS]
+nmem today [OPTIONS]
 ```
 
 ## Brain Management {#brain}
 
-### `pugbrain brain list`
+### `nmem brain list`
 
 List available brains.
 
 ```
-pugbrain brain list [OPTIONS]
+nmem brain list [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain brain use`
+### `nmem brain use`
 
 Switch to a different brain.
 
 ```
-pugbrain brain use [OPTIONS]
+nmem brain use [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `name` | text | Yes | — | (positional argument) |
 
-### `pugbrain brain create`
+### `nmem brain create`
 
 Create a new brain.
 
 ```
-pugbrain brain create [OPTIONS]
+nmem brain create [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -246,12 +246,12 @@ pugbrain brain create [OPTIONS]
 | `name` | text | Yes | — | (positional argument) |
 | `--use / -u` | boolean | No | `True` | Switch to the new brain after creating |
 
-### `pugbrain brain export`
+### `nmem brain export`
 
 Export brain to JSON or markdown file.
 
 ```
-pugbrain brain export [OPTIONS]
+nmem brain export [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -261,12 +261,12 @@ pugbrain brain export [OPTIONS]
 | `--exclude-sensitive / -s` | boolean | No | `False` | Exclude memories with sensitive content |
 | `--format / -f` | text | No | `json` | Export format: json or markdown |
 
-### `pugbrain brain import`
+### `nmem brain import`
 
 Import brain from JSON file.
 
 ```
-pugbrain brain import [OPTIONS]
+nmem brain import [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -276,12 +276,12 @@ pugbrain brain import [OPTIONS]
 | `--use / -u` | boolean | No | `True` | Switch to imported brain |
 | `--scan` | boolean | No | `True` | Scan for sensitive content before importing |
 
-### `pugbrain brain delete`
+### `nmem brain delete`
 
 Delete a brain.
 
 ```
-pugbrain brain delete [OPTIONS]
+nmem brain delete [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -289,12 +289,12 @@ pugbrain brain delete [OPTIONS]
 | `name` | text | Yes | — | (positional argument) |
 | `--force / -f` | boolean | No | `False` | Skip confirmation |
 
-### `pugbrain brain health`
+### `nmem brain health`
 
 Check brain health (freshness, sensitive content).
 
 ```
-pugbrain brain health [OPTIONS]
+nmem brain health [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -302,12 +302,12 @@ pugbrain brain health [OPTIONS]
 | `--name / -n` | text | No | — | Brain name (default: current) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain brain transplant`
+### `nmem brain transplant`
 
 Transplant memories from another brain into the current brain.
 
 ```
-pugbrain brain transplant [OPTIONS]
+nmem brain transplant [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -320,48 +320,48 @@ pugbrain brain transplant [OPTIONS]
 
 ## Information & Diagnostics {#info}
 
-### `pugbrain stats`
+### `nmem stats`
 
 Show brain statistics including freshness and memory type analysis.
 
 ```
-pugbrain stats [OPTIONS]
+nmem stats [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain status`
+### `nmem status`
 
 Show current brain status, recent activity, and actionable suggestions.
 
 ```
-pugbrain status [OPTIONS]
+nmem status [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain health`
+### `nmem health`
 
 Show brain health diagnostics with purity score and recommendations.
 
 ```
-pugbrain health [OPTIONS]
+nmem health [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain check`
+### `nmem check`
 
 Check content for sensitive information without storing.
 
 ```
-pugbrain check [OPTIONS]
+nmem check [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -369,32 +369,32 @@ pugbrain check [OPTIONS]
 | `content` | text | Yes | — | (positional argument) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain doctor`
+### `nmem doctor`
 
 Run system health diagnostics.
 
 ```
-pugbrain doctor [OPTIONS]
+nmem doctor [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain dashboard`
+### `nmem dashboard`
 
 Show a rich dashboard with brain stats and recent activity.
 
 ```
-pugbrain dashboard [OPTIONS]
+nmem dashboard [OPTIONS]
 ```
 
-### `pugbrain ui`
+### `nmem ui`
 
 Interactive memory browser with rich formatting.
 
 ```
-pugbrain ui [OPTIONS]
+nmem ui [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -403,12 +403,12 @@ pugbrain ui [OPTIONS]
 | `--search / -s` | text | No | — | Search in memory content |
 | `--limit / -n` | integer | No | `20` | Number of memories to show |
 
-### `pugbrain graph`
+### `nmem graph`
 
 Visualize neural connections as a tree graph.
 
 ```
-pugbrain graph [OPTIONS]
+nmem graph [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -420,12 +420,12 @@ pugbrain graph [OPTIONS]
 
 ## Training & Import/Export {#training}
 
-### `pugbrain train`
+### `nmem train`
 
 Train a brain from documentation files (markdown).
 
 ```
-pugbrain train [OPTIONS]
+nmem train [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -437,12 +437,12 @@ pugbrain train [OPTIONS]
 | `--no-consolidate` | boolean | No | `False` | Skip ENRICH consolidation |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain index`
+### `nmem index`
 
 Index a codebase into neural memory for code-aware recall.
 
 ```
-pugbrain index [OPTIONS]
+nmem index [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -452,12 +452,12 @@ pugbrain index [OPTIONS]
 | `--status / -s` | boolean | No | `False` | Show indexing status instead of scanning |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain import`
+### `nmem import`
 
 Import brain from JSON file.
 
 ```
-pugbrain import [OPTIONS]
+nmem import [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -467,12 +467,12 @@ pugbrain import [OPTIONS]
 | `--merge / -m` | boolean | No | `False` | Merge with existing brain |
 | `--strategy` | text | No | `prefer_local` | Conflict resolution: prefer_local, prefer_remote, prefer_recent, prefer_stronger |
 
-### `pugbrain export`
+### `nmem export`
 
 Export brain to JSON file for backup or sharing.
 
 ```
-pugbrain export [OPTIONS]
+nmem export [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -482,12 +482,12 @@ pugbrain export [OPTIONS]
 
 ## Configuration & Setup {#config}
 
-### `pugbrain init`
+### `nmem init`
 
 Set up PugBrain in one command.
 
 ```
-pugbrain init [OPTIONS]
+nmem init [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -498,12 +498,12 @@ pugbrain init [OPTIONS]
 | `--wizard / -w` | boolean | No | `False` | Interactive setup wizard |
 | `--defaults` | boolean | No | `False` | Non-interactive with all defaults |
 
-### `pugbrain setup`
+### `nmem setup`
 
 Set up optional components.
 
 ```
-pugbrain setup [OPTIONS]
+nmem setup [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -513,12 +513,12 @@ pugbrain setup [OPTIONS]
 | `--all` | boolean | No | `False` | Generate rules for all supported IDEs |
 | `--force / -f` | boolean | No | `False` | Overwrite existing files |
 
-### `pugbrain mcp-config`
+### `nmem mcp-config`
 
 Generate MCP server configuration for Claude Code/Cursor.
 
 ```
-pugbrain mcp-config [OPTIONS]
+nmem mcp-config [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -526,12 +526,12 @@ pugbrain mcp-config [OPTIONS]
 | `--with-prompt / -p` | boolean | No | `False` | Include system prompt in config |
 | `--compact / -c` | boolean | No | `False` | Use compact prompt (if --with-prompt) |
 
-### `pugbrain prompt`
+### `nmem prompt`
 
 Show system prompt for AI tools.
 
 ```
-pugbrain prompt [OPTIONS]
+nmem prompt [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -539,12 +539,12 @@ pugbrain prompt [OPTIONS]
 | `--compact / -c` | boolean | No | `False` | Show compact version |
 | `--copy` | boolean | No | `False` | Copy to clipboard (requires pyperclip) |
 
-### `pugbrain hooks`
+### `nmem hooks`
 
 Install or manage git hooks for automatic memory capture.
 
 ```
-pugbrain hooks [OPTIONS]
+nmem hooks [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -552,12 +552,12 @@ pugbrain hooks [OPTIONS]
 | `action` | text | No | `install` | (positional argument) |
 | `--path / -p` | text | No | — | Path to git repo (default: current dir) |
 
-### `pugbrain config preset`
+### `nmem config preset`
 
 Apply a configuration preset or list available presets.
 
 ```
-pugbrain config preset [OPTIONS]
+nmem config preset [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -566,12 +566,12 @@ pugbrain config preset [OPTIONS]
 | `--list / -l` | boolean | No | `False` | List available presets |
 | `--dry-run / -n` | boolean | No | `False` | Show changes without applying |
 
-### `pugbrain config tier`
+### `nmem config tier`
 
 Get or set the MCP tool tier to control token usage.
 
 ```
-pugbrain config tier [OPTIONS]
+nmem config tier [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -579,12 +579,12 @@ pugbrain config tier [OPTIONS]
 | `name` | text | No | `` | (positional argument) |
 | `--show / -s` | boolean | No | `False` | Show current tier |
 
-### `pugbrain install-skills`
+### `nmem install-skills`
 
 Install PugBrain skills to ~/.claude/skills/.
 
 ```
-pugbrain install-skills [OPTIONS]
+nmem install-skills [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -594,36 +594,36 @@ pugbrain install-skills [OPTIONS]
 
 ## Server & MCP {#server}
 
-### `pugbrain serve`
+### `nmem serve`
 
 Run the PugBrain API server.
 
 ```
-pugbrain serve [OPTIONS]
+nmem serve [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--host / -h` | text | No | `127.0.0.1` | Host to bind to |
-| `--port / -p` | integer | No | `8000` | Port to bind to |
+| `--port / -p` | integer | No | `18790` | Port to bind to |
 | `--reload / -r` | boolean | No | `False` | Enable auto-reload for development |
 
-### `pugbrain mcp`
+### `nmem mcp`
 
 Run the MCP (Model Context Protocol) server.
 
 ```
-pugbrain mcp [OPTIONS]
+nmem mcp [OPTIONS]
 ```
 
 ## Maintenance {#maintenance}
 
-### `pugbrain decay`
+### `nmem decay`
 
 Apply memory decay to simulate forgetting.
 
 ```
-pugbrain decay [OPTIONS]
+nmem decay [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -632,12 +632,12 @@ pugbrain decay [OPTIONS]
 | `--dry-run / -n` | boolean | No | `False` | Preview changes without applying |
 | `--prune / -p` | float | No | `0.01` | Prune below this activation level |
 
-### `pugbrain consolidate`
+### `nmem consolidate`
 
 Consolidate brain memories by pruning, merging, or summarizing.
 
 ```
-pugbrain consolidate [OPTIONS]
+nmem consolidate [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -650,12 +650,12 @@ pugbrain consolidate [OPTIONS]
 | `--merge-overlap` | float | No | `0.5` | Jaccard overlap threshold for merging fibers |
 | `--min-inactive-days` | float | No | `7.0` | Minimum inactive days before pruning |
 
-### `pugbrain cleanup`
+### `nmem cleanup`
 
 Clean up expired or old memories.
 
 ```
-pugbrain cleanup [OPTIONS]
+nmem cleanup [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -666,12 +666,12 @@ pugbrain cleanup [OPTIONS]
 | `--force / -f` | boolean | No | `False` | Skip confirmation |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain flush`
+### `nmem flush`
 
 Emergency flush: capture memories before context is lost.
 
 ```
-pugbrain flush [OPTIONS]
+nmem flush [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -682,12 +682,12 @@ pugbrain flush [OPTIONS]
 
 ## Project Management {#project}
 
-### `pugbrain project create`
+### `nmem project create`
 
 Create a new project for organizing memories.
 
 ```
-pugbrain project create [OPTIONS]
+nmem project create [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -699,12 +699,12 @@ pugbrain project create [OPTIONS]
 | `--priority / -p` | float | No | `1.0` | Project priority (default: 1.0) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain project list`
+### `nmem project list`
 
 List all projects.
 
 ```
-pugbrain project list [OPTIONS]
+nmem project list [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -712,12 +712,12 @@ pugbrain project list [OPTIONS]
 | `--active / -a` | boolean | No | `False` | Show only active projects |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain project show`
+### `nmem project show`
 
 Show project details and its memories.
 
 ```
-pugbrain project show [OPTIONS]
+nmem project show [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -725,12 +725,12 @@ pugbrain project show [OPTIONS]
 | `name` | text | Yes | — | (positional argument) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain project delete`
+### `nmem project delete`
 
 Delete a project (memories are preserved but unlinked).
 
 ```
-pugbrain project delete [OPTIONS]
+nmem project delete [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -738,12 +738,12 @@ pugbrain project delete [OPTIONS]
 | `name` | text | Yes | — | (positional argument) |
 | `--force / -f` | boolean | No | `False` | Skip confirmation |
 
-### `pugbrain project extend`
+### `nmem project extend`
 
 Extend a project's deadline.
 
 ```
-pugbrain project extend [OPTIONS]
+nmem project extend [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -754,12 +754,12 @@ pugbrain project extend [OPTIONS]
 
 ## Advanced Features {#advanced}
 
-### `pugbrain shared enable`
+### `nmem shared enable`
 
 Enable shared mode to connect to a remote PugBrain server.
 
 ```
-pugbrain shared enable [OPTIONS]
+nmem shared enable [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -768,40 +768,40 @@ pugbrain shared enable [OPTIONS]
 | `--api-key / -k` | text | No | — | API key for authentication |
 | `--timeout / -t` | float | No | `30.0` | Request timeout in seconds |
 
-### `pugbrain shared disable`
+### `nmem shared disable`
 
 Disable shared mode and use local storage.
 
 ```
-pugbrain shared disable [OPTIONS]
+nmem shared disable [OPTIONS]
 ```
 
-### `pugbrain shared status`
+### `nmem shared status`
 
 Show shared mode status and configuration.
 
 ```
-pugbrain shared status [OPTIONS]
+nmem shared status [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain shared test`
+### `nmem shared test`
 
 Test connection to the shared server.
 
 ```
-pugbrain shared test [OPTIONS]
+nmem shared test [OPTIONS]
 ```
 
-### `pugbrain shared sync`
+### `nmem shared sync`
 
 Manually sync local brain with remote server.
 
 ```
-pugbrain shared sync [OPTIONS]
+nmem shared sync [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -809,24 +809,24 @@ pugbrain shared sync [OPTIONS]
 | `--direction / -d` | text | No | `both` | Sync direction: push, pull, or both |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain habits list`
+### `nmem habits list`
 
 List learned workflow habits.
 
 ```
-pugbrain habits list [OPTIONS]
+nmem habits list [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain habits show`
+### `nmem habits show`
 
 Show details of a specific learned habit.
 
 ```
-pugbrain habits show [OPTIONS]
+nmem habits show [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -834,36 +834,36 @@ pugbrain habits show [OPTIONS]
 | `name` | text | Yes | — | (positional argument) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain habits clear`
+### `nmem habits clear`
 
 Clear all learned habits.
 
 ```
-pugbrain habits clear [OPTIONS]
+nmem habits clear [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--force / -f` | boolean | No | `False` | Skip confirmation |
 
-### `pugbrain habits status`
+### `nmem habits status`
 
 Show progress toward habit detection.
 
 ```
-pugbrain habits status [OPTIONS]
+nmem habits status [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain version create`
+### `nmem version create`
 
 Create a version snapshot of the current brain state.
 
 ```
-pugbrain version create [OPTIONS]
+nmem version create [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -872,12 +872,12 @@ pugbrain version create [OPTIONS]
 | `--description / -d` | text | No | `` | Description |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain version list`
+### `nmem version list`
 
 List brain versions.
 
 ```
-pugbrain version list [OPTIONS]
+nmem version list [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -885,12 +885,12 @@ pugbrain version list [OPTIONS]
 | `--limit / -l` | integer | No | `20` | Max versions |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain version rollback`
+### `nmem version rollback`
 
 Rollback brain to a previous version.
 
 ```
-pugbrain version rollback [OPTIONS]
+nmem version rollback [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -898,12 +898,12 @@ pugbrain version rollback [OPTIONS]
 | `version_id` | text | Yes | — | (positional argument) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain version diff`
+### `nmem version diff`
 
 Compare two brain versions.
 
 ```
-pugbrain version diff [OPTIONS]
+nmem version diff [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -912,40 +912,40 @@ pugbrain version diff [OPTIONS]
 | `to_version` | text | Yes | — | (positional argument) |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain telegram status`
+### `nmem telegram status`
 
 Show Telegram integration status.
 
 ```
-pugbrain telegram status [OPTIONS]
+nmem telegram status [OPTIONS]
 ```
 
-### `pugbrain telegram test`
+### `nmem telegram test`
 
 Send a test message to verify configuration.
 
 ```
-pugbrain telegram test [OPTIONS]
+nmem telegram test [OPTIONS]
 ```
 
-### `pugbrain telegram backup`
+### `nmem telegram backup`
 
 Send brain database file as backup to Telegram.
 
 ```
-pugbrain telegram backup [OPTIONS]
+nmem telegram backup [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
 |--------|------|----------|---------|-------------|
 | `--brain / -b` | text | No | — | Brain name (default: active brain) |
 
-### `pugbrain list`
+### `nmem list`
 
 List memories with filtering by type, priority, project, and status.
 
 ```
-pugbrain list [OPTIONS]
+nmem list [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -958,12 +958,12 @@ pugbrain list [OPTIONS]
 | `--limit / -l` | integer | No | `20` | Maximum number of results |
 | `--json / -j` | boolean | No | `False` | Output as JSON |
 
-### `pugbrain migrate`
+### `nmem migrate`
 
 Migrate brain data between storage backends.
 
 ```
-pugbrain migrate [OPTIONS]
+nmem migrate [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
@@ -973,12 +973,12 @@ pugbrain migrate [OPTIONS]
 | `--falkordb-host` | text | No | `localhost` | FalkorDB host |
 | `--falkordb-port` | integer | No | `6379` | FalkorDB port |
 
-### `pugbrain update`
+### `nmem update`
 
 Update pug-brain to the latest version.
 
 ```
-pugbrain update [OPTIONS]
+nmem update [OPTIONS]
 ```
 
 | Option | Type | Required | Default | Description |
